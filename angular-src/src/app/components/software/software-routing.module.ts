@@ -30,15 +30,6 @@ const routes: Routes = [
                 ]
             },
             {
-                path: 'inventory',
-                children: [
-                    {
-                        path: '',
-                        loadChildren: './data/inventory/inventory.module#InventoryModule' 
-                    }
-                ]
-            },
-            {
                 path: 'settings',
                 children: [
                     {

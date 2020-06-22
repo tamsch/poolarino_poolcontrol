@@ -14,7 +14,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     subOperations: Boolean = false;
     subWaterIntakes: Boolean = false;
     subSettings: Boolean = false;
-    subInventory: Boolean = false;
 
     private _clockSubscription: Subscription;
     time: Date;
@@ -34,7 +33,6 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.subOperations = false;
         this.subWaterIntakes = false;
         this.subSettings = false;
-        this.subInventory = false;
 
         this[submenu] = true;
     }
