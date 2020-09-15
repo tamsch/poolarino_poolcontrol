@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "fwSoftware": {
+    "poolarinoPoolcontrol": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/fwSoftware",
+            "outputPath": "dist/poolarino",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -64,18 +64,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "fwSoftware:build"
+            "browserTarget": "poolarinoPoolcontrol:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "fwSoftware:build:production"
+              "browserTarget": "poolarinoPoolcontrol:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fwSoftware:build"
+            "browserTarget": "poolarinoPoolcontrol:build"
           }
         },
         "test": {
@@ -112,7 +112,7 @@
         }
       }
     },
-    "fwSoftware-e2e": {
+    "poolarinoPoolcontrol-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -121,11 +121,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "fwSoftware:serve"
+            "devServerTarget": "poolarinoPoolcontrol:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "fwSoftware:serve:production"
+              "devServerTarget": "poolarinoPoolcontrol:serve:production"
             }
           }
         },
@@ -141,5 +141,5 @@
       }
     }
   },
-  "defaultProject": "fwSoftware"
+  "defaultProject": "poolarinoPoolcontrol"
 }

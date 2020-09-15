@@ -32,9 +32,9 @@ imports: [
             tokenGetter: tokenGetter,
             throwNoTokenError: false,
             authScheme: '',
-            whitelistedDomains: ['localhost:3000']
-            //prod: whitelistedDomains: ['192.168.178.45:3000']
-            //dev: whitelistedDomains: ['localhost:3000']
+            allowedDomains: ['192.168.188.46:3000']
+            //prod: allowedDomains: ['192.168.178.45:3000']
+            //dev: allowedDomains: ['localhost:3000']
         }
     }),
     BrowserAnimationsModule
