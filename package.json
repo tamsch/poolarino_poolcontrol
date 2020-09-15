@@ -16,21 +16,21 @@
     "express": "*",
     "express-error-handler": "^1.1.0",
     "isomorphic-fetch": "^2.2.1",
-    "jquery": "^3.5.0",
+    "jquery": "^3.5.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.10",
-    "node-fetch": "^2.6.0",
+    "mongoose": "^5.10.5",
+    "node-fetch": "^2.6.1",
     "node-geocoder": "^3.27.0",
-    "nodemailer": "^6.4.6",
+    "nodemailer": "^6.4.11",
     "passport": "*",
     "passport-jwt": "*",
-    "rpi-gpio": "^2.1.5",
+    "rpi-gpio": "^2.1.7",
     "shelljs": "^0.8.4",
-    "shelly-iot": "^1.0.6"
+    "shelly-iot": "^1.1.0"
   },
   "author": "Tammo Schimanski",
   "license": "GPL",
   "devDependencies": {
-    "@types/jquery": "^3.3.35"
+    "@types/jquery": "^3.5.1"
   }
 }
