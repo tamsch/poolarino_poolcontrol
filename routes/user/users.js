@@ -95,17 +95,17 @@ router.post('/register', (req, res) => {
                                             `;
 
                                             let transporter = nodemailer.createTransport({
-                                                host: 'w0170211.kasserver.com',
+                                                host: 'MAILHOST',
                                                 port: 465,
                                                 secure: true, 
                                                 auth: {
-                                                    user: 'm04a29e7', 
-                                                    pass: 'Eka34kGWsNAuxvkc' 
+                                                    user: 'MAILUSER', 
+                                                    pass: 'MAILPASS' 
                                                 }
                                             });
                                         
                                             let mailOptions = {
-                                                from: '"ZESI CRM" <crm@zesi-intern.de>',
+                                                from: 'MAILHOST',
                                                 to: user.email,
                                                 subject: 'Deine Registrierung',
                                                 text: plain,

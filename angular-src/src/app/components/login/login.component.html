@@ -1,7 +1,7 @@
 <div class="wholePage">
     <div class="login-page">
         <div class="form">
-            <img src="../../../assets/logos/logo_ohne_schriftzug.png" width="100%">
+            <!-- <img src="../../../assets/logos/logo_ohne_schriftzug.png" width="100%"> -->
             <p *ngIf="this.showMessage" [ngClass]="(this.messageColor=='red')?'redText':'greenText'">{{ this.message }}</p>
             <form class="register-form" *ngIf="!showLogin">
                 <input type="text" [(ngModel)]="name" name="name" placeholder="Dein Name (Vorname Nachname)"/>

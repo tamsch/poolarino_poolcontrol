@@ -27,6 +27,7 @@ export class PoolControlComponent implements OnInit {
     showLoaderTemps: Boolean = false;
     showLoaderWatt: Boolean = false;
     showLoaderChart: Boolean = false;
+    noValues: Boolean = false;
 
     tempGartenhuette: number;
     tempSkimmer: number;
@@ -109,6 +110,7 @@ export class PoolControlComponent implements OnInit {
 
     getTempsAndRuntime() {
         this.showLoaderTemps = true;
+        this.noValues = false;
 
         this.colorTempLufttemperatur = '#d8d8d8';
         this.colorTempGartenhuette = '#d8d8d8';
@@ -267,7 +269,11 @@ export class PoolControlComponent implements OnInit {
                     this.tempHelper = 0.0;
                 }
                 this.showLoaderTemps = false;
+                this.noValues = false;
                 
+            } else {
+                this.showLoaderTemps = false;
+                this.noValues = true;
             }
         })
 
