@@ -2,6 +2,8 @@
 
 Poolarino Poolcontrol is a free software to control your technic around your swimming pool. If you have any questions feel free to join us under www.poolarino.de
 
+![Poolarino Poolcontrol](https://www.poolarino.de/media/23-poolarino-poolcontrol-v-1-0-0-dashboard-png/)
+
 ## Information
 
 This software is designed for the official raspberry pi touch display (800 x 480px). If you're going to develop on your local environment run you favored browser and set resolution to `800px x 480px` via Devtools (normaly F12) than go on with these steps:
