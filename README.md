@@ -2,7 +2,7 @@
 
 Poolarino Poolcontrol is a free software to control your technic around your swimming pool. If you have any questions feel free to join us under www.poolarino.de
 
-![Poolarino Poolcontrol](https://www.poolarino.de/media/23-poolarino-poolcontrol-v-1-0-0-dashboard-png/)
+![Poolarino Poolcontrol](https://www.poolarino.de/media/23-poolarino-poolcontrol-v-1-0-0-dashboard-png/ = 300x200)
 
 ## Information
 
