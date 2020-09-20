@@ -3,10 +3,14 @@ const mongoose = require('mongoose');
 
 const SettingsSchema = mongoose.Schema({
     shellyConnected: {
-        type: Boolean
+        type: Boolean,
+        default: false
+    },
+    shellyIp: {
+        type: String
     }
 })
 
 
-//User extern verfügbar machen
+//Settings extern verfügbar machen
 const Settings = module.exports = mongoose.model('Settings', SettingsSchema);

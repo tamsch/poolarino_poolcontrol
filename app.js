@@ -43,6 +43,7 @@ const poolControl = require('./routes/poolcontrol/poolcontrol');
 const weatherForecast = require('./routes/weatherforecast/weatherforecast');
 const users = require('./routes/user/users');
 const userRights = require('./routes/user/userRights');
+const settings = require('./routes/settings/settings');
 
 
 //Port Number
@@ -73,6 +74,7 @@ app.use('/users', users);
 app.use('/userRights', userRights);
 app.use('/poolcontrol', poolControl);
 app.use('/weatherforecast', weatherForecast);
+app.use('/settings', settings);
 
 
 
