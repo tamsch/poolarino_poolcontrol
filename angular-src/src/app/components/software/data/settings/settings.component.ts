@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SettingsService } from 'src/app/services/settings/settings.service';
 import Swal from 'sweetalert2';
 
@@ -7,24 +7,22 @@ import Swal from 'sweetalert2';
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent implements OnInit, AfterViewInit {
+export class SettingsComponent implements OnInit {
 
     shellyConnected: string = '';
+    raspiConnected: string = ';'
     shellyIp: string = '';
 
     shellyConnectedBoolean: Boolean = false;
+    raspiConnectedBoolean: Boolean = false;
 
     constructor(
         private settingsService: SettingsService
     ) { }
 
     ngOnInit() {
-        
-
-    }
-
-    ngAfterViewInit(){
         this.loadSettings();
+
     }
 
     saveOptions(){
@@ -45,8 +43,15 @@ export class SettingsComponent implements OnInit, AfterViewInit {
                     this.shellyConnectedBoolean = false;
                 }
 
+                if(this.raspiConnected == 'yes') {
+                    this.raspiConnectedBoolean = true;
+                } else {
+                    this.raspiConnectedBoolean = false;
+                }
+
                 let settings = {
                     shellyConnected: this.shellyConnectedBoolean,
+                    raspberryPiConnected: this.raspiConnectedBoolean,
                     shellyIp: this.shellyIp
                 }
 
@@ -63,15 +68,21 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
     loadSettings(){
         this.settingsService.loadAllSettings().subscribe(data => {
-            console.log(data);
             if(data.success){
                 this.shellyConnectedBoolean = data.data.shellyConnected;
+                this.raspiConnectedBoolean = data.data.raspberryPiConnected;
                 this.shellyIp = data.data.shellyIp;
 
                 if(this.shellyConnectedBoolean){
                     this.shellyConnected = 'yes';
                 } else {
                     this.shellyConnected = 'no';
+                }
+
+                if(this.raspiConnectedBoolean){
+                    this.raspiConnected = 'yes';
+                } else {
+                    this.raspiConnected = 'no';
                 }
             } else {
 

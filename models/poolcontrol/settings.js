@@ -8,6 +8,10 @@ const SettingsSchema = mongoose.Schema({
     },
     shellyIp: {
         type: String
+    },
+    raspberryPiConnected: {
+        type: Boolean,
+        default: false
     }
 })
 

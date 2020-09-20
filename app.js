@@ -14,6 +14,8 @@ const Solar = require('./models/poolcontrol/solar');
 const ShellyIot = require('shelly-iot');
 const Shelly = new ShellyIot({});
 
+const Settings = require('./models/poolcontrol/settings');
+
 var gpio = require('rpi-gpio');
 var gpiop = gpio.promise;
 
@@ -143,36 +145,49 @@ setInterval(function(){
 
 // Trockenlauf- und Überdruckschutz der Pumpe - Prüft alle 10 Sekunden den Verbrauch
 setInterval(function(){
-    Shelly.callDevice('192.168.178.48', '/status', (error, response, data) => {
-        if(error){
-            // console.log(error)
-        } else {
-            Solar.find().exec((err, solar) => {
-                if(err){
-                    console.log(err);
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
+        if(settings != null && settings.shellyConnected){
+            Shelly.callDevice(settings.shellyIp, '/status', (error, response, data) => {
+                if(error){
+                    // console.log(error)
                 } else {
-                    if((response.meters[0].power < 400 || response.meters[0].power > 500) && response.relays[0].ison && !solar[0].justSwitched) {
-                        Shelly.callDevice('192.168.178.48', '/relay/0?turn=off', (error, response, data) => {
-                            console.log('Pumpe notabgeschaltet!');
-                            let newGeneral = new General({
-                                emergencyShutdown: true,
-                                relay: 0,
-                                resolved: false
-                            })
+                    Solar.find().exec((err, solar) => {
+                        if(err){
+                            console.log(err);
+                        } else {
+                            if((response.meters[0].power < 400 || response.meters[0].power > 500) && response.relays[0].ison && !solar[0].justSwitched) {
+                                Shelly.callDevice(settings.shellyIp, '/relay/0?turn=off', (error, response, data) => {
+                                    console.log('Pumpe notabgeschaltet!');
+                                    let newGeneral = new General({
+                                        emergencyShutdown: true,
+                                        relay: 0,
+                                        resolved: false
+                                    })
+                    
+                                    newGeneral.save();
+                                });
+                            }
+                        }
             
-                            newGeneral.save();
-                        });
-                    }
+                        
+                    })
                 }
-    
                 
-            })
-        }
         
+            }); 
+        } else {
 
-    }); 
+        }
+    })
+    
 }, 10000);
 
-gpiop.setup(16, gpio.DIR_IN)
-gpiop.setup(18, gpio.DIR_IN);
-
+Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+    if(settings != null && settings.raspberryPiConnected){
+        gpiop.setup(16, gpio.DIR_IN);
+        gpiop.setup(18, gpio.DIR_IN);
+    } else {
+              
+    }
+    
+})
