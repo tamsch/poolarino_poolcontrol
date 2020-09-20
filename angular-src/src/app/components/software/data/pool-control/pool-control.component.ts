@@ -25,7 +25,6 @@ export class PoolControlComponent implements OnInit {
     sub: any;
     subTemps: any;
     showLoaderTemps: Boolean = false;
-    showLoaderWatt: Boolean = false;
     showLoaderChart: Boolean = false;
     noValues: Boolean = false;
 
@@ -399,14 +398,12 @@ export class PoolControlComponent implements OnInit {
     }
 
     getDeviceLoad() {
-        this.showLoaderWatt = true;
         this.poolControlService.getDeviceLoad().subscribe(data => {
             if(data.success){
                 this.relayZeroWatt = data.data[0].power;
                 this.relayOneWatt = data.data[1].power;
                 this.relayTwoWatt = data.data[2].power;
                 this.relayThreeWatt = data.data[3].power;
-                this.showLoaderWatt = false;
             }
         })
 

@@ -8,6 +8,8 @@ const Solar = require('../../models/poolcontrol/solar');
 const ShellyIot = require('shelly-iot');
 const Shelly = new ShellyIot({});
 
+const Settings = require('../../models/poolcontrol/settings');
+
 var shell = require('shelljs');
 
 var gpio = require('rpi-gpio')
@@ -28,7 +30,6 @@ function asyncCallDevice(device, command) {
             if (error) {
                 return reject(error);
             }
-            console.log(response);
             return resolve(response);
         })
     });
@@ -36,22 +37,31 @@ function asyncCallDevice(device, command) {
 
 //Temperaturen aller Sensoren jetzt aktuell laden
 router.get('/getTemperatureFromAllSensors', (req, res) => {
-    ds18b20.sensors((err, ids) => {
-        if(err){
-            console.log(err);
-            return res.json({success: false});
-        } else {
-            const temps = [];
-            for(i = 0; i < ids.length; i += 1) {
-                temps.push(getTemp(ids[i]));
-            }
-            
-            Promise.all(temps).then(values => {
-                return res.status(200).json({success: true, data: values});
+
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        if(settings != null && settings.raspberryPiConnected) {
+            ds18b20.sensors((err, ids) => {
+                if(err){
+                    console.log(err);
+                    return res.json({success: false});
+                } else {
+                    const temps = [];
+                    for(i = 0; i < ids.length; i += 1) {
+                        temps.push(getTemp(ids[i]));
+                    }
+                    
+                    Promise.all(temps).then(values => {
+                        return res.status(200).json({success: true, data: values});
+                    });
+                }
+                
             });
+        } else {
+            return res.json({success: false});
         }
-        
-    });
+    })
+
+    
 })
 
 //Laden der Temperaturen für Anzeige des Graphen
@@ -63,159 +73,191 @@ router.get('/getTemperaturesForGraphForSensor/:sensorId', async (req, res) => {
 //Relay am Shelly An- bzw. Ausschalten
 router.get('/toggleDevice/:deviceId', async (req, res) => {
     console.log('REQ-GET | poolControl.js | /toggleDevice');
-    Shelly.callDevice('192.168.178.48', '/relay/' + req.params.deviceId + '?turn=toggle', (error, response, data) => {
-        if(error){
-            return res.json({success: false});
-        } else {
-            if(req.params.deviceId === '3' || req.params.deviceId === '0'){
-                // Wenn das Gerät eingeschaltet wurde, wird ein neuer Eintrag in der RuntimeDB erzeugt.
-                // Diesem Eintrag wird ein Startdatum hinzugefügt.
-                if(response.ison){
-                    let dateHelper = new Date();
-                    let dateHelperToday = dateHelper.toISOString().substr(0,10);
-                    let newRuntime = new Runtime({
-                        relay: req.params.deviceId,
-                        date: dateHelperToday,
-                        startTime: new Date()
-                    });
-    
-                    newRuntime.save();
-                    return res.json({success: true, data: response});
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
+        if(settings != null && settings.shellyConnected) {
+            Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId + '?turn=toggle', (error, response, data) => {
+                if(error){
+                    return res.json({success: false});
                 } else {
-                // Wenn das Gerät ausgeschaltet wurde, wird der letzte Eintrag herangezogen und das Enddatum gesetzt
-                    Runtime.findOne().where({'relay': req.params.deviceId}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
-                        runtime.set({
-                            endTime: new Date()
-                        })
-    
-                        let calcHelper = runtime.endTime - runtime.startTime;
-    
-                        runtime.set({
-                            calculatedTime: calcHelper
-                        })
-    
-                        runtime.save();
-    
+                    if(req.params.deviceId === '3' || req.params.deviceId === '0'){
+                        // Wenn das Gerät eingeschaltet wurde, wird ein neuer Eintrag in der RuntimeDB erzeugt.
+                        // Diesem Eintrag wird ein Startdatum hinzugefügt.
+                        if(response.ison){
+                            let dateHelper = new Date();
+                            let dateHelperToday = dateHelper.toISOString().substr(0,10);
+                            let newRuntime = new Runtime({
+                                relay: req.params.deviceId,
+                                date: dateHelperToday,
+                                startTime: new Date()
+                            });
+            
+                            newRuntime.save();
+                            return res.json({success: true, data: response});
+                        } else {
+                        // Wenn das Gerät ausgeschaltet wurde, wird der letzte Eintrag herangezogen und das Enddatum gesetzt
+                            Runtime.findOne().where({'relay': req.params.deviceId}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
+                                runtime.set({
+                                    endTime: new Date()
+                                })
+            
+                                let calcHelper = runtime.endTime - runtime.startTime;
+            
+                                runtime.set({
+                                    calculatedTime: calcHelper
+                                })
+            
+                                runtime.save();
+            
+                                return res.json({success: true, data: response});
+            
+                            })
+                        }
+                        
+                    } else {
                         return res.json({success: true, data: response});
-    
-                    })
-                }
-                
-            } else {
-                return res.json({success: true, data: response});
-            }     
-        }   
-    });  
+                    }     
+                }   
+            });
+        } else {
+            return res.json({success: false});
+        }
+    })
+  
 })
 
 //Status des Relays abfragen
 router.get('/getDeviceStatus/:deviceId', async (req, res) => {
-    Shelly.callDevice('192.168.178.48', '/relay/' + req.params.deviceId, (error, response, data) => {
-        if(error){
-            console.log(error)
-            return res.json({success: false});
+
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
+        if(settings != null && settings.shellyConnected) {
+            Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId, (error, response, data) => {
+                if(error){
+                    console.log(error)
+                    return res.json({success: false});
+                } else {
+                    return res.json({success: true, data: response})
+                }
+                
+            }); 
         } else {
-            return res.json({success: true, data: response})
+            return res.json({success: false});
         }
-        
-    });  
+    })
+
+ 
 })
 
 //Verbrauch des Relays abfragen
 router.get('/getRelayLoad', async (req, res) => {
-    Shelly.callDevice('192.168.178.48', '/status', (error, response, data) => {
-        if(error){
-            return res.json({success: false});
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
+        if(settings != null && settings.shellyConnected){
+            Shelly.callDevice(settings.shellyIp, '/status', (error, response, data) => {
+                if(error){
+                    return res.json({success: false});
+                } else {
+                    return res.json({success: true, data: response.meters, relays: response.relays});
+                }
+                
+            }); 
         } else {
-            return res.json({success: true, data: response.meters, relays: response.relays});
+            return res.json({success: false});
         }
-        
-    });  
+    })
+     
 })
 
 //Solarumstellen mit Prüfung, ob Relay wirklich deaktiviert ist!
 router.get('/solar/:solarValue', async (req, res) => {
 
-    try {
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        if(settings != null && settings.shellyConnected){
+            try {
 
-        await asyncCallDevice('192.168.178.48', '/relay/0?turn=off');
-        const status = await asyncCallDevice('192.168.178.48', '/status');
-
-
-        if(status.relays[0].ison || status.meters[0].power > 350 || status.meters[1].power > 350 || status.meters[2].power > 350 || status.meters[3].power > 350) {
-
-            return res.json({success: false, msg: 'Pumpe ließ sich nicht ausschalten!'});
-        } else {
-            setTimeout(() => {
-                if(req.params.solarValue === 'off') {
-                    Solar.findOne({isOn: true}).exec((err, solar) => {
-                        if(err) {
-                            console.log(err);
-                        } else if(solar.length = 0) {
-                            console.log('Kein Eintrag gefunden!');
-                        } else {
-
-
-                            shell.exec('gpio write 10 0');
-                            shell.exec('gpio write 11 1');
-                            console.log('asdf');
-                            solar.set({
-                                isOn: false,
-                                justSwitched: true
-                            })
-
-                            solar.save();
-                            setTimeout(() => {
-                                solar.set({
-                                    justSwitched: false
-                                });
-                                solar.save();
-                            }, 90000)
-                        }
-                    })
-                    
-                } else if (req.params.solarValue === 'on') {
-                    Solar.findOne({isOn: false}).exec((err, solar) => {
-
-                        if(err) {
-                            console.log(err)
-                        } else if(solar.length = 0) {
-                            console.log('Kein Eintrag gefunden.')
-                        } else {
-                            shell.exec('gpio write 10 1');
-                            shell.exec('gpio write 11 0');
-                            solar.set({
-                                isOn: true,
-                                justSwitched: true
-                            });
-                            solar.save();
-                            setTimeout(() => {
-                                solar.set({
-                                    justSwitched: false
-                                });
-                                console.log('m,nm,,');
-                                solar.save();
-                            }, 90000)
-                        }
-                    })
-                    
-                }
-            }, 10000)
-    
-            setTimeout(() => {
-                shell.exec('gpio write 10 1');
-                shell.exec('gpio write 11 1');
-                asyncCallDevice('192.168.178.48', '/relay/0?turn=on');
-            }, 30000)
-    
-            return res.json({success: true, msg: ''});
-        }
-
+                await asyncCallDevice(settings.shellyIp, '/relay/0?turn=off');
+                const status = await asyncCallDevice(settings.shellyIp, '/status');
         
+        
+                if(status.relays[0].ison || status.meters[0].power > 350 || status.meters[1].power > 350 || status.meters[2].power > 350 || status.meters[3].power > 350) {
+        
+                    return res.json({success: false, msg: 'Pumpe ließ sich nicht ausschalten!'});
+                } else {
+                    setTimeout(() => {
+                        if(req.params.solarValue === 'off') {
+                            Solar.findOne({isOn: true}).exec((err, solar) => {
+                                if(err) {
+                                    console.log(err);
+                                } else if(solar.length = 0) {
+                                    console.log('Kein Eintrag gefunden!');
+                                } else {
+        
+        
+                                    shell.exec('gpio write 10 0');
+                                    shell.exec('gpio write 11 1');
 
-    } catch {
-        return res.json({success: false, msg: 'Pumpe ließ sich nicht ausschalten!'});
-    }
+                                    solar.set({
+                                        isOn: false,
+                                        justSwitched: true
+                                    })
+        
+                                    solar.save();
+                                    setTimeout(() => {
+                                        solar.set({
+                                            justSwitched: false
+                                        });
+                                        solar.save();
+                                    }, 90000)
+                                }
+                            })
+                            
+                        } else if (req.params.solarValue === 'on') {
+                            Solar.findOne({isOn: false}).exec((err, solar) => {
+        
+                                if(err) {
+                                    console.log(err)
+                                } else if(solar.length = 0) {
+                                    console.log('Kein Eintrag gefunden.')
+                                } else {
+                                    shell.exec('gpio write 10 1');
+                                    shell.exec('gpio write 11 0');
+                                    solar.set({
+                                        isOn: true,
+                                        justSwitched: true
+                                    });
+                                    solar.save();
+                                    setTimeout(() => {
+                                        solar.set({
+                                            justSwitched: false
+                                        });
+
+                                        solar.save();
+                                    }, 90000)
+                                }
+                            })
+                            
+                        }
+                    }, 10000)
+            
+                    setTimeout(() => {
+                        shell.exec('gpio write 10 1');
+                        shell.exec('gpio write 11 1');
+                        asyncCallDevice(settings.shellyIp, '/relay/0?turn=on');
+                    }, 30000)
+            
+                    return res.json({success: true, msg: ''});
+                }
+        
+                
+        
+            } catch {
+                return res.json({success: false, msg: 'Pumpe ließ sich nicht ausschalten!'});
+            }
+        } else {
+            return res.json({success: false});
+        }
+    });
+
+
+    
 
 
 })
@@ -225,7 +267,7 @@ router.get('/relayRuntime/:relayId', async (req, res) => {
     let dateHelper = new Date();
     let dateHelperToday = dateHelper.toISOString().substr(0,10);
     Runtime.find({date: dateHelperToday}).where({'relay': req.params.relayId}).exec((err, runtimes) => {
-        if(err){
+        if(err || runtimes.length === 0){
             return res.json({success: false});
         } else {
             if(runtimes) {
@@ -287,34 +329,43 @@ router.get('/getSolar', async (req, res) => {
 
 //Ermittlung der aktuellen Stellung des Kugelhahns
 router.get('/getSolarState', async (req, res) => {
-    
-    const gpio23 = await gpiop.read(16);
-    const gpio24 = await gpiop.read(18);
 
-    // const gpio23 = await shell.exec('cat /sys/class/gpio/gpio23/value');
-    // const gpio24 = await shell.exec('cat /sys/class/gpio/gpio24/value');
-
-    
-
-    setTimeout(() => {
-        if(gpio24 && !gpio23){
-            let helper = {
-                isOn: false
-            }
-
-            return res.json({success: true, data: helper});
-        } else if(!gpio24 && gpio23){
-            let helper = {
-                isOn: true
-            }
-
-            return res.json({success: true, data: helper});
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        if(settings != null && settings.raspberryPiConnected) {
+            const gpio23 = await gpiop.read(16);
+            const gpio24 = await gpiop.read(18);
+        
+            // const gpio23 = await shell.exec('cat /sys/class/gpio/gpio23/value');
+            // const gpio24 = await shell.exec('cat /sys/class/gpio/gpio24/value');
+        
+            
+        
+            setTimeout(() => {
+                if(gpio24 && !gpio23){
+                    let helper = {
+                        isOn: false
+                    }
+        
+                    return res.json({success: true, data: helper});
+                } else if(!gpio24 && gpio23){
+                    let helper = {
+                        isOn: true
+                    }
+        
+                    return res.json({success: true, data: helper});
+                } else {
+                    return res.json({success: false});
+                }
+        
+                
+            }, 500)
         } else {
             return res.json({success: false});
         }
-
-        
-    }, 500)
+    })
+    
+    
+    
 
     
 })

@@ -1,4 +1,4 @@
-<div class="menuButtonContainer buttonCustomers" [routerLinkActive]="'buttonCustomersActive'" [routerLink]="['poolControl']" skipLocationChange (click)="changeContent('subCustomer')">
+<div class="menuButtonContainer buttonCustomers" [routerLinkActive]="'buttonCustomersActive'" [routerLink]="['poolControl']" skipLocationChange>
     <div class="menuButtonColoredLine lineCustomers"></div>
     <div class="menuIcon"><i class="fas fasome fa-water"></i></div>
     <div class="menuButton">
@@ -12,8 +12,15 @@
         <p class="menuButtonDescription">Wetter</p>
     </div>
 </div>
+<div class="menuButtonContainer buttonSettings" [routerLinkActive]="'buttonSettingsActive'" [routerLink]="['settings']" skipLocationChange>
+    <div class="menuButtonColoredLine lineSettings"></div>
+    <div class="menuIcon"><i class="fasome fas fa-wrench"></i></div>
+    <div class="menuButton">
+        <p class="menuButtonDescription">Einstellungen</p>
+    </div>
+</div>
 
 <img class="poolarinoLogo" src="../../../../../assets/logos/poolarino_logo.png" width="10%">
 <p class="poolarinoText">Poolarino Poolsteuerung © 2020</p>
-<p class="poolarinoVersion">V. 1.0.0</p>
+<p class="poolarinoVersion">V. 1.1.0</p>
 <p class="clock">{{ time | date:'HH:mm:ss' }} Uhr</p>

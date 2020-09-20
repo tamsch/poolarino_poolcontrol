@@ -11,5 +11,5 @@ const SolarSchema = mongoose.Schema({
 })
 
 
-//User extern verfügbar machen
+//Solar extern verfügbar machen
 const Solar = module.exports = mongoose.model('Solar', SolarSchema);

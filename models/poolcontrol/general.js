@@ -14,5 +14,5 @@ const GeneralSchema = mongoose.Schema({
 })
 
 
-//User extern verfügbar machen
+//General extern verfügbar machen
 const General = module.exports = mongoose.model('General', GeneralSchema);

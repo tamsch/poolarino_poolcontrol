@@ -9,12 +9,6 @@ import { Subscription } from 'rxjs';
 })
 export class MenuComponent implements OnInit, OnDestroy {
 
-    subCustomer: Boolean = false;
-    subFireTrucks: Boolean = false;
-    subOperations: Boolean = false;
-    subWaterIntakes: Boolean = false;
-    subSettings: Boolean = false;
-
     private _clockSubscription: Subscription;
     time: Date;
 
@@ -24,17 +18,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this._clockSubscription = this.clockService.getClock().subscribe(time => this.time = time);
-    }
-
-    changeContent(submenu) {
-
-        this.subCustomer = false;
-        this.subFireTrucks = false;
-        this.subOperations = false;
-        this.subWaterIntakes = false;
-        this.subSettings = false;
-
-        this[submenu] = true;
     }
 
     ngOnDestroy(): void {

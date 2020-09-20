@@ -14,5 +14,5 @@ const TemperatureSchema = mongoose.Schema({
 })
 
 
-//User extern verfügbar machen
+//Temperatur extern verfügbar machen
 const Temperature = module.exports = mongoose.model('Temperature', TemperatureSchema);

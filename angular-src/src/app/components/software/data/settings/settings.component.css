@@ -1,0 +1,25 @@
+h3{
+    text-align: center;
+    margin-top: 1%;
+}
+
+.selectShelly{
+    margin-left: 1%;
+}
+
+.saveButton{
+    position: absolute;
+    bottom: 5%;
+    right: 2%;
+}
+
+.shellyIpClass{
+    position: absolute;
+    left: 13%;
+    top: 40%;
+    width: 25%;
+}
+
+.selectRaspi{
+    margin-left: 2%;
+}

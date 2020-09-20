@@ -1,2 +1,24 @@
-settings works!
+<h3>Einstellungen</h3>
+<hr>
+<mat-form-field appearance="fill" class="selectShelly">
+    <mat-label>Shelly verbunden?</mat-label>
+    <mat-select [(value)]="shellyConnected">
+      <mat-option value="yes">Ja</mat-option>
+      <mat-option value="no">Nein</mat-option>
+    </mat-select>
+</mat-form-field>
 
+<mat-form-field appearance="fill" class="selectRaspi">
+    <mat-label>Raspi verbunden?</mat-label>
+    <mat-select [(value)]="raspiConnected">
+      <mat-option value="yes">Ja</mat-option>
+      <mat-option value="no">Nein</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field class="example-full-width shellyIpClass">
+    <mat-label>Shelly-IP</mat-label>
+    <input matInput [(ngModel)]="shellyIp">
+  </mat-form-field>
+
+<button mat-flat-button color="primary" class="saveButton" (click)="saveOptions()">Speichern</button>

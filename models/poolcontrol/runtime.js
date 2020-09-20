@@ -20,5 +20,5 @@ const RuntimeSchema = mongoose.Schema({
 })
 
 
-//User extern verfügbar machen
+//Runtime extern verfügbar machen
 const Runtime = module.exports = mongoose.model('Runtime', RuntimeSchema);
