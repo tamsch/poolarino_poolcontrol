@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit {
                     if(data.success){
                         this.loadSettings();
                     } else {
-                        console.log('fehlgeschlagen');
+                        
                     }
                 })
             }
