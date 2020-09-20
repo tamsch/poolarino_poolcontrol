@@ -6,7 +6,7 @@ const Settings = require('../../models/poolcontrol/settings');
 //Alle Settings laden
 router.get('/loadAllSettings', async (req, res) => {
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
-        if(err){
+        if(err || settings == null){
             console.log(err);
             return res.json({success: false});
         } else {

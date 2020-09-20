@@ -63,6 +63,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
     loadSettings(){
         this.settingsService.loadAllSettings().subscribe(data => {
+            console.log(data);
             if(data.success){
                 this.shellyConnectedBoolean = data.data.shellyConnected;
                 this.shellyIp = data.data.shellyIp;
