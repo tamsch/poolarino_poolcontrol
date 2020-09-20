@@ -1,2 +1,9 @@
-settings works!
-
+<h3>Einstellungen</h3>
+<hr>
+<mat-form-field appearance="fill" class="selectShelly">
+    <mat-label>Shelly verbunden?</mat-label>
+    <mat-select [(value)]="shellySelected" (selectionChange)="saveOptions()">
+      <mat-option value="yes">Ja</mat-option>
+      <mat-option value="no">Nein</mat-option>
+    </mat-select>
+</mat-form-field>
