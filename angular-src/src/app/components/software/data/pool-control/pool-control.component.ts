@@ -102,7 +102,7 @@ export class PoolControlComponent implements OnInit {
         
 
             this.sub = interval(10000).subscribe(x => this.getDeviceLoad());
-            this.subTemps = interval(10000).subscribe(x => this.getTempsAndRuntime());
+            this.subTemps = interval(60000).subscribe(x => this.getTempsAndRuntime());
         }
     }
     
