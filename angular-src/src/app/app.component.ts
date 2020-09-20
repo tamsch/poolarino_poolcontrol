@@ -24,7 +24,7 @@ export class AppComponent {
                     this.authService.checkForRelog().subscribe(data => {
                         if(data.success) {
                             localStorage.clear();
-                            this.router.navigate(["login"]);
+                            //this.router.navigate(["login"]);
                         }
                     })
                 }

@@ -225,7 +225,7 @@ router.get('/relayRuntime/:relayId', async (req, res) => {
     let dateHelper = new Date();
     let dateHelperToday = dateHelper.toISOString().substr(0,10);
     Runtime.find({date: dateHelperToday}).where({'relay': req.params.relayId}).exec((err, runtimes) => {
-        if(err){
+        if(err || runtimes.length === 0){
             return res.json({success: false});
         } else {
             if(runtimes) {

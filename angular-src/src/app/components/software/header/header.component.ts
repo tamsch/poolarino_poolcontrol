@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
         this.authService.logout().subscribe(data => {
             if(data.success){
                 localStorage.clear();
-                this.router.navigate(['login']);
+               // this.router.navigate(['login']);
             }
         })
     }
