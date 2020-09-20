@@ -1,4 +1,4 @@
-<div class="menuButtonContainer buttonCustomers" [routerLinkActive]="'buttonCustomersActive'" [routerLink]="['poolControl']" skipLocationChange (click)="changeContent('subCustomer')">
+<div class="menuButtonContainer buttonCustomers" [routerLinkActive]="'buttonCustomersActive'" [routerLink]="['poolControl']" skipLocationChange>
     <div class="menuButtonColoredLine lineCustomers"></div>
     <div class="menuIcon"><i class="fas fasome fa-water"></i></div>
     <div class="menuButton">
@@ -10,6 +10,13 @@
     <div class="menuIcon"><i class="fasome far fa-sun"></i></div>
     <div class="menuButton">
         <p class="menuButtonDescription">Wetter</p>
+    </div>
+</div>
+<div class="menuButtonContainer buttonSettings" [routerLinkActive]="'buttonSettingsActive'" [routerLink]="['settings']" skipLocationChange>
+    <div class="menuButtonColoredLine lineSettings"></div>
+    <div class="menuIcon"><i class="fasome fas fa-wrench"></i></div>
+    <div class="menuButton">
+        <p class="menuButtonDescription">Einstellungen</p>
     </div>
 </div>
 
