@@ -13,12 +13,12 @@ const SettingsSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    sensor1: [
-        {
-            name: String,
-            id: String 
-        }
-    ]
+    sensor1name:{
+        type: String
+    },
+    sensor1id:{
+        type: String
+    }
 })
 
 

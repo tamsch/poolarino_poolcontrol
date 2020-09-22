@@ -15,11 +15,27 @@ h3{
 
 .shellyIpClass{
     position: absolute;
-    left: 13%;
-    top: 40%;
+    left: 67%;
+    top: 15.5%;
     width: 25%;
 }
 
 .selectRaspi{
     margin-left: 2%;
+}
+
+.sensorName{
+    position: absolute;
+    left: 13%;
+    top: 27%;
+    width: 18%;
+    font-size: 10pt;
+}
+
+.sensorId{
+    position: absolute;
+    top: 27%;
+    width: 18%;
+    left: 40%;
+    font-size: 10pt;
 }

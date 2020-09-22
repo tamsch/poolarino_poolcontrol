@@ -19,6 +19,7 @@ export class SettingsService {
     saveSettings(settings){
         return this.http.put<data>( environment.serverUrl + '/settings/saveSettings', settings);
     }
+    
     addTemperatureSensors(temperatureSensors){
         return this.http.post<data>( environment.serverUrl + '/settings/addTemperatureSensors', temperatureSensors)
     }

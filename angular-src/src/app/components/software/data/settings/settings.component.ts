@@ -16,6 +16,9 @@ export class SettingsComponent implements OnInit {
     shellyConnectedBoolean: Boolean = false;
     raspiConnectedBoolean: Boolean = false;
 
+    sensor1name: String;
+    sensor1id: String;
+
     constructor(
         private settingsService: SettingsService
     ) { }
@@ -52,7 +55,14 @@ export class SettingsComponent implements OnInit {
                 let settings = {
                     shellyConnected: this.shellyConnectedBoolean,
                     raspberryPiConnected: this.raspiConnectedBoolean,
-                    shellyIp: this.shellyIp
+                    shellyIp: this.shellyIp,
+                    sensors: [
+                        {
+                            sensor1name: this.sensor1name,
+                            sensor1id: this.sensor1id
+                        }
+                    ]
+                    
                 }
 
                 this.settingsService.saveSettings(settings).subscribe(data => {
@@ -72,6 +82,10 @@ export class SettingsComponent implements OnInit {
                 this.shellyConnectedBoolean = data.data.shellyConnected;
                 this.raspiConnectedBoolean = data.data.raspberryPiConnected;
                 this.shellyIp = data.data.shellyIp;
+                
+                this.sensor1name = data.data.sensor1name;
+                this.sensor1id = data.data.sensor1id;
+                
 
                 if(this.shellyConnectedBoolean){
                     this.shellyConnected = 'yes';
