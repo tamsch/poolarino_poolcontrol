@@ -12,7 +12,13 @@ const SettingsSchema = mongoose.Schema({
     raspberryPiConnected: {
         type: Boolean,
         default: false
-    }
+    },
+    sensor1: [
+        {
+            name: String,
+            id: String 
+        }
+    ]
 })
 
 
