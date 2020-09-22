@@ -5,6 +5,7 @@ h3{
 
 .selectShelly{
     margin-left: 1%;
+    font-size: 10pt;
 }
 
 .saveButton{
@@ -16,26 +17,58 @@ h3{
 .shellyIpClass{
     position: absolute;
     left: 67%;
-    top: 15.5%;
+    top: 15%;
     width: 25%;
+    font-size: 10pt;
 }
 
 .selectRaspi{
     margin-left: 2%;
+    font-size: 10pt;
 }
 
 .sensorName{
     position: absolute;
     left: 13%;
-    top: 27%;
+    top: 24%;
     width: 18%;
     font-size: 10pt;
 }
 
 .sensorId{
     position: absolute;
-    top: 27%;
+    top: 24%;
     width: 18%;
     left: 40%;
     font-size: 10pt;
 }
+
+.sensor2{
+    top: 33%;
+}
+
+.sensor3{
+    top: 42%;
+}
+
+.sensor4{
+    top: 51%;
+}
+
+.sensor5{
+    top: 60%;
+}
+
+.sensor6{
+    top: 69%;
+}
+
+.sensor7{
+    top: 78%;
+}
+
+.sensor8{
+    top: 87%;
+}
+
+

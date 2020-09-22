@@ -18,6 +18,21 @@ export class SettingsComponent implements OnInit {
 
     sensor1name: String;
     sensor1id: String;
+    sensor2name: String;
+    sensor2id: String;
+    sensor3name: String;
+    sensor3id: String;
+    sensor4name: String;
+    sensor4id: String;
+    sensor5name: String;
+    sensor5id: String;
+    sensor6name: String;
+    sensor6id: String;
+    sensor7name: String;
+    sensor7id: String;
+    sensor8name: String;
+    sensor8id: String;
+    
 
     constructor(
         private settingsService: SettingsService
@@ -56,13 +71,22 @@ export class SettingsComponent implements OnInit {
                     shellyConnected: this.shellyConnectedBoolean,
                     raspberryPiConnected: this.raspiConnectedBoolean,
                     shellyIp: this.shellyIp,
-                    sensors: [
-                        {
-                            sensor1name: this.sensor1name,
-                            sensor1id: this.sensor1id
-                        }
-                    ]
-                    
+                    sensor1name: this.sensor1name,
+                    sensor1id: this.sensor1id,
+                    sensor2name: this.sensor2name,
+                    sensor2id: this.sensor2id,
+                    sensor3name: this.sensor3name,
+                    sensor3id: this.sensor3id,
+                    sensor4name: this.sensor4name,
+                    sensor4id: this.sensor4id,
+                    sensor5name: this.sensor5name,
+                    sensor5id: this.sensor5id,
+                    sensor6name: this.sensor6name,
+                    sensor6id: this.sensor6id,
+                    sensor7name: this.sensor7name,
+                    sensor7id: this.sensor7id,
+                    sensor8name: this.sensor8name,
+                    sensor8id: this.sensor8id                   
                 }
 
                 this.settingsService.saveSettings(settings).subscribe(data => {
@@ -82,9 +106,24 @@ export class SettingsComponent implements OnInit {
                 this.shellyConnectedBoolean = data.data.shellyConnected;
                 this.raspiConnectedBoolean = data.data.raspberryPiConnected;
                 this.shellyIp = data.data.shellyIp;
-                
+
                 this.sensor1name = data.data.sensor1name;
                 this.sensor1id = data.data.sensor1id;
+                this.sensor2name = data.data.sensor2name;
+                this.sensor2id = data.data.sensor2id;
+                this.sensor3name = data.data.sensor3name;
+                this.sensor3id = data.data.sensor3id;
+                this.sensor4name = data.data.sensor4name;
+                this.sensor4id = data.data.sensor4id;
+                this.sensor5name = data.data.sensor5name;
+                this.sensor5id = data.data.sensor5id;
+                this.sensor6name = data.data.sensor6name;
+                this.sensor6id = data.data.sensor6id;
+                this.sensor7name = data.data.sensor7name;
+                this.sensor7id = data.data.sensor7id;
+                this.sensor8name = data.data.sensor8name;
+                this.sensor8id = data.data.sensor8id;
+                
                 
 
                 if(this.shellyConnectedBoolean){
