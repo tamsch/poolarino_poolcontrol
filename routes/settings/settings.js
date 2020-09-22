@@ -41,6 +41,11 @@ router.put('/saveSettings', async (req, res) => {
         settings.sensor7id = req.body.sensor7id;
         settings.sensor8name = req.body.sensor8name;
         settings.sensor8id = req.body.sensor8id;
+
+        settings.weatherName = req.body.weatherName;
+        settings.weatherCity = req.body.weatherCity;
+        settings.weatherAppId = req.body.weatherAppId;
+        settings.weatherCountryCode = req.body.weatherCountryCode;
             
 
         await settings.save((err, saved) => {

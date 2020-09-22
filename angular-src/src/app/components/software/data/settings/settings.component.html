@@ -21,6 +21,26 @@
     <input matInput [(ngModel)]="shellyIp">
 </mat-form-field>
 
+<mat-form-field class="example-full-width weatherName">
+    <mat-label>Wetter Bezeichnung</mat-label>
+    <input matInput [(ngModel)]="weatherName">
+</mat-form-field>
+
+<mat-form-field class="example-full-width weatherCity">
+    <mat-label>Ort der Abfrage</mat-label>
+    <input matInput [(ngModel)]="weatherCity">
+</mat-form-field>
+
+<mat-form-field class="example-full-width weatherCountryCode">
+    <mat-label>Länderkennung (de, at, oder ch)</mat-label>
+    <input matInput [(ngModel)]="weatherCountryCode">
+</mat-form-field>
+
+<mat-form-field class="example-full-width weatherAppId">
+    <mat-label>AppId</mat-label>
+    <input matInput [(ngModel)]="weatherAppId">
+</mat-form-field>
+
 <mat-form-field class="example-full-width sensorName">
     <mat-label>Sensor 1 Name</mat-label>
     <input matInput [(ngModel)]="sensor1name">

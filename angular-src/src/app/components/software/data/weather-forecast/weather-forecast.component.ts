@@ -6,6 +6,7 @@
  */
 
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { SettingsService } from 'src/app/services/settings/settings.service';
 import { WeatherforecastService } from 'src/app/services/weatherforecast/weatherforecast.service';
 
 @Component({
@@ -43,13 +44,24 @@ export class WeatherForecastComponent implements OnInit, AfterViewInit {
     iconUrl: String = 'http://openweathermap.org/img/w/';
     fileType: String = '.png';
 
+    weatherName: String;
+
     constructor(
-        private weatherforecastService: WeatherforecastService
+        private weatherforecastService: WeatherforecastService,
+        private settingsService: SettingsService
     ) { }
 
     ngOnInit() {
-        this.weatherforecastService.loadForecast().subscribe(data => {
+
+        this.settingsService.loadAllSettings().subscribe(data => {
             if(data.success){
+                this.weatherName = data.data.weatherName
+            }
+        })
+
+        this.weatherforecastService.loadForecast().subscribe(data => {
+
+            if(data.success && data.data.cod == "200"){
                 for(let num of data.data.list){
                     this.forecasts.push(num);
                     this.forecastsDate.push(num.dt_txt)
@@ -80,6 +92,10 @@ export class WeatherForecastComponent implements OnInit, AfterViewInit {
                     this.completeDates.push(completeDate);
                     this.completeTimes.push(completeTime);
                 }
+            } else if(data.success && (data.data.cod == "400" || data.data.cod == "404")){
+                console.log(data.data.message);
+            } else {
+
             }
         })
     }
