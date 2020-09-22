@@ -77,6 +77,18 @@ const SettingsSchema = mongoose.Schema({
         type: String,
         default: '88'
     },
+    weatherName:{
+        type: String
+    },
+    weatherCity:{
+        type: String
+    },
+    weatherAppId:{
+        type: String
+    },
+    weatherCountryCode:{
+        type: String
+    }
     
 })
 
