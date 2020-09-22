@@ -12,6 +12,7 @@ import { StockChart } from 'angular-highcharts';
 import { interval } from 'rxjs';
 import Swal from 'sweetalert2';
 import { environment } from '../../../../../environments/environment';
+import { SettingsService } from 'src/app/services/settings/settings.service';
 
 @Component({
   selector: 'app-pool-control',
@@ -87,11 +88,31 @@ export class PoolControlComponent implements OnInit {
 
     upper: any;
 
+    sensor1name: String;
+    sensor1id: String;
+    sensor2name: String;
+    sensor2id: String;
+    sensor3name: String;
+    sensor3id: String;
+    sensor4name: String;
+    sensor4id: String;
+    sensor5name: String;
+    sensor5id: String;
+    sensor6name: String;
+    sensor6id: String;
+    sensor7name: String;
+    sensor7id: String;
+    sensor8name: String;
+    sensor8id: String;
+
     constructor(
-        private poolControlService: PoolcontrolService
+        private poolControlService: PoolcontrolService,
+        private settingsService: SettingsService
     ) { }
 
     ngOnInit() {
+
+        this.loadTemperatureSensorData();
 
         if(environment.production) {
             this.getTempsAndRuntime();
@@ -99,8 +120,9 @@ export class PoolControlComponent implements OnInit {
             this.getDeviceLoad();
     
             this.refreshAllDevices();
-        
 
+            
+        
             this.sub = interval(10000).subscribe(x => this.getDeviceLoad());
             this.subTemps = interval(60000).subscribe(x => this.getTempsAndRuntime());
         }
@@ -123,7 +145,7 @@ export class PoolControlComponent implements OnInit {
         this.poolControlService.getTemperatureFromAllSensors().subscribe(data => {
             if(data.success) {
                 for(let num of data.data) {
-                    if(num.id === '28-0114329d55c5') {
+                    if(num.id === this.sensor7id) {
                         this.tempLufttemperatur = num.t;
                         if(num.t >= 0 && num.t <= 5){
                             this.colorTempLufttemperatur = '#0e58cf';
@@ -140,7 +162,7 @@ export class PoolControlComponent implements OnInit {
                         } else if(num.t >= 30.1){
                             this.colorTempLufttemperatur = '#ff2b2b';
                         }
-                    } else if(num.id === '28-02131d69d7aa') {
+                    } else if(num.id === this.sensor6id) {
                         this.tempSkimmer = num.t;
                         if(num.t >= 0 && num.t <= 5){
                             this.colorTempSkimmer = '#0e58cf';
@@ -157,7 +179,7 @@ export class PoolControlComponent implements OnInit {
                         } else if(num.t >= 30.1){
                             this.colorTempSkimmer = '#ff2b2b';
                         }
-                    } else if(num.id === '28-02131d4f0aaa') {
+                    } else if(num.id === this.sensor4id) {
                         this.tempSwitchgehaeuse = num.t;
                         if(num.t >= 0 && num.t <= 5){
                             this.colorTempSwitchGehaeuse = '#0e58cf';
@@ -174,7 +196,7 @@ export class PoolControlComponent implements OnInit {
                         } else if(num.t >= 30.1){
                             this.colorTempSwitchGehaeuse = '#ff2b2b';
                         }
-                    } else if(num.id === '28-02131d5ddeaa') {
+                    } else if(num.id === this.sensor2id) {
                         this.tempGartenhuette = num.t;
                         if(num.t >= 0 && num.t <= 5){
                             this.colorTempGartenhuette = '#0e58cf';
@@ -191,7 +213,7 @@ export class PoolControlComponent implements OnInit {
                         } else if(num.t >= 30.1){
                             this.colorTempGartenhuette = '#ff2b2b';
                         }
-                    } else if(num.id === '28-011432b48ee0') {
+                    } else if(num.id === this.sensor3id) {
                         this.tempRaspberryGehaeuse = num.t;
                         if(num.t >= 0 && num.t <= 5){
                             this.colorTempRaspberryGehaeuse = '#0e58cf';
@@ -208,7 +230,7 @@ export class PoolControlComponent implements OnInit {
                         } else if(num.t >= 30.1){
                             this.colorTempRaspberryGehaeuse = '#ff2b2b';
                         }
-                    } else if(num.id === '28-02131d5f74aa') {
+                    } else if(num.id === this.sensor1id) {
                         this.tempSolaranlage = num.t;
                         if(num.t >= 0 && num.t <= 5){
                             this.colorTempSolaranlage = '#0e58cf';
@@ -225,7 +247,7 @@ export class PoolControlComponent implements OnInit {
                         } else if(num.t >= 30.1){
                             this.colorTempSolaranlage = '#ff2b2b';
                         }
-                    } else if(num.id === '28-02131d6d7faa') {
+                    } else if(num.id === this.sensor8id) {
                         this.tempWarmesWasser = num.t;
                         if(num.t >= 0 && num.t <= 5){
                             this.colorTempWarmesWasser = '#0e58cf';
@@ -242,7 +264,7 @@ export class PoolControlComponent implements OnInit {
                         } else if(num.t >= 30.1){
                             this.colorTempWarmesWasser = '#ff2b2b';
                         }
-                    } else if(num.id === '28-011454301baa') {
+                    } else if(num.id === this.sensor5id) {
                         this.tempHifiGehaeuse = num.t
                         if(num.t >= 0 && num.t < 5){
                             this.colorTempHifiGehaeuse = '#0e58cf';
@@ -483,4 +505,27 @@ export class PoolControlComponent implements OnInit {
         
     }
 
+    loadTemperatureSensorData(){
+        this.settingsService.loadAllSettings().subscribe(data => {
+            if(data.success){
+                this.sensor1id = data.data.sensor1id;
+                this.sensor1name = data.data.sensor1name;
+                this.sensor2id = data.data.sensor2id;
+                this.sensor2name = data.data.sensor2name;
+                this.sensor3id = data.data.sensor3id;
+                this.sensor3name = data.data.sensor3name;
+                this.sensor4id = data.data.sensor4id;
+                this.sensor4name = data.data.sensor4name;
+                this.sensor5id = data.data.sensor5id;
+                this.sensor5name = data.data.sensor5name;
+                this.sensor6id = data.data.sensor6id;
+                this.sensor6name = data.data.sensor6name;
+                this.sensor7id = data.data.sensor7id;
+                this.sensor7name = data.data.sensor7name;
+                this.sensor8id = data.data.sensor8id;
+                this.sensor8name = data.data.sensor8name;
+                
+            }
+        })
+    }
 }
