@@ -112,8 +112,6 @@ export class PoolControlComponent implements OnInit {
 
     ngOnInit() {
 
-        this.loadTemperatureSensorData();
-
         if(environment.production) {
             this.getTempsAndRuntime();
 
@@ -121,7 +119,7 @@ export class PoolControlComponent implements OnInit {
     
             this.refreshAllDevices();
 
-            
+            this.loadTemperatureSensorData();            
         
             this.sub = interval(10000).subscribe(x => this.getDeviceLoad());
             this.subTemps = interval(60000).subscribe(x => this.getTempsAndRuntime());

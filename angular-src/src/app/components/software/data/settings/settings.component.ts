@@ -32,6 +32,11 @@ export class SettingsComponent implements OnInit {
     sensor7id: String;
     sensor8name: String;
     sensor8id: String;
+
+    weatherCity: String;
+    weatherCountryCode: String;
+    weatherAppId: String;
+    weatherName: String;
     
 
     constructor(
@@ -86,7 +91,11 @@ export class SettingsComponent implements OnInit {
                     sensor7name: this.sensor7name,
                     sensor7id: this.sensor7id,
                     sensor8name: this.sensor8name,
-                    sensor8id: this.sensor8id                   
+                    sensor8id: this.sensor8id,
+                    weatherCity: this.weatherCity,
+                    weatherName: this.weatherName,
+                    weatherAppId: this.weatherAppId,
+                    weatherCountryCode: this.weatherCountryCode                 
                 }
 
                 this.settingsService.saveSettings(settings).subscribe(data => {
@@ -123,6 +132,10 @@ export class SettingsComponent implements OnInit {
                 this.sensor7id = data.data.sensor7id;
                 this.sensor8name = data.data.sensor8name;
                 this.sensor8id = data.data.sensor8id;
+                this.weatherCity = data.data.weatherCity;
+                this.weatherName = data.data.weatherName;
+                this.weatherAppId = data.data.weatherAppId;
+                this.weatherCountryCode = data.data.weatherCountryCode;
                 
                 
 
