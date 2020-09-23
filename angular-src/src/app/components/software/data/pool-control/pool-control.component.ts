@@ -105,6 +105,8 @@ export class PoolControlComponent implements OnInit {
     sensor8name: String;
     sensor8id: String;
 
+    envBoolean: Boolean = false;
+
     constructor(
         private poolControlService: PoolcontrolService,
         private settingsService: SettingsService
@@ -113,6 +115,9 @@ export class PoolControlComponent implements OnInit {
     ngOnInit() {
 
         if(environment.production) {
+
+            this.envBoolean = true;
+
             this.getTempsAndRuntime();
 
             this.getDeviceLoad();
@@ -123,7 +128,11 @@ export class PoolControlComponent implements OnInit {
         
             this.sub = interval(10000).subscribe(x => this.getDeviceLoad());
             this.subTemps = interval(60000).subscribe(x => this.getTempsAndRuntime());
+        } else {
+            this.envBoolean = false;
         }
+        
+        console.log(this.envBoolean);
     }
     
 

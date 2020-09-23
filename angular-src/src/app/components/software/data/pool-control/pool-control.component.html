@@ -99,6 +99,7 @@
     <hr class="hrcorrection">
     <mat-progress-bar class="loadingBar" [hidden]="!showLoaderTemps" mode="indeterminate"></mat-progress-bar>
     <p [hidden]="!noValues" style="color: green; font-weight: bold; display: inline-block;position: absolute; top: 33%; left: 34%">Server Verbindung ok - Keine Werte vorhanden!<p>
+    <p [hidden]="envBoolean" style="color: Orange; font-weight: bold; display: inline-block;position: absolute; top: 33%; left: 47%">Dev-Environment!<p>
     <div class="tempContainer">
         <div id="containerTempSolaranlage">
             <round-progress class="roundProgress"
