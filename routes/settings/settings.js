@@ -17,7 +17,6 @@ router.get('/loadAllSettings', async (req, res) => {
 
 //Settings speichern
 router.put('/saveSettings', async (req, res) => {
-    console.log(req.body);
     const settings = await Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1);
 
     if(settings){
@@ -58,7 +57,6 @@ router.put('/saveSettings', async (req, res) => {
         });
 
     } else {
-        console.log(req.body);
         newSettings = new Settings({
             shellyConnected: req.body.shellyConnected,
             raspberryPiConnected: req.body.raspberryPiConnected,

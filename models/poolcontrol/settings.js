@@ -95,8 +95,12 @@ const SettingsSchema = mongoose.Schema({
         default: 'de'
     },
     versionInfo:{
-        type: String,
-        default: '0.0.1'
+        type: Number,
+        default: 0.1
+    },
+    actualVersion:{
+        type: Number,
+        default: 0.1
     },
     cpuSerial:{
         type: String,

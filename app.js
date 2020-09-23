@@ -207,6 +207,15 @@ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, set
     }
 })
 
+function saveVersion(res){
+    console.log(res);
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        settings.actualVersion = res.actualVersion;
+
+        settings.save();
+    }) 
+}
+
 setInterval(function () {
 
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
@@ -229,7 +238,7 @@ setInterval(function () {
                             newUuid = settings.hbId;
                         }
                         
-                        settings.versionInfo = versionInfo.version;
+                        settings.versionInfo = settings.versionInfo;
                         settings.cpuSerial = stdout.replace(/(\r\n|\n|\r)/gm, "");
                         settings.hbId = newUuid;
     
@@ -243,8 +252,11 @@ setInterval(function () {
                                 fetch('http://49.12.69.199:4000/hb/newHb', {
                                     method: 'post',
                                     body:    JSON.stringify(body),
-                                    headers: { 'Content-Type': 'application/json' }
+                                    headers: { 'Content-Type': 'application/json' },
                                 })
+                                .then(res => res.json())
+                                .then(body => {saveVersion(body)})
+                                .catch(err => console.log());
                             }
                         })
                     }
@@ -253,4 +265,4 @@ setInterval(function () {
             
         }
     })    
-}, 3600000);
+}, 2000);
