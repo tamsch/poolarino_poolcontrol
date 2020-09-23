@@ -4,12 +4,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const versionInfo = require('./config/versionInfo');
 const config = require('./config/database');
 const ds18b20 = require('ds18b20');
 const Temperature = require('./models/poolcontrol/temperature');
 const errorHandler = require('express-error-handler');
 const General = require('./models/poolcontrol/general');
 const Solar = require('./models/poolcontrol/solar');
+const fetch = require('node-fetch');
+const { v4: uuidv4 } = require('uuid');
+const { exec } = require('child_process');
 
 const ShellyIot = require('shelly-iot');
 const Shelly = new ShellyIot({});
@@ -94,6 +98,18 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log('Server started on port '+port);
 });
+
+// Setzen der neuen VersionInfo
+Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        if(settings != null){
+           settings.versionInfo = versionInfo.version; 
+        } else {
+            let newSettings = new Settings({
+                versionInfo: versionInfo.version
+            })
+            newSettings.save();
+        }
+})
 
 function getTemp(id, time) {
     return new Promise((resolve, reject) => {
@@ -189,5 +205,52 @@ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, set
     } else {
               
     }
-    
 })
+
+setInterval(function () {
+
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        if(err){
+            //console.log(err);
+        } else {
+            if(settings.hbDisabled){
+
+            } else {
+                exec("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2", async (err, stdout, stderr) => {
+                    if(err){
+                        //console.log(err);
+                    } else {
+    
+                        if(settings == null){
+                            newUuid = await uuidv4();
+                        } else if(settings.hbId.length < 15){
+                            newUuid = await uuidv4();
+                        } else {
+                            newUuid = settings.hbId;
+                        }
+                        
+                        settings.versionInfo = versionInfo.version;
+                        settings.cpuSerial = stdout.replace(/(\r\n|\n|\r)/gm, "");
+                        settings.hbId = newUuid;
+    
+                        settings.save((err, newSettings) => {
+                            if(err){
+                                //console.log(err);
+                            } else {
+    
+                                const body = {versionInfo: newSettings.versionInfo, cpuSerial: newSettings.cpuSerial, hbId: newSettings.hbId}
+    
+                                fetch('http://49.12.69.199:4000/hb/newHb', {
+                                    method: 'post',
+                                    body:    JSON.stringify(body),
+                                    headers: { 'Content-Type': 'application/json' }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+            
+        }
+    })    
+}, 3600000);
