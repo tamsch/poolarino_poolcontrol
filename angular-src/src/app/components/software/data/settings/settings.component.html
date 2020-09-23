@@ -1,117 +1,123 @@
 <h3>Einstellungen</h3>
 <hr>
-<mat-form-field appearance="fill" class="selectShelly">
-    <mat-label>Shelly verbunden?</mat-label>
-    <mat-select [(value)]="shellyConnected">
-      <mat-option value="yes">Ja</mat-option>
-      <mat-option value="no">Nein</mat-option>
-    </mat-select>
-</mat-form-field>
+<mat-tab-group animationDuration="0ms">
+    <mat-tab label="Allgemeine Einstellungen">
+        <mat-form-field appearance="fill" class="selectShelly">
+            <mat-label>Shelly verbunden?</mat-label>
+            <mat-select [(value)]="shellyConnected">
+            <mat-option value="yes">Ja</mat-option>
+            <mat-option value="no">Nein</mat-option>
+            </mat-select>
+        </mat-form-field>
 
-<mat-form-field appearance="fill" class="selectRaspi">
-    <mat-label>Raspi verbunden?</mat-label>
-    <mat-select [(value)]="raspiConnected">
-      <mat-option value="yes">Ja</mat-option>
-      <mat-option value="no">Nein</mat-option>
-    </mat-select>
-</mat-form-field>
+        <mat-form-field appearance="fill" class="selectRaspi">
+            <mat-label>Raspi verbunden?</mat-label>
+            <mat-select [(value)]="raspiConnected">
+            <mat-option value="yes">Ja</mat-option>
+            <mat-option value="no">Nein</mat-option>
+            </mat-select>
+        </mat-form-field>
 
-<mat-form-field class="example-full-width shellyIpClass">
-    <mat-label>Shelly-IP</mat-label>
-    <input matInput [(ngModel)]="shellyIp">
-</mat-form-field>
+        <mat-form-field class="example-full-width shellyIpClass">
+            <mat-label>Shelly-IP</mat-label>
+            <input matInput [(ngModel)]="shellyIp">
+        </mat-form-field>
+    </mat-tab>
+    <mat-tab label="Wetter">
+        <mat-form-field class="example-full-width weatherName">
+            <mat-label>Wetter Bezeichnung</mat-label>
+            <input matInput [(ngModel)]="weatherName">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width weatherName">
-    <mat-label>Wetter Bezeichnung</mat-label>
-    <input matInput [(ngModel)]="weatherName">
-</mat-form-field>
+        <mat-form-field class="example-full-width weatherCity">
+            <mat-label>Ort der Abfrage</mat-label>
+            <input matInput [(ngModel)]="weatherCity">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width weatherCity">
-    <mat-label>Ort der Abfrage</mat-label>
-    <input matInput [(ngModel)]="weatherCity">
-</mat-form-field>
+        <mat-form-field class="example-full-width weatherCountryCode">
+            <mat-label>Länderkennung (de, at, oder ch)</mat-label>
+            <input matInput [(ngModel)]="weatherCountryCode">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width weatherCountryCode">
-    <mat-label>Länderkennung (de, at, oder ch)</mat-label>
-    <input matInput [(ngModel)]="weatherCountryCode">
-</mat-form-field>
+        <mat-form-field class="example-full-width weatherAppId">
+            <mat-label>AppId</mat-label>
+            <input matInput [(ngModel)]="weatherAppId">
+        </mat-form-field>
+    </mat-tab>
+    <mat-tab label="Sensoren">
+        <mat-form-field class="example-full-width sensorName sensor1">
+            <mat-label>Sensor 1 Name</mat-label>
+            <input matInput [(ngModel)]="sensor1name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId sensor1">
+            <mat-label>Sensor 1 ID</mat-label>
+            <input matInput [(ngModel)]="sensor1id">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width weatherAppId">
-    <mat-label>AppId</mat-label>
-    <input matInput [(ngModel)]="weatherAppId">
-</mat-form-field>
+        <mat-form-field class="example-full-width sensorName sensor2">
+            <mat-label>Sensor 2 Name</mat-label>
+            <input matInput [(ngModel)]="sensor2name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 2 ID</mat-label>
+            <input matInput [(ngModel)]="sensor2id">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width sensorName">
-    <mat-label>Sensor 1 Name</mat-label>
-    <input matInput [(ngModel)]="sensor1name">
-</mat-form-field>
-<mat-form-field class="example-full-width sensorId">
-    <mat-label>Sensor 1 ID</mat-label>
-    <input matInput [(ngModel)]="sensor1id">
-</mat-form-field>
+        <mat-form-field class="example-full-width sensorName sensor3">
+            <mat-label>Sensor 3 Name</mat-label>
+            <input matInput [(ngModel)]="sensor3name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId sensor3">
+            <mat-label>Sensor 3 ID</mat-label>
+            <input matInput [(ngModel)]="sensor3id">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width sensorName sensor2">
-    <mat-label>Sensor 2 Name</mat-label>
-    <input matInput [(ngModel)]="sensor2name">
-</mat-form-field>
-<mat-form-field class="example-full-width sensorId sensor2">
-    <mat-label>Sensor 2 ID</mat-label>
-    <input matInput [(ngModel)]="sensor2id">
-</mat-form-field>
+        <mat-form-field class="example-full-width sensorName sensor4">
+            <mat-label>Sensor 4 Name</mat-label>
+            <input matInput [(ngModel)]="sensor4name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 4 ID</mat-label>
+            <input matInput [(ngModel)]="sensor4id">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width sensorName sensor3">
-    <mat-label>Sensor 3 Name</mat-label>
-    <input matInput [(ngModel)]="sensor3name">
-</mat-form-field>
-<mat-form-field class="example-full-width sensorId sensor3">
-    <mat-label>Sensor 3 ID</mat-label>
-    <input matInput [(ngModel)]="sensor3id">
-</mat-form-field>
+        <mat-form-field class="example-full-width sensorName sensor5">
+            <mat-label>Sensor 5 Name</mat-label>
+            <input matInput [(ngModel)]="sensor5name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId sensor5">
+            <mat-label>Sensor 5 ID</mat-label>
+            <input matInput [(ngModel)]="sensor5id">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width sensorName sensor4">
-    <mat-label>Sensor 4 Name</mat-label>
-    <input matInput [(ngModel)]="sensor4name">
-</mat-form-field>
-<mat-form-field class="example-full-width sensorId sensor4">
-    <mat-label>Sensor 4 ID</mat-label>
-    <input matInput [(ngModel)]="sensor4id">
-</mat-form-field>
+        <mat-form-field class="example-full-width sensorName sensor6">
+            <mat-label>Sensor 6 Name</mat-label>
+            <input matInput [(ngModel)]="sensor6name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 6 ID</mat-label>
+            <input matInput [(ngModel)]="sensor6id">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width sensorName sensor5">
-    <mat-label>Sensor 5 Name</mat-label>
-    <input matInput [(ngModel)]="sensor5name">
-</mat-form-field>
-<mat-form-field class="example-full-width sensorId sensor5">
-    <mat-label>Sensor 5 ID</mat-label>
-    <input matInput [(ngModel)]="sensor5id">
-</mat-form-field>
+        <mat-form-field class="example-full-width sensorName sensor7">
+            <mat-label>Sensor 7 Name</mat-label>
+            <input matInput [(ngModel)]="sensor7name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId sensor7">
+            <mat-label>Sensor 7 ID</mat-label>
+            <input matInput [(ngModel)]="sensor7id">
+        </mat-form-field>
 
-<mat-form-field class="example-full-width sensorName sensor6">
-    <mat-label>Sensor 6 Name</mat-label>
-    <input matInput [(ngModel)]="sensor6name">
-</mat-form-field>
-<mat-form-field class="example-full-width sensorId sensor6">
-    <mat-label>Sensor 6 ID</mat-label>
-    <input matInput [(ngModel)]="sensor6id">
-</mat-form-field>
-
-<mat-form-field class="example-full-width sensorName sensor7">
-    <mat-label>Sensor 7 Name</mat-label>
-    <input matInput [(ngModel)]="sensor7name">
-</mat-form-field>
-<mat-form-field class="example-full-width sensorId sensor7">
-    <mat-label>Sensor 7 ID</mat-label>
-    <input matInput [(ngModel)]="sensor7id">
-</mat-form-field>
-
-<mat-form-field class="example-full-width sensorName sensor8">
-    <mat-label>Sensor 8 Name</mat-label>
-    <input matInput [(ngModel)]="sensor8name">
-</mat-form-field>
-<mat-form-field class="example-full-width sensorId sensor8">
-    <mat-label>Sensor 8 ID</mat-label>
-    <input matInput [(ngModel)]="sensor8id">
-</mat-form-field>
-
+        <mat-form-field class="example-full-width sensorName sensor8">
+            <mat-label>Sensor 8 Name</mat-label>
+            <input matInput [(ngModel)]="sensor8name">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 8 ID</mat-label>
+            <input matInput [(ngModel)]="sensor8id">
+        </mat-form-field>
+    </mat-tab>
+    <mat-tab label="Pumpe" disabled></mat-tab>
+</mat-tab-group>
 
 <button mat-flat-button color="primary" class="saveButton" (click)="saveOptions()">Speichern</button>
