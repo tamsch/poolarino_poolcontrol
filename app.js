@@ -14,6 +14,8 @@ const Solar = require('./models/poolcontrol/solar');
 const fetch = require('node-fetch');
 const { v4: uuidv4 } = require('uuid');
 const { exec } = require('child_process');
+const os = require('os');
+const clientId = require('node-machine-id');
 
 const ShellyIot = require('shelly-iot');
 const Shelly = new ShellyIot({});
@@ -217,6 +219,23 @@ function saveVersion(res) {
     })
 }
 
+async function getOsInformation(){
+
+    let system = os.type();
+    let version = os.release();
+    let machineId = await clientId.machineIdSync();
+
+    let helper = [];
+    helper.push(system, version, machineId);
+    
+    return new Promise((resolve, reject) => {
+        resolve(helper);
+    })
+
+    
+   
+}
+
 setInterval(function () {
 
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
@@ -226,68 +245,37 @@ setInterval(function () {
             if (settings.hbDisabled) {
                 
             } else {
-                exec("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2", async (err, stdout, stderr) => {
-                    if (err) {
-                        if (settings == null) {
-                            newUuid = await uuidv4();
-                        } else if (settings.hbId.length < 15) {
-                            newUuid = await uuidv4();
-                        } else {
-                            newUuid = settings.hbId;
-                        }
 
-                        settings.versionInfo = settings.versionInfo;
-                        settings.cpuSerial = '999888777666555444333222111';
-                        settings.hbId = newUuid;
+                let sys = await getOsInformation();
 
-                        settings.save((err, newSettings) => {
-                            if (err) {
-                                //console.log(err);
-                            } else {
+                settings.osType = sys[0];
+                settings.osVersion = sys[1];
+                settings.machineId = sys[2];
 
-                                const body = { versionInfo: newSettings.versionInfo, cpuSerial: newSettings.cpuSerial, hbId: newSettings.hbId }
+                let x = JSON.parse(JSON.stringify(settings));
 
-                                fetch('http://49.12.69.199:4000/hb/newHb', {
-                                    method: 'post',
-                                    body: JSON.stringify(body),
-                                    headers: { 'Content-Type': 'application/json' },
-                                })
-                                    .then(res => res.json())
-                                    .then(body => { saveVersion(body) })
-                                    .catch(err => console.log());
-                            }
-                        })
+                if(x.hbId.length < 15){
+                    newInstallationId = await uuidv4();
+                } else {
+                    newInstallationId = x.hbId;
+                }
+
+                settings.hbId = newInstallationId;
+
+                settings.save((err, newSettings) => {
+                    if(err){
+
                     } else {
+                        const body = { versionInfo: newSettings.versionInfo, machineId: newSettings.machineId, hbId: newSettings.hbId, osType: newSettings.osType, osVersion: newSettings.osVersion }
 
-                        if (settings == null) {
-                            newUuid = await uuidv4();
-                        } else if (settings.hbId.length < 15) {
-                            newUuid = await uuidv4();
-                        } else {
-                            newUuid = settings.hbId;
-                        }
-
-                        settings.versionInfo = settings.versionInfo;
-                        settings.cpuSerial = stdout.replace(/(\r\n|\n|\r)/gm, "");
-                        settings.hbId = newUuid;
-
-                        settings.save((err, newSettings) => {
-                            if (err) {
-                                //console.log(err);
-                            } else {
-
-                                const body = { versionInfo: newSettings.versionInfo, cpuSerial: newSettings.cpuSerial, hbId: newSettings.hbId }
-
-                                fetch('http://49.12.69.199:4000/hb/newHb', {
-                                    method: 'post',
-                                    body: JSON.stringify(body),
-                                    headers: { 'Content-Type': 'application/json' },
-                                })
-                                    .then(res => res.json())
-                                    .then(body => { saveVersion(body) })
-                                    .catch(err => console.log());
-                            }
+                        fetch('http://49.12.69.199:4000/hb/newHb', {
+                            method: 'post',
+                            body: JSON.stringify(body),
+                            headers: { 'Content-Type': 'application/json' },
                         })
+                        .then(res => res.json())
+                        .then(body => { saveVersion(body) })
+                        .catch(err => err = '');
                     }
                 })
             }

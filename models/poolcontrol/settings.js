@@ -102,7 +102,7 @@ const SettingsSchema = mongoose.Schema({
         type: Number,
         default: 0.1
     },
-    cpuSerial:{
+    machineId:{
         type: String,
         default: '000000000'
     },
@@ -145,6 +145,14 @@ const SettingsSchema = mongoose.Schema({
     sensor8icon:{
         type: String,
         default: 'fas fa fa-home'
+    },
+    osType:{
+        type: String,
+        default: 'OSType'
+    },
+    osVersion:{
+        type: String,
+        default: 'OSVersion'
     }
     
 })
