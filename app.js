@@ -224,7 +224,6 @@ setInterval(function () {
             //console.log(err);
         } else {
             if (settings.hbDisabled) {
-                console.log('HBDISABLED');
             } else {
                 exec("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2", async (err, stdout, stderr) => {
                     if (err) {
@@ -266,4 +265,4 @@ setInterval(function () {
 
         }
     })
-}, 10000);
+}, 3600000);
