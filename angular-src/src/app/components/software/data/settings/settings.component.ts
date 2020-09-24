@@ -19,20 +19,29 @@ export class SettingsComponent implements OnInit {
 
     sensor1name: String;
     sensor1id: String;
+    sensor1icon: String;
     sensor2name: String;
     sensor2id: String;
+    sensor2icon: String;
     sensor3name: String;
     sensor3id: String;
+    sensor3icon: String;
     sensor4name: String;
     sensor4id: String;
+    sensor4icon: String;
     sensor5name: String;
     sensor5id: String;
+    sensor5icon: String;
     sensor6name: String;
     sensor6id: String;
+    sensor6icon: String;
     sensor7name: String;
     sensor7id: String;
+    sensor7icon: String;
     sensor8name: String;
     sensor8id: String;
+    sensor8icon: String;
+
 
     weatherCity: String;
     weatherCountryCode: String;
@@ -98,20 +107,28 @@ export class SettingsComponent implements OnInit {
                                     shellyIp: this.shellyIp,
                                     sensor1name: this.sensor1name,
                                     sensor1id: this.sensor1id,
+                                    sensor1icon: this.sensor1icon,
                                     sensor2name: this.sensor2name,
                                     sensor2id: this.sensor2id,
+                                    sensor2icon: this.sensor2icon,
                                     sensor3name: this.sensor3name,
                                     sensor3id: this.sensor3id,
+                                    sensor3icon: this.sensor3icon,
                                     sensor4name: this.sensor4name,
                                     sensor4id: this.sensor4id,
+                                    sensor4icon: this.sensor4icon,
                                     sensor5name: this.sensor5name,
                                     sensor5id: this.sensor5id,
+                                    sensor5icon: this.sensor5icon,
                                     sensor6name: this.sensor6name,
                                     sensor6id: this.sensor6id,
+                                    sensor6icon: this.sensor6icon,
                                     sensor7name: this.sensor7name,
                                     sensor7id: this.sensor7id,
+                                    sensor7icon: this.sensor7icon,
                                     sensor8name: this.sensor8name,
                                     sensor8id: this.sensor8id,
+                                    sensor8icon: this.sensor8icon,
                                     weatherCity: this.weatherCity,
                                     weatherName: this.weatherName,
                                     weatherAppId: this.weatherAppId,
@@ -140,20 +157,28 @@ export class SettingsComponent implements OnInit {
                             shellyIp: this.shellyIp,
                             sensor1name: this.sensor1name,
                             sensor1id: this.sensor1id,
+                            sensor1icon: this.sensor1icon,
                             sensor2name: this.sensor2name,
                             sensor2id: this.sensor2id,
+                            sensor2icon: this.sensor2icon,
                             sensor3name: this.sensor3name,
                             sensor3id: this.sensor3id,
+                            sensor3icon: this.sensor3icon,
                             sensor4name: this.sensor4name,
                             sensor4id: this.sensor4id,
+                            sensor4icon: this.sensor4icon,
                             sensor5name: this.sensor5name,
                             sensor5id: this.sensor5id,
+                            sensor5icon: this.sensor5icon,
                             sensor6name: this.sensor6name,
                             sensor6id: this.sensor6id,
+                            sensor6icon: this.sensor6icon,
                             sensor7name: this.sensor7name,
                             sensor7id: this.sensor7id,
+                            sensor7icon: this.sensor7icon,
                             sensor8name: this.sensor8name,
                             sensor8id: this.sensor8id,
+                            sensor8icon: this.sensor8icon,
                             weatherCity: this.weatherCity,
                             weatherName: this.weatherName,
                             weatherAppId: this.weatherAppId,
@@ -179,20 +204,28 @@ export class SettingsComponent implements OnInit {
                         shellyIp: this.shellyIp,
                         sensor1name: this.sensor1name,
                         sensor1id: this.sensor1id,
+                        sensor1icon: this.sensor1icon,
                         sensor2name: this.sensor2name,
                         sensor2id: this.sensor2id,
+                        sensor2icon: this.sensor2icon,
                         sensor3name: this.sensor3name,
                         sensor3id: this.sensor3id,
+                        sensor3icon: this.sensor3icon,
                         sensor4name: this.sensor4name,
                         sensor4id: this.sensor4id,
+                        sensor4icon: this.sensor4icon,
                         sensor5name: this.sensor5name,
                         sensor5id: this.sensor5id,
+                        sensor5icon: this.sensor5icon,
                         sensor6name: this.sensor6name,
                         sensor6id: this.sensor6id,
+                        sensor6icon: this.sensor6icon,
                         sensor7name: this.sensor7name,
                         sensor7id: this.sensor7id,
+                        sensor7icon: this.sensor7icon,
                         sensor8name: this.sensor8name,
                         sensor8id: this.sensor8id,
+                        sensor8icon: this.sensor8icon,
                         weatherCity: this.weatherCity,
                         weatherName: this.weatherName,
                         weatherAppId: this.weatherAppId,
@@ -221,20 +254,28 @@ export class SettingsComponent implements OnInit {
 
                 this.sensor1name = data.data.sensor1name;
                 this.sensor1id = data.data.sensor1id;
+                this.sensor1icon = data.data.sensor1icon;
                 this.sensor2name = data.data.sensor2name;
                 this.sensor2id = data.data.sensor2id;
+                this.sensor2icon = data.data.sensor2icon;
                 this.sensor3name = data.data.sensor3name;
                 this.sensor3id = data.data.sensor3id;
+                this.sensor3icon = data.data.sensor3icon;
                 this.sensor4name = data.data.sensor4name;
                 this.sensor4id = data.data.sensor4id;
+                this.sensor4icon = data.data.sensor4icon;
                 this.sensor5name = data.data.sensor5name;
                 this.sensor5id = data.data.sensor5id;
+                this.sensor5icon = data.data.sensor5icon;
                 this.sensor6name = data.data.sensor6name;
                 this.sensor6id = data.data.sensor6id;
+                this.sensor6icon = data.data.sensor6icon;
                 this.sensor7name = data.data.sensor7name;
                 this.sensor7id = data.data.sensor7id;
+                this.sensor7icon = data.data.sensor7icon;
                 this.sensor8name = data.data.sensor8name;
                 this.sensor8id = data.data.sensor8id;
+                this.sensor8icon = data.data.sensor8icon;
                 this.weatherCity = data.data.weatherCity;
                 this.weatherName = data.data.weatherName;
                 this.weatherAppId = data.data.weatherAppId;

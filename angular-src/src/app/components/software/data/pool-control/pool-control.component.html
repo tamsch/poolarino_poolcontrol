@@ -118,7 +118,7 @@
             [animationDelay]="0"
             ></round-progress>
         </div>
-        <!-- <p class="tempIcon"><i class="fas fa-solar-panel"></i></p> -->
+        <p class="tempIcon"><i [class]="sensor1icon"></i></p>
         <div class="upperAliner" style="text-align: center;">{{ sensor1name }}</div>
         <p class="upperTemperature">{{ tempSolaranlage ? tempSolaranlage + '°C' : '' }}</p>
     </div>
@@ -140,7 +140,7 @@
             [animationDelay]="0"
             ></round-progress>
         </div>
-        <!-- <p class="tempIcon"><i class="fas fa fa-home"></i></p> -->
+        <p class="tempIcon"><i [class]="sensor2icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor2name }}</div>
         <p class="upperTemperature">{{ tempGartenhuette ? tempGartenhuette + '°C' : '' }}</p>
     </div>
@@ -162,7 +162,7 @@
             [animationDelay]="0"
             ></round-progress>
         </div>
-        <!-- <p class="tempIcon"><i class="fab fa-raspberry-pi"></i></p> -->
+        <p class="tempIcon"><i [class]="sensor3icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor3name }}</div>
         <p class="upperTemperature">{{ tempRaspberryGehaeuse ? tempRaspberryGehaeuse + '°C' : '' }}</p>
     </div>
@@ -187,7 +187,7 @@
             [animationDelay]="0"
             ></round-progress>
         </div>
-        <!-- <p class="tempIcon"><i class="fas fa-network-wired"></i></p> -->
+        <p class="tempIcon"><i [class]="sensor4icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor4name }}</div>
         <p class="upperTemperature">{{ tempSwitchgehaeuse ? tempSwitchgehaeuse + '°C' : '' }}</p>
     </div>
@@ -209,7 +209,7 @@
             [animationDelay]="0"
             ></round-progress>
         </div>
-        <!-- <p class="tempIcon"><i class="fas fa-music"></i></p> -->
+        <p class="tempIcon"><i [class]="sensor5icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor5name }}</div>
         <p class="upperTemperature">{{ tempHifiGehaeuse ? tempHifiGehaeuse + '°C' : '' }}</p>
     </div>
@@ -231,7 +231,7 @@
             [animationDelay]="0"
             ></round-progress>
         </div>
-        <!-- <p class="tempIcon"><i class="fas fa-swimming-pool"></i></p> -->
+        <p class="tempIcon"><i [class]="sensor6icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor6name }}</div>
         <p class="upperTemperature">{{ tempSkimmer ? tempSkimmer + '°C' : '' }}</p>
     </div>
@@ -239,15 +239,15 @@
 <hr>
 <div class="bottomTemps">
     <div class="bottomTempContainer" [hidden]="!solarIsOn">
-        <!--<p class="bottomTemperatureIcon"> <i class="fas fa-thermometer-full"></i></p> -->
+        <p class="bottomTemperatureIcon"> <i [class]="sensor7icon"></i></p>
         <p class="bottomTemperature">{{ sensor8name }}: <b>{{ tempWarmesWasser ? tempWarmesWasser + '°C' : '' }}</b></p>
     </div>
     <div class="bottomTempContainer">
-        <!-- <p class="bottomTemperatureIcon"><i class="fas fa-wind"></i></p> -->
+        <p class="bottomTemperatureIcon"><i [class]="sensor8icon"></i></p>
         <p class="bottomTemperature">{{ sensor7name }}: <b>{{ tempLufttemperatur ? tempLufttemperatur + '°C' : '' }}</b></p>
     </div>
     <div class="bottomTempContainer" [hidden]="!solarIsOn">
-        <!-- <p class="bottomTemperatureIcon"><i class="fas fa-thermometer"></i></p> -->
+        <p class="bottomTemperatureIcon"><i class="fas fa-thermometer"></i></p>
         <p class="bottomTemperature">Solargewinn: <b>{{ tempHelper ? tempHelper + '°C' : '' }}</b></p>
     </div>
 </div>

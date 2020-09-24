@@ -31,6 +31,10 @@ export class SettingsService {
     checkVersion() {
         return this.http.get<data>(environment.serverUrl + '/settings/checkVersion');
     }
+
+    loadSensorIcons(){
+        return this.http.get<data>(environment.serverUrl + '/settings/loadSensorIcons');
+    }
 }
 
 interface data {

@@ -30,6 +30,15 @@ export class PoolControlComponent implements OnInit {
     showLoaderChart: Boolean = false;
     noValues: Boolean = false;
 
+    sensor1icon: String = '';
+    sensor2icon: String = '';
+    sensor3icon: String = '';
+    sensor4icon: String = '';
+    sensor5icon: String = '';
+    sensor6icon: String = '';
+    sensor7icon: String = '';
+    sensor8icon: String = '';
+
     tempGartenhuette: number;
     tempSkimmer: number;
     tempSwitchgehaeuse: number;
@@ -116,7 +125,7 @@ export class PoolControlComponent implements OnInit {
 
     ngOnInit() {
 
-        if (environment.production) {
+        if (!environment.production) {
 
             this.envBoolean = true;
 
@@ -127,6 +136,8 @@ export class PoolControlComponent implements OnInit {
             this.refreshAllDevices();
 
             this.loadTemperatureSensorData();
+
+            this.loadSensorIcons();
 
 
             this.sub = interval(10000).subscribe(x => this.getDeviceLoad());
@@ -533,6 +544,22 @@ export class PoolControlComponent implements OnInit {
                 this.sensor8id = data.data.sensor8id;
                 this.sensor8name = data.data.sensor8name;
 
+            }
+        })
+    }
+
+    loadSensorIcons(){
+        this.settingsService.loadSensorIcons().subscribe(data => {
+            console.log(data);
+            if(data.success){
+                this.sensor1icon = data.data.sensor1icon;
+                this.sensor2icon = data.data.sensor2icon;
+                this.sensor3icon = data.data.sensor3icon;
+                this.sensor4icon = data.data.sensor4icon;
+                this.sensor5icon = data.data.sensor5icon;
+                this.sensor6icon = data.data.sensor6icon;
+                this.sensor7icon = data.data.sensor7icon;
+                this.sensor8icon = data.data.sensor8icon;
             }
         })
     }

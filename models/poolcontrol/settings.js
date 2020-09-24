@@ -113,6 +113,38 @@ const SettingsSchema = mongoose.Schema({
     hbDisabled:{
         type: Boolean,
         default: false
+    },
+    sensor1icon:{
+        type: String,
+        default: 'fas fa fa-home'
+    },
+    sensor2icon:{
+        type: String,
+        default: 'fas fa fa-home'
+    },
+    sensor3icon:{
+        type: String,
+        default: 'fas fa fa-home'
+    },
+    sensor4icon:{
+        type: String,
+        default: 'fas fa fa-home'
+    },
+    sensor5icon:{
+        type: String,
+        default: 'fas fa fa-home'
+    },
+    sensor6icon:{
+        type: String,
+        default: 'fas fa fa-home'
+    },
+    sensor7icon:{
+        type: String,
+        default: 'fas fa fa-home'
+    },
+    sensor8icon:{
+        type: String,
+        default: 'fas fa fa-home'
     }
     
 })
