@@ -224,6 +224,7 @@ setInterval(function () {
             //console.log(err);
         } else {
             if (settings.hbDisabled) {
+                
             } else {
                 exec("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2", async (err, stdout, stderr) => {
                     if (err) {
