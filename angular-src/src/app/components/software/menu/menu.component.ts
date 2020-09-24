@@ -30,7 +30,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
         this.checkVersion();
 
-        this.subVersion = interval(10000).subscribe(x => this.checkVersion());
+        this.subVersion = interval(3600000).subscribe(x => this.checkVersion());
     }
 
     ngOnDestroy(): void {

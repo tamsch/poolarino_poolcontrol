@@ -5,22 +5,30 @@
         <mat-form-field appearance="fill" class="selectShelly">
             <mat-label>Shelly verbunden?</mat-label>
             <mat-select [(value)]="shellyConnected">
-            <mat-option value="yes">Ja</mat-option>
-            <mat-option value="no">Nein</mat-option>
+                <mat-option value="yes">Ja</mat-option>
+                <mat-option value="no">Nein</mat-option>
             </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="selectRaspi">
             <mat-label>Raspi verbunden?</mat-label>
             <mat-select [(value)]="raspiConnected">
-            <mat-option value="yes">Ja</mat-option>
-            <mat-option value="no">Nein</mat-option>
+                <mat-option value="yes">Ja</mat-option>
+                <mat-option value="no">Nein</mat-option>
             </mat-select>
         </mat-form-field>
 
         <mat-form-field class="example-full-width shellyIpClass">
             <mat-label>Shelly-IP</mat-label>
             <input matInput [(ngModel)]="shellyIp">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="heartbeatDisabledClass">
+            <mat-label>Heartbeat deaktivieren</mat-label>
+            <mat-select [(value)]="heartbeatDisabled">
+                <mat-option value="yes">Ja</mat-option>
+                <mat-option value="no">Nein</mat-option>
+            </mat-select>
         </mat-form-field>
     </mat-tab>
     <mat-tab label="Wetter">

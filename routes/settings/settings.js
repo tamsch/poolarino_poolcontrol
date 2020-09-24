@@ -46,6 +46,8 @@ router.put('/saveSettings', async (req, res) => {
         settings.weatherAppId = req.body.weatherAppId;
         settings.weatherCountryCode = req.body.weatherCountryCode;
 
+        settings.hbDisabled = req.body.hbDisabled;
+
 
         await settings.save((err, saved) => {
             if (err) {
@@ -75,13 +77,12 @@ router.get('/checkVersion', async (req, res) => {
             console.log(err);
             return res.json({ success: false });
         } else {
-            console.log(settings);
             if (settings.actualVersion > settings.versionInfo) {
                 return res.json({ success: true, updateAvailable: true, data: settings });
             } else {
-
+                return res.json({ success: true, updateAvailable: false, data: settings });
             }
-            return res.json({ success: true, updateAvailable: false, data: settings });
+
         }
     })
 })

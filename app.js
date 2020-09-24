@@ -103,6 +103,8 @@ app.listen(port, () => {
 Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
     if (settings != null) {
         settings.versionInfo = versionInfo.version;
+
+        settings.save();
     } else {
         let newSettings = new Settings({
             versionInfo: versionInfo.version
@@ -208,7 +210,6 @@ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, set
 })
 
 function saveVersion(res) {
-    console.log(res);
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
         settings.actualVersion = res.actualVersion;
 
@@ -223,39 +224,11 @@ setInterval(function () {
             //console.log(err);
         } else {
             if (settings.hbDisabled) {
-
+                console.log('HBDISABLED');
             } else {
                 exec("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2", async (err, stdout, stderr) => {
                     if (err) {
-                        if (settings == null) {
-                            newUuid = await uuidv4();
-                        } else if (settings.hbId.length < 15) {
-                            newUuid = await uuidv4();
-                        } else {
-                            newUuid = settings.hbId;
-                        }
 
-                        settings.versionInfo = settings.versionInfo;
-                        settings.cpuSerial = '0041042044002'; //stdout.replace(/(\r\n|\n|\r)/gm, "");
-                        settings.hbId = newUuid;
-
-                        settings.save((err, newSettings) => {
-                            if (err) {
-                                //console.log(err);
-                            } else {
-
-                                const body = { versionInfo: newSettings.versionInfo, cpuSerial: newSettings.cpuSerial, hbId: newSettings.hbId }
-
-                                fetch('http://49.12.69.199:4000/hb/newHb', {
-                                    method: 'post',
-                                    body: JSON.stringify(body),
-                                    headers: { 'Content-Type': 'application/json' },
-                                })
-                                    .then(res => res.json())
-                                    .then(body => { saveVersion(body) })
-                                    .catch(err => console.log());
-                            }
-                        })
                     } else {
 
                         if (settings == null) {
