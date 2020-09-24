@@ -285,6 +285,16 @@
         margin-bottom: 0px !important;
         margin-left: 0.5%;
     }
+
+    .updateInfo{
+        display: block;
+        margin-top: 33%;
+        position: absolute;
+        font-size: 7pt;
+        margin-left: 0.8%;
+        font-weight: bold;
+        color: red;
+    }
     
 }
 

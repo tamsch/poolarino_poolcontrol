@@ -6,11 +6,11 @@ const Settings = require('../../models/poolcontrol/settings');
 //Alle Settings laden
 router.get('/loadAllSettings', async (req, res) => {
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
-        if(err || settings == null){
+        if (err || settings == null) {
             console.log(err);
-            return res.json({success: false});
+            return res.json({ success: false });
         } else {
-            return res.json({success: true, data: settings});
+            return res.json({ success: true, data: settings });
         }
     })
 })
@@ -19,7 +19,7 @@ router.get('/loadAllSettings', async (req, res) => {
 router.put('/saveSettings', async (req, res) => {
     const settings = await Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1);
 
-    if(settings){
+    if (settings) {
         settings.shellyConnected = req.body.shellyConnected;
         settings.raspberryPiConnected = req.body.raspberryPiConnected;
         settings.shellyIp = req.body.shellyIp;
@@ -45,14 +45,14 @@ router.put('/saveSettings', async (req, res) => {
         settings.weatherCity = req.body.weatherCity;
         settings.weatherAppId = req.body.weatherAppId;
         settings.weatherCountryCode = req.body.weatherCountryCode;
-            
+
 
         await settings.save((err, saved) => {
-            if(err){
+            if (err) {
                 console.log(err);
-                return res.json({success: false});
+                return res.json({ success: false });
             } else {
-                return res.json({success: true});
+                return res.json({ success: true });
             }
         });
 
@@ -64,8 +64,26 @@ router.put('/saveSettings', async (req, res) => {
         })
 
         newSettings.save();
-        return res.json({success: true});
+        return res.json({ success: true });
     }
+})
+
+//Alle Settings laden
+router.get('/checkVersion', async (req, res) => {
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).select('actualVersion versionInfo').exec((err, settings) => {
+        if (err || settings == null) {
+            console.log(err);
+            return res.json({ success: false });
+        } else {
+            console.log(settings);
+            if (settings.actualVersion > settings.versionInfo) {
+                return res.json({ success: true, updateAvailable: true });
+            } else {
+
+            }
+            return res.json({ success: true, updateAvailable: false });
+        }
+    })
 })
 
 module.exports = router; 

@@ -6,7 +6,7 @@
  */
 
 
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PoolcontrolService } from 'src/app/services/poolcontrol/poolcontrol.service';
 import { StockChart } from 'angular-highcharts';
 import { interval } from 'rxjs';
@@ -15,9 +15,9 @@ import { environment } from '../../../../../environments/environment';
 import { SettingsService } from 'src/app/services/settings/settings.service';
 
 @Component({
-  selector: 'app-pool-control',
-  templateUrl: './pool-control.component.html',
-  styleUrls: ['./pool-control.component.css']
+    selector: 'app-pool-control',
+    templateUrl: './pool-control.component.html',
+    styleUrls: ['./pool-control.component.css']
 })
 export class PoolControlComponent implements OnInit {
 
@@ -25,6 +25,7 @@ export class PoolControlComponent implements OnInit {
     solarIsOn: Boolean;
     sub: any;
     subTemps: any;
+    subVersion: any;
     showLoaderTemps: Boolean = false;
     showLoaderChart: Boolean = false;
     noValues: Boolean = false;
@@ -107,6 +108,7 @@ export class PoolControlComponent implements OnInit {
 
     envBoolean: Boolean = false;
 
+
     constructor(
         private poolControlService: PoolcontrolService,
         private settingsService: SettingsService
@@ -114,27 +116,26 @@ export class PoolControlComponent implements OnInit {
 
     ngOnInit() {
 
-        if(environment.production) {
+        if (environment.production) {
 
             this.envBoolean = true;
 
             this.getTempsAndRuntime();
 
             this.getDeviceLoad();
-    
+
             this.refreshAllDevices();
 
-            this.loadTemperatureSensorData();            
-        
+            this.loadTemperatureSensorData();
+
+
             this.sub = interval(10000).subscribe(x => this.getDeviceLoad());
             this.subTemps = interval(60000).subscribe(x => this.getTempsAndRuntime());
         } else {
             this.envBoolean = false;
         }
-        
-        console.log(this.envBoolean);
+
     }
-    
 
     getTempsAndRuntime() {
         this.showLoaderTemps = true;
@@ -150,142 +151,142 @@ export class PoolControlComponent implements OnInit {
         this.colorTempWarmesWasser = '#d8d8d8';
         this.colorTempDifferenz = '#d8d8d8';
         this.poolControlService.getTemperatureFromAllSensors().subscribe(data => {
-            if(data.success) {
-                for(let num of data.data) {
-                    if(num.id === this.sensor7id) {
+            if (data.success) {
+                for (let num of data.data) {
+                    if (num.id === this.sensor7id) {
                         this.tempLufttemperatur = num.t;
-                        if(num.t >= 0 && num.t <= 5){
+                        if (num.t >= 0 && num.t <= 5) {
                             this.colorTempLufttemperatur = '#0e58cf';
-                        } else if(num.t >= 5.1 && num.t <= 10){
+                        } else if (num.t >= 5.1 && num.t <= 10) {
                             this.colorTempLufttemperatur = '#3366FF';
-                        } else if(num.t >= 10.1 && num.t <= 15){
+                        } else if (num.t >= 10.1 && num.t <= 15) {
                             this.colorTempLufttemperatur = '#7badf7';
-                        } else if(num.t >= 15.1 && num.t <= 20){
+                        } else if (num.t >= 15.1 && num.t <= 20) {
                             this.colorTempLufttemperatur = '#f9bd25';
-                        } else if(num.t >= 20.1 && num.t <= 25){
+                        } else if (num.t >= 20.1 && num.t <= 25) {
                             this.colorTempLufttemperatur = '#fc6400';
-                        } else if(num.t >= 25.1 && num.t <= 30){
+                        } else if (num.t >= 25.1 && num.t <= 30) {
                             this.colorTempLufttemperatur = '#fc4700';
-                        } else if(num.t >= 30.1){
+                        } else if (num.t >= 30.1) {
                             this.colorTempLufttemperatur = '#ff2b2b';
                         }
-                    } else if(num.id === this.sensor6id) {
+                    } else if (num.id === this.sensor6id) {
                         this.tempSkimmer = num.t;
-                        if(num.t >= 0 && num.t <= 5){
+                        if (num.t >= 0 && num.t <= 5) {
                             this.colorTempSkimmer = '#0e58cf';
-                        } else if(num.t >= 5.1 && num.t <= 10){
+                        } else if (num.t >= 5.1 && num.t <= 10) {
                             this.colorTempSkimmer = '#3366FF';
-                        } else if(num.t >= 10.1 && num.t <= 15){
+                        } else if (num.t >= 10.1 && num.t <= 15) {
                             this.colorTempSkimmer = '#7badf7';
-                        } else if(num.t >= 15.1 && num.t <= 20){
+                        } else if (num.t >= 15.1 && num.t <= 20) {
                             this.colorTempSkimmer = '#f9bd25';
-                        } else if(num.t >= 20.1 && num.t <= 25){
+                        } else if (num.t >= 20.1 && num.t <= 25) {
                             this.colorTempSkimmer = '#fc6400';
-                        } else if(num.t >= 25.1 && num.t <= 30){
+                        } else if (num.t >= 25.1 && num.t <= 30) {
                             this.colorTempSkimmer = '#fc4700';
-                        } else if(num.t >= 30.1){
+                        } else if (num.t >= 30.1) {
                             this.colorTempSkimmer = '#ff2b2b';
                         }
-                    } else if(num.id === this.sensor4id) {
+                    } else if (num.id === this.sensor4id) {
                         this.tempSwitchgehaeuse = num.t;
-                        if(num.t >= 0 && num.t <= 5){
+                        if (num.t >= 0 && num.t <= 5) {
                             this.colorTempSwitchGehaeuse = '#0e58cf';
-                        } else if(num.t >= 5.1 && num.t <= 10){
+                        } else if (num.t >= 5.1 && num.t <= 10) {
                             this.colorTempSwitchGehaeuse = '#3366FF';
-                        } else if(num.t >= 10.1 && num.t <= 15){
+                        } else if (num.t >= 10.1 && num.t <= 15) {
                             this.colorTempSwitchGehaeuse = '#7badf7';
-                        } else if(num.t >= 15.1 && num.t <= 20){
+                        } else if (num.t >= 15.1 && num.t <= 20) {
                             this.colorTempSwitchGehaeuse = '#f9bd25';
-                        } else if(num.t >= 20.1 && num.t <= 25){
+                        } else if (num.t >= 20.1 && num.t <= 25) {
                             this.colorTempSwitchGehaeuse = '#fc6400';
-                        } else if(num.t >= 25.1 && num.t <= 30){
+                        } else if (num.t >= 25.1 && num.t <= 30) {
                             this.colorTempSwitchGehaeuse = '#fc4700';
-                        } else if(num.t >= 30.1){
+                        } else if (num.t >= 30.1) {
                             this.colorTempSwitchGehaeuse = '#ff2b2b';
                         }
-                    } else if(num.id === this.sensor2id) {
+                    } else if (num.id === this.sensor2id) {
                         this.tempGartenhuette = num.t;
-                        if(num.t >= 0 && num.t <= 5){
+                        if (num.t >= 0 && num.t <= 5) {
                             this.colorTempGartenhuette = '#0e58cf';
-                        } else if(num.t >= 5.1 && num.t <= 10){
+                        } else if (num.t >= 5.1 && num.t <= 10) {
                             this.colorTempGartenhuette = '#3366FF';
-                        } else if(num.t >= 10.1 && num.t <= 15){
+                        } else if (num.t >= 10.1 && num.t <= 15) {
                             this.colorTempGartenhuette = '#7badf7';
-                        } else if(num.t >= 15.1 && num.t <= 20){
+                        } else if (num.t >= 15.1 && num.t <= 20) {
                             this.colorTempGartenhuette = '#f9bd25';
-                        } else if(num.t >= 20.1 && num.t <= 25){
+                        } else if (num.t >= 20.1 && num.t <= 25) {
                             this.colorTempGartenhuette = '#fc6400';
-                        } else if(num.t >= 25.1 && num.t <= 30){
+                        } else if (num.t >= 25.1 && num.t <= 30) {
                             this.colorTempGartenhuette = '#fc4700';
-                        } else if(num.t >= 30.1){
+                        } else if (num.t >= 30.1) {
                             this.colorTempGartenhuette = '#ff2b2b';
                         }
-                    } else if(num.id === this.sensor3id) {
+                    } else if (num.id === this.sensor3id) {
                         this.tempRaspberryGehaeuse = num.t;
-                        if(num.t >= 0 && num.t <= 5){
+                        if (num.t >= 0 && num.t <= 5) {
                             this.colorTempRaspberryGehaeuse = '#0e58cf';
-                        } else if(num.t >= 5.1 && num.t <= 10){
+                        } else if (num.t >= 5.1 && num.t <= 10) {
                             this.colorTempRaspberryGehaeuse = '#3366FF';
-                        } else if(num.t >= 10.1 && num.t <= 15){
+                        } else if (num.t >= 10.1 && num.t <= 15) {
                             this.colorTempRaspberryGehaeuse = '#7badf7';
-                        } else if(num.t >= 15.1 && num.t <= 20){
+                        } else if (num.t >= 15.1 && num.t <= 20) {
                             this.colorTempRaspberryGehaeuse = '#f9bd25';
-                        } else if(num.t >= 20.1 && num.t <= 25){
+                        } else if (num.t >= 20.1 && num.t <= 25) {
                             this.colorTempRaspberryGehaeuse = '#fc6400';
-                        } else if(num.t >= 25.1 && num.t <= 30){
+                        } else if (num.t >= 25.1 && num.t <= 30) {
                             this.colorTempRaspberryGehaeuse = '#fc4700';
-                        } else if(num.t >= 30.1){
+                        } else if (num.t >= 30.1) {
                             this.colorTempRaspberryGehaeuse = '#ff2b2b';
                         }
-                    } else if(num.id === this.sensor1id) {
+                    } else if (num.id === this.sensor1id) {
                         this.tempSolaranlage = num.t;
-                        if(num.t >= 0 && num.t <= 5){
+                        if (num.t >= 0 && num.t <= 5) {
                             this.colorTempSolaranlage = '#0e58cf';
-                        } else if(num.t >= 5.1 && num.t <= 10){
+                        } else if (num.t >= 5.1 && num.t <= 10) {
                             this.colorTempSolaranlage = '#3366FF';
-                        } else if(num.t >= 10.1 && num.t <= 15){
+                        } else if (num.t >= 10.1 && num.t <= 15) {
                             this.colorTempSolaranlage = '#7badf7';
-                        } else if(num.t >= 15.1 && num.t <= 20){
+                        } else if (num.t >= 15.1 && num.t <= 20) {
                             this.colorTempSolaranlage = '#f9bd25';
-                        } else if(num.t >= 20.1 && num.t <= 25){
+                        } else if (num.t >= 20.1 && num.t <= 25) {
                             this.colorTempSolaranlage = '#fc6400';
-                        } else if(num.t >= 25.1 && num.t <= 30){
+                        } else if (num.t >= 25.1 && num.t <= 30) {
                             this.colorTempSolaranlage = '#fc4700';
-                        } else if(num.t >= 30.1){
+                        } else if (num.t >= 30.1) {
                             this.colorTempSolaranlage = '#ff2b2b';
                         }
-                    } else if(num.id === this.sensor8id) {
+                    } else if (num.id === this.sensor8id) {
                         this.tempWarmesWasser = num.t;
-                        if(num.t >= 0 && num.t <= 5){
+                        if (num.t >= 0 && num.t <= 5) {
                             this.colorTempWarmesWasser = '#0e58cf';
-                        } else if(num.t >= 5.1 && num.t <= 10){
+                        } else if (num.t >= 5.1 && num.t <= 10) {
                             this.colorTempWarmesWasser = '#3366FF';
-                        } else if(num.t >= 10.1 && num.t <= 15){
+                        } else if (num.t >= 10.1 && num.t <= 15) {
                             this.colorTempWarmesWasser = '#7badf7';
-                        } else if(num.t >= 15.1 && num.t <= 20){
+                        } else if (num.t >= 15.1 && num.t <= 20) {
                             this.colorTempWarmesWasser = '#f9bd25';
-                        } else if(num.t >= 20.1 && num.t <= 25){
+                        } else if (num.t >= 20.1 && num.t <= 25) {
                             this.colorTempWarmesWasser = '#fc6400';
-                        } else if(num.t >= 25.1 && num.t <= 30){
+                        } else if (num.t >= 25.1 && num.t <= 30) {
                             this.colorTempWarmesWasser = '#fc4700';
-                        } else if(num.t >= 30.1){
+                        } else if (num.t >= 30.1) {
                             this.colorTempWarmesWasser = '#ff2b2b';
                         }
-                    } else if(num.id === this.sensor5id) {
+                    } else if (num.id === this.sensor5id) {
                         this.tempHifiGehaeuse = num.t
-                        if(num.t >= 0 && num.t < 5){
+                        if (num.t >= 0 && num.t < 5) {
                             this.colorTempHifiGehaeuse = '#0e58cf';
-                        } else if(num.t >= 5.1 && num.t <= 10){
+                        } else if (num.t >= 5.1 && num.t <= 10) {
                             this.colorTempHifiGehaeuse = '#3366FF';
-                        } else if(num.t >= 10.1 && num.t <= 15){
+                        } else if (num.t >= 10.1 && num.t <= 15) {
                             this.colorTempHifiGehaeuse = '#7badf7';
-                        } else if(num.t >= 15.1 && num.t <= 20){
+                        } else if (num.t >= 15.1 && num.t <= 20) {
                             this.colorTempHifiGehaeuse = '#f9bd25';
-                        } else if(num.t >= 20.1 && num.t <= 25){
+                        } else if (num.t >= 20.1 && num.t <= 25) {
                             this.colorTempHifiGehaeuse = '#fc6400';
-                        } else if(num.t >= 25.1 && num.t <= 30){
+                        } else if (num.t >= 25.1 && num.t <= 30) {
                             this.colorTempHifiGehaeuse = '#fc4700';
-                        } else if(num.t >= 30.1){
+                        } else if (num.t >= 30.1) {
                             this.colorTempHifiGehaeuse = '#ff2b2b';
                         }
                     }
@@ -293,12 +294,12 @@ export class PoolControlComponent implements OnInit {
 
                 this.tempDifferenz = this.tempWarmesWasser - this.tempSkimmer;
                 this.tempHelper = Math.round(this.tempDifferenz * 100) / 100;
-                if(this.tempHelper < 0) {
+                if (this.tempHelper < 0) {
                     this.tempHelper = 0.0;
                 }
                 this.showLoaderTemps = false;
                 this.noValues = false;
-                
+
             } else {
                 this.showLoaderTemps = false;
                 this.noValues = true;
@@ -306,42 +307,42 @@ export class PoolControlComponent implements OnInit {
         })
 
         let relays = ['0', '3'];
-        for(let num of relays) {
+        for (let num of relays) {
             this.poolControlService.relayRuntime(num).subscribe(data => {
-                if(data.success) {
-                    if(data.data.relay === '0'){
+                if (data.success) {
+                    if (data.data.relay === '0') {
                         this.relayZeroRuntime = data.data.runtime;
-                    } else if(data.data.relay === '3'){
+                    } else if (data.data.relay === '3') {
                         this.relayThreeRuntime = data.data.runtime;
                     }
                 }
             })
-        }        
+        }
     }
 
     toggleDevice(deviceId) {
         this.poolControlService.toggleDevice(deviceId).subscribe(data => {
-            if(data.success) {
-                if(deviceId === '0'){
-                    if(data.data.ison) {
+            if (data.success) {
+                if (deviceId === '0') {
+                    if (data.data.ison) {
                         this.relayZeroIsOn = true;
                     } else {
                         this.relayZeroIsOn = false;
                     }
-                } else if(deviceId === '1'){
-                    if(data.data.ison) {
+                } else if (deviceId === '1') {
+                    if (data.data.ison) {
                         this.relayOneIsOn = true;
                     } else {
                         this.relayOneIsOn = false;
                     }
-                } else if(deviceId === '2'){
-                    if(data.data.ison) {
+                } else if (deviceId === '2') {
+                    if (data.data.ison) {
                         this.relayTwoIsOn = true;
                     } else {
                         this.relayTwoIsOn = false;
                     }
-                } else if(deviceId === '3'){
-                    if(data.data.ison) {
+                } else if (deviceId === '3') {
+                    if (data.data.ison) {
                         this.relayThreeIsOn = true;
                     } else {
                         this.relayThreeIsOn = false;
@@ -350,36 +351,36 @@ export class PoolControlComponent implements OnInit {
             }
         })
 
-        setTimeout(()=>{
+        setTimeout(() => {
             this.getDeviceLoad();
-       }, 1000);
+        }, 1000);
 
         this.refreshDevice(deviceId);
     }
 
-    refreshDevice(deviceId){
+    refreshDevice(deviceId) {
         this.poolControlService.getDeviceStatus(deviceId).subscribe(data => {
-            if(data.success) {
-                if(deviceId === '0'){
-                    if(data.data.ison) {
+            if (data.success) {
+                if (deviceId === '0') {
+                    if (data.data.ison) {
                         this.relayZeroIsOn = true;
                     } else {
                         this.relayZeroIsOn = false;
                     }
-                } else if(deviceId === '1'){
-                    if(data.data.ison) {
+                } else if (deviceId === '1') {
+                    if (data.data.ison) {
                         this.relayOneIsOn = true;
                     } else {
                         this.relayOneIsOn = false;
                     }
-                } else if(deviceId === '2'){
-                    if(data.data.ison) {
+                } else if (deviceId === '2') {
+                    if (data.data.ison) {
                         this.relayTwoIsOn = true;
                     } else {
                         this.relayTwoIsOn = false;
                     }
-                } else if(deviceId === '3'){
-                    if(data.data.ison) {
+                } else if (deviceId === '3') {
+                    if (data.data.ison) {
                         this.relayThreeIsOn = true;
                     } else {
                         this.relayThreeIsOn = false;
@@ -389,32 +390,32 @@ export class PoolControlComponent implements OnInit {
         })
     }
 
-    refreshAllDevices(){
+    refreshAllDevices() {
         let deviceIds = ['0', '1', '2', '3'];
 
-        for(let num of deviceIds) {
+        for (let num of deviceIds) {
             this.poolControlService.getDeviceStatus(num).subscribe(data => {
-                if(data.success) {
-                    if(num === '0'){
-                        if(data.data.ison) {
+                if (data.success) {
+                    if (num === '0') {
+                        if (data.data.ison) {
                             this.relayZeroIsOn = true;
                         } else {
                             this.relayZeroIsOn = false;
                         }
-                    } else if(num === '1'){
-                        if(data.data.ison) {
+                    } else if (num === '1') {
+                        if (data.data.ison) {
                             this.relayOneIsOn = true;
                         } else {
                             this.relayOneIsOn = false;
                         }
-                    } else if(num === '2'){
-                        if(data.data.ison) {
+                    } else if (num === '2') {
+                        if (data.data.ison) {
                             this.relayTwoIsOn = true;
                         } else {
                             this.relayTwoIsOn = false;
                         }
-                    } else if(num === '3'){
-                        if(data.data.ison) {
+                    } else if (num === '3') {
+                        if (data.data.ison) {
                             this.relayThreeIsOn = true;
                         } else {
                             this.relayThreeIsOn = false;
@@ -422,13 +423,13 @@ export class PoolControlComponent implements OnInit {
                     }
                 }
             })
-        }      
-        
+        }
+
     }
 
     getDeviceLoad() {
         this.poolControlService.getDeviceLoad().subscribe(data => {
-            if(data.success){
+            if (data.success) {
                 this.relayZeroWatt = data.data[0].power;
                 this.relayOneWatt = data.data[1].power;
                 this.relayTwoWatt = data.data[2].power;
@@ -437,8 +438,8 @@ export class PoolControlComponent implements OnInit {
         })
 
         this.poolControlService.getSolarState().subscribe(data => {
-            if(data.success){
-                if(data.data.isOn){
+            if (data.success) {
+                if (data.data.isOn) {
                     this.solarIsOn = true;
                 } else {
                     this.solarIsOn = false;
@@ -448,12 +449,12 @@ export class PoolControlComponent implements OnInit {
     }
 
     setSolar() {
-        if(this.solarJustChanged) {
-            
+        if (this.solarJustChanged) {
+
         } else {
             this.poolControlService.getSolar().subscribe(data => {
-                if(data.success){
-                    if(data.data[0].isOn){
+                if (data.success) {
+                    if (data.data[0].isOn) {
 
                         Swal.fire({
                             title: 'Sicher?',
@@ -464,21 +465,21 @@ export class PoolControlComponent implements OnInit {
                             confirmButtonColor: '#3085d6',
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'Ja'
-                          }).then((result) => {
+                        }).then((result) => {
                             if (result.value) {
                                 this.solarJustChanged = true;
                                 this.poolControlService.setSolar('off').subscribe(data => {
-                                    if(data.success) {
+                                    if (data.success) {
                                         this.solarIsOn = false;
                                         this.getDeviceLoad();
                                     }
                                 })
-                                setTimeout(()=>{
+                                setTimeout(() => {
                                     this.solarJustChanged = false;
-                               }, 35000);
+                                }, 35000);
                             }
-                          })
-                        
+                        })
+
                     } else {
 
                         Swal.fire({
@@ -490,31 +491,31 @@ export class PoolControlComponent implements OnInit {
                             confirmButtonColor: '#3085d6',
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'Ja'
-                          }).then((result) => {
+                        }).then((result) => {
                             if (result.value) {
                                 this.solarJustChanged = true;
                                 this.poolControlService.setSolar('on').subscribe(data => {
-                                    if(data.success) {
+                                    if (data.success) {
                                         this.getDeviceLoad();
                                     }
                                 })
-                                setTimeout(()=>{
+                                setTimeout(() => {
                                     this.solarJustChanged = false;
-                               }, 35000);
+                                }, 35000);
                             }
-                          })
+                        })
                     }
                 } else {
                     console.log('Server timeout!');
                 }
             })
         }
-        
+
     }
 
-    loadTemperatureSensorData(){
+    loadTemperatureSensorData() {
         this.settingsService.loadAllSettings().subscribe(data => {
-            if(data.success){
+            if (data.success) {
                 this.sensor1id = data.data.sensor1id;
                 this.sensor1name = data.data.sensor1name;
                 this.sensor2id = data.data.sensor2id;
@@ -531,7 +532,7 @@ export class PoolControlComponent implements OnInit {
                 this.sensor7name = data.data.sensor7name;
                 this.sensor8id = data.data.sensor8id;
                 this.sensor8name = data.data.sensor8name;
-                
+
             }
         })
     }
