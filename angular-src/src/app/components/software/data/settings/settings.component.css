@@ -28,19 +28,19 @@ h3{
 
 .sensorName{
     margin-top: 3%;
-    margin-left: 4%;
-    width: 18%;
+    margin-left: 1%;
+    width: 17%;
     font-size: 10pt;
 }
 
 .sensorId{
-    margin-left: 4%;
-    width: 18%;
+    margin-left: 1%;
+    width: 14%;
     font-size: 10pt;
 }
 
 .sensor2{
-    margin-left: 8%;
+    margin-left: 4%;
 }
 
 .sensor3{
@@ -48,7 +48,7 @@ h3{
 }
 
 .sensor4{
-    margin-left: 8%;
+    margin-left: 4%;
 }
 
 .sensor5{
@@ -56,7 +56,7 @@ h3{
 }
 
 .sensor6{
-    margin-left: 8%;
+    margin-left: 4%;
 }
 
 .sensor7{
@@ -64,7 +64,7 @@ h3{
 }
 
 .sensor8{
-    margin-left: 8%;
+    margin-left: 4%;
 }
 
 .weatherCity{

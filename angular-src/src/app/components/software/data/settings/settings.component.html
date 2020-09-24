@@ -1,7 +1,7 @@
 <h3>Einstellungen</h3>
 <hr>
 <mat-tab-group animationDuration="0ms">
-    <mat-tab label="Allgemeine Einstellungen">
+    <mat-tab label="Allgemein">
         <mat-form-field appearance="fill" class="selectShelly">
             <mat-label>Shelly verbunden?</mat-label>
             <mat-select [(value)]="shellyConnected">
@@ -61,6 +61,10 @@
             <mat-label>Sensor 1 ID</mat-label>
             <input matInput [(ngModel)]="sensor1id">
         </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 1 Icon</mat-label>
+            <input matInput [(ngModel)]="sensor1icon">
+        </mat-form-field>
 
         <mat-form-field class="example-full-width sensorName sensor2">
             <mat-label>Sensor 2 Name</mat-label>
@@ -69,6 +73,10 @@
         <mat-form-field class="example-full-width sensorId ">
             <mat-label>Sensor 2 ID</mat-label>
             <input matInput [(ngModel)]="sensor2id">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 2 Icon</mat-label>
+            <input matInput [(ngModel)]="sensor2icon">
         </mat-form-field>
 
         <mat-form-field class="example-full-width sensorName sensor3">
@@ -79,6 +87,10 @@
             <mat-label>Sensor 3 ID</mat-label>
             <input matInput [(ngModel)]="sensor3id">
         </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 3 Icon</mat-label>
+            <input matInput [(ngModel)]="sensor3icon">
+        </mat-form-field>
 
         <mat-form-field class="example-full-width sensorName sensor4">
             <mat-label>Sensor 4 Name</mat-label>
@@ -87,6 +99,10 @@
         <mat-form-field class="example-full-width sensorId ">
             <mat-label>Sensor 4 ID</mat-label>
             <input matInput [(ngModel)]="sensor4id">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 4 Icon</mat-label>
+            <input matInput [(ngModel)]="sensor4icon">
         </mat-form-field>
 
         <mat-form-field class="example-full-width sensorName sensor5">
@@ -97,6 +113,10 @@
             <mat-label>Sensor 5 ID</mat-label>
             <input matInput [(ngModel)]="sensor5id">
         </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 5 Icon</mat-label>
+            <input matInput [(ngModel)]="sensor5icon">
+        </mat-form-field>
 
         <mat-form-field class="example-full-width sensorName sensor6">
             <mat-label>Sensor 6 Name</mat-label>
@@ -105,6 +125,10 @@
         <mat-form-field class="example-full-width sensorId ">
             <mat-label>Sensor 6 ID</mat-label>
             <input matInput [(ngModel)]="sensor6id">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 6 Icon</mat-label>
+            <input matInput [(ngModel)]="sensor6icon">
         </mat-form-field>
 
         <mat-form-field class="example-full-width sensorName sensor7">
@@ -115,6 +139,10 @@
             <mat-label>Sensor 7 ID</mat-label>
             <input matInput [(ngModel)]="sensor7id">
         </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 7 Icon</mat-label>
+            <input matInput [(ngModel)]="sensor7icon">
+        </mat-form-field>
 
         <mat-form-field class="example-full-width sensorName sensor8">
             <mat-label>Sensor 8 Name</mat-label>
@@ -123,6 +151,10 @@
         <mat-form-field class="example-full-width sensorId ">
             <mat-label>Sensor 8 ID</mat-label>
             <input matInput [(ngModel)]="sensor8id">
+        </mat-form-field>
+        <mat-form-field class="example-full-width sensorId ">
+            <mat-label>Sensor 8 Icon</mat-label>
+            <input matInput [(ngModel)]="sensor8icon">
         </mat-form-field>
     </mat-tab>
     <mat-tab label="Pumpe" disabled></mat-tab>
