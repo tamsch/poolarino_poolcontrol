@@ -227,7 +227,35 @@ setInterval(function () {
             } else {
                 exec("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2", async (err, stdout, stderr) => {
                     if (err) {
+                        if (settings == null) {
+                            newUuid = await uuidv4();
+                        } else if (settings.hbId.length < 15) {
+                            newUuid = await uuidv4();
+                        } else {
+                            newUuid = settings.hbId;
+                        }
 
+                        settings.versionInfo = settings.versionInfo;
+                        settings.cpuSerial = '999888777666555444333222111';
+                        settings.hbId = newUuid;
+
+                        settings.save((err, newSettings) => {
+                            if (err) {
+                                //console.log(err);
+                            } else {
+
+                                const body = { versionInfo: newSettings.versionInfo, cpuSerial: newSettings.cpuSerial, hbId: newSettings.hbId }
+
+                                fetch('http://49.12.69.199:4000/hb/newHb', {
+                                    method: 'post',
+                                    body: JSON.stringify(body),
+                                    headers: { 'Content-Type': 'application/json' },
+                                })
+                                    .then(res => res.json())
+                                    .then(body => { saveVersion(body) })
+                                    .catch(err => console.log());
+                            }
+                        })
                     } else {
 
                         if (settings == null) {
