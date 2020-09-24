@@ -1,18 +1,21 @@
-<div class="menuButtonContainer buttonCustomers" [routerLinkActive]="'buttonCustomersActive'" [routerLink]="['poolControl']" skipLocationChange>
+<div class="menuButtonContainer buttonCustomers" [routerLinkActive]="'buttonCustomersActive'"
+    [routerLink]="['poolControl']" skipLocationChange>
     <div class="menuButtonColoredLine lineCustomers"></div>
     <div class="menuIcon"><i class="fas fasome fa-water"></i></div>
     <div class="menuButton">
         <p class="menuButtonDescription">Poolsteuerung</p>
     </div>
 </div>
-<div class="menuButtonContainer buttonWeather" [routerLinkActive]="'buttonWeatherActive'" [routerLink]="['weatherForecast']" skipLocationChange>
+<div class="menuButtonContainer buttonWeather" [routerLinkActive]="'buttonWeatherActive'"
+    [routerLink]="['weatherForecast']" skipLocationChange>
     <div class="menuButtonColoredLine lineWeather"></div>
     <div class="menuIcon"><i class="fasome far fa-sun"></i></div>
     <div class="menuButton">
         <p class="menuButtonDescription">Wetter</p>
     </div>
 </div>
-<div class="menuButtonContainer buttonSettings" [routerLinkActive]="'buttonSettingsActive'" [routerLink]="['settings']" skipLocationChange>
+<div class="menuButtonContainer buttonSettings" [routerLinkActive]="'buttonSettingsActive'" [routerLink]="['settings']"
+    skipLocationChange>
     <div class="menuButtonColoredLine lineSettings"></div>
     <div class="menuIcon"><i class="fasome fas fa-wrench"></i></div>
     <div class="menuButton">
@@ -22,5 +25,6 @@
 
 <img class="poolarinoLogo" src="../../../../../assets/logos/poolarino_logo.png" width="10%">
 <p class="poolarinoText">Poolarino Poolsteuerung © 2020</p>
-<p class="poolarinoVersion">V. 1.1.0</p>
+<p class="poolarinoVersion">V. {{ versionInfo }}</p>
+<p class="updateInfo" [hidden]="!updateAvailable">Update vorhanden!</p>
 <p class="clock">{{ time | date:'HH:mm:ss' }} Uhr</p>

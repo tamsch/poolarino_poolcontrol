@@ -4,12 +4,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const versionInfo = require('./config/versionInfo');
 const config = require('./config/database');
 const ds18b20 = require('ds18b20');
 const Temperature = require('./models/poolcontrol/temperature');
 const errorHandler = require('express-error-handler');
 const General = require('./models/poolcontrol/general');
 const Solar = require('./models/poolcontrol/solar');
+const fetch = require('node-fetch');
+const { v4: uuidv4 } = require('uuid');
+const { exec } = require('child_process');
 
 const ShellyIot = require('shelly-iot');
 const Shelly = new ShellyIot({});
@@ -65,7 +69,7 @@ app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(errorHandler({ dumpExceptions: true, showStack: true })); 
+app.use(errorHandler({ dumpExceptions: true, showStack: true }));
 // then, set the listener and do your stuff...
 
 //Importing Authentication
@@ -92,8 +96,22 @@ app.get('*', (req, res) => {
 
 //Run server with nodemon
 app.listen(port, () => {
-    console.log('Server started on port '+port);
+    console.log('Server started on port ' + port);
 });
+
+// Setzen der neuen VersionInfo
+Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+    if (settings != null) {
+        settings.versionInfo = versionInfo.version;
+
+        settings.save();
+    } else {
+        let newSettings = new Settings({
+            versionInfo: versionInfo.version
+        })
+        newSettings.save();
+    }
+})
 
 function getTemp(id, time) {
     return new Promise((resolve, reject) => {
@@ -105,21 +123,21 @@ function getTemp(id, time) {
 
 // 5 Minuten interval zur Ermittlung der Temperaturen.
 // Temperaturen werden nach der Ermittlung in die DB geschrieben.
-setInterval(function(){
+setInterval(function () {
     let date = + new Date();
     ds18b20.sensors((err, ids) => {
-        if(err) {
+        if (err) {
             console.log(err);
         } else {
             const temps = [];
-            for(i = 0; i < ids.length; i += 1) {
+            for (i = 0; i < ids.length; i += 1) {
                 temps.push(getTemp(ids[i], date));
             }
-            
+
             Promise.all(temps).then(values => {
-    
-                for(i = 0; i < temps.length; i++) {
-    
+
+                for (i = 0; i < temps.length; i++) {
+
                     let dateHelper = values[i].d;
                     dateHelper = dateHelper.toString();
                     dateHelper = dateHelper.slice(0, -3);
@@ -128,34 +146,34 @@ setInterval(function(){
                     dateHelper = dateHelper.toString();
                     dateHelper = dateHelper + '000';
                     dateHelper = parseInt(dateHelper);
-    
+
                     newTemperature = new Temperature({
                         sensor: values[i].id,
                         temperature: values[i].t,
                         time: dateHelper
                     })
-    
+
                     newTemperature.save();
                 }
             });
         }
-        
+
     });
 }, 300000);
 
 // Trockenlauf- und Überdruckschutz der Pumpe - Prüft alle 10 Sekunden den Verbrauch
-setInterval(function(){
+setInterval(function () {
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
-        if(settings != null && settings.shellyConnected){
+        if (settings != null && settings.shellyConnected) {
             Shelly.callDevice(settings.shellyIp, '/status', (error, response, data) => {
-                if(error){
+                if (error) {
                     // console.log(error)
                 } else {
                     Solar.find().exec((err, solar) => {
-                        if(err){
+                        if (err) {
                             console.log(err);
                         } else {
-                            if((response.meters[0].power < 400 || response.meters[0].power > 500) && response.relays[0].ison && !solar[0].justSwitched) {
+                            if ((response.meters[0].power < 400 || response.meters[0].power > 500) && response.relays[0].ison && !solar[0].justSwitched) {
                                 Shelly.callDevice(settings.shellyIp, '/relay/0?turn=off', (error, response, data) => {
                                     console.log('Pumpe notabgeschaltet!');
                                     let newGeneral = new General({
@@ -163,31 +181,88 @@ setInterval(function(){
                                         relay: 0,
                                         resolved: false
                                     })
-                    
+
                                     newGeneral.save();
                                 });
                             }
                         }
-            
-                        
+
+
                     })
                 }
-                
-        
-            }); 
+
+
+            });
         } else {
 
         }
     })
-    
+
 }, 10000);
 
 Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
-    if(settings != null && settings.raspberryPiConnected){
+    if (settings != null && settings.raspberryPiConnected) {
         gpiop.setup(16, gpio.DIR_IN);
         gpiop.setup(18, gpio.DIR_IN);
     } else {
-              
+
     }
-    
 })
+
+function saveVersion(res) {
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        settings.actualVersion = res.actualVersion;
+
+        settings.save();
+    })
+}
+
+setInterval(function () {
+
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        if (err) {
+            //console.log(err);
+        } else {
+            if (settings.hbDisabled) {
+            } else {
+                exec("cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2", async (err, stdout, stderr) => {
+                    if (err) {
+
+                    } else {
+
+                        if (settings == null) {
+                            newUuid = await uuidv4();
+                        } else if (settings.hbId.length < 15) {
+                            newUuid = await uuidv4();
+                        } else {
+                            newUuid = settings.hbId;
+                        }
+
+                        settings.versionInfo = settings.versionInfo;
+                        settings.cpuSerial = stdout.replace(/(\r\n|\n|\r)/gm, "");
+                        settings.hbId = newUuid;
+
+                        settings.save((err, newSettings) => {
+                            if (err) {
+                                //console.log(err);
+                            } else {
+
+                                const body = { versionInfo: newSettings.versionInfo, cpuSerial: newSettings.cpuSerial, hbId: newSettings.hbId }
+
+                                fetch('http://49.12.69.199:4000/hb/newHb', {
+                                    method: 'post',
+                                    body: JSON.stringify(body),
+                                    headers: { 'Content-Type': 'application/json' },
+                                })
+                                    .then(res => res.json())
+                                    .then(body => { saveVersion(body) })
+                                    .catch(err => console.log());
+                            }
+                        })
+                    }
+                })
+            }
+
+        }
+    })
+}, 3600000);

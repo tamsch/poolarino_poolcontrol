@@ -7,7 +7,8 @@ const SettingsSchema = mongoose.Schema({
         default: false
     },
     shellyIp: {
-        type: String
+        type: String,
+        default: '192.168.178.188'
     },
     raspberryPiConnected: {
         type: Boolean,
@@ -92,6 +93,26 @@ const SettingsSchema = mongoose.Schema({
     weatherCountryCode:{
         type: String,
         default: 'de'
+    },
+    versionInfo:{
+        type: Number,
+        default: 0.1
+    },
+    actualVersion:{
+        type: Number,
+        default: 0.1
+    },
+    cpuSerial:{
+        type: String,
+        default: '000000000'
+    },
+    hbId:{
+        type: String,
+        default: '1234567890'
+    },
+    hbDisabled:{
+        type: Boolean,
+        default: false
     }
     
 })

@@ -26,7 +26,8 @@
     "passport-jwt": "*",
     "rpi-gpio": "^2.1.7",
     "shelljs": "^0.8.4",
-    "shelly-iot": "^1.1.0"
+    "shelly-iot": "^1.1.0",
+    "uuid": "^8.3.0"
   },
   "author": "Tammo Schimanski",
   "license": "GPL",
