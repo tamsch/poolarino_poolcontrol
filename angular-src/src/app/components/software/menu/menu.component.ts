@@ -18,6 +18,8 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     updateAvailable: Boolean = false;
 
+    versionInfo: String;
+
     constructor(
         private clockService: ClockService,
         private settingsService: SettingsService
@@ -43,6 +45,8 @@ export class MenuComponent implements OnInit, OnDestroy {
                 } else {
                     this.updateAvailable = false;
                 }
+
+                this.versionInfo = data.data.versionInfo
             }
         })
     }

@@ -77,11 +77,11 @@ router.get('/checkVersion', async (req, res) => {
         } else {
             console.log(settings);
             if (settings.actualVersion > settings.versionInfo) {
-                return res.json({ success: true, updateAvailable: true });
+                return res.json({ success: true, updateAvailable: true, data: settings });
             } else {
 
             }
-            return res.json({ success: true, updateAvailable: false });
+            return res.json({ success: true, updateAvailable: false, data: settings });
         }
     })
 })
