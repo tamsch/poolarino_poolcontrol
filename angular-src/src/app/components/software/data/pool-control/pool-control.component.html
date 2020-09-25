@@ -239,11 +239,11 @@
 <hr>
 <div class="bottomTemps">
     <div class="bottomTempContainer" [hidden]="!solarIsOn">
-        <p class="bottomTemperatureIcon"> <i [class]="sensor7icon"></i></p>
+        <p class="bottomTemperatureIcon"> <i [class]="sensor8icon"></i></p>
         <p class="bottomTemperature">{{ sensor8name }}: <b>{{ tempWarmesWasser ? tempWarmesWasser + '°C' : '' }}</b></p>
     </div>
     <div class="bottomTempContainer">
-        <p class="bottomTemperatureIcon"><i [class]="sensor8icon"></i></p>
+        <p class="bottomTemperatureIcon"><i [class]="sensor7icon"></i></p>
         <p class="bottomTemperature">{{ sensor7name }}: <b>{{ tempLufttemperatur ? tempLufttemperatur + '°C' : '' }}</b></p>
     </div>
     <div class="bottomTempContainer" [hidden]="!solarIsOn">
