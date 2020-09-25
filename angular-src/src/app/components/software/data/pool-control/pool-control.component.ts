@@ -125,7 +125,7 @@ export class PoolControlComponent implements OnInit {
 
     ngOnInit() {
 
-        if (!environment.production) {
+        if (environment.production) {
 
             this.envBoolean = true;
 
