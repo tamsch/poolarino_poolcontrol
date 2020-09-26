@@ -1,6 +1,6 @@
 {
   "name": "poolarinopoolcontrol",
-  "version": "1.6",
+  "version": "1.1.0",
   "description": "Poolarino Poolcontrol by www.poolarino.de",
   "main": "app.js",
   "scripts": {
