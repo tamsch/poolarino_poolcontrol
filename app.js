@@ -282,48 +282,51 @@ setInterval(function () {
 }, 3600000);
 
 
-// initial sendout
-Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
-    if (err) {
-        //console.log(err);
-    } else {
-        if (settings.hbDisabled) {
-            
+setTimeout(function(){ 
+    // initial sendout
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        if (err) {
+            //console.log(err);
         } else {
-
-            let sys = await getOsInformation();
-
-            settings.osType = sys[0];
-            settings.osVersion = sys[1];
-            settings.machineId = sys[2];
-
-            let x = JSON.parse(JSON.stringify(settings));
-
-            if(x.hbId.length < 15){
-                newInstallationId = await uuidv4();
+            if (settings.hbDisabled) {
+                
             } else {
-                newInstallationId = x.hbId;
+
+                let sys = await getOsInformation();
+
+                settings.osType = sys[0];
+                settings.osVersion = sys[1];
+                settings.machineId = sys[2];
+
+                let x = JSON.parse(JSON.stringify(settings));
+
+                if(x.hbId.length < 15){
+                    newInstallationId = await uuidv4();
+                } else {
+                    newInstallationId = x.hbId;
+                }
+
+                settings.hbId = newInstallationId;
+
+                settings.save((err, newSettings) => {
+                    if(err){
+
+                    } else {
+                        const body = { versionInfo: newSettings.versionInfo, machineId: newSettings.machineId, hbId: newSettings.hbId, osType: newSettings.osType, osVersion: newSettings.osVersion }
+
+                        fetch('http://49.12.69.199:4000/hb/newHb', {
+                            method: 'post',
+                            body: JSON.stringify(body),
+                            headers: { 'Content-Type': 'application/json' },
+                        })
+                        .then(res => res.json())
+                        .then(body => { saveVersion(body) })
+                        .catch(err => err = '');
+                    }
+                })
             }
 
-            settings.hbId = newInstallationId;
-
-            settings.save((err, newSettings) => {
-                if(err){
-
-                } else {
-                    const body = { versionInfo: newSettings.versionInfo, machineId: newSettings.machineId, hbId: newSettings.hbId, osType: newSettings.osType, osVersion: newSettings.osVersion }
-
-                    fetch('http://49.12.69.199:4000/hb/newHb', {
-                        method: 'post',
-                        body: JSON.stringify(body),
-                        headers: { 'Content-Type': 'application/json' },
-                    })
-                    .then(res => res.json())
-                    .then(body => { saveVersion(body) })
-                    .catch(err => err = '');
-                }
-            })
         }
+    })
+}, 10000);
 
-    }
-})
