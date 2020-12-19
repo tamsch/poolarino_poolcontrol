@@ -222,14 +222,16 @@ function saveVersion(res) {
 async function getMachineId() {
     
     var content = fs.readFileSync('/proc/cpuinfo', 'utf8');
- 
     var cont_array = content.split("\n");
- 
-    var serial_line = cont_array[cont_array.length-2];
- 
-    var serial = serial_line.split(":");
- 
-    return serial[1].slice(1);
+	var x = 0; var serial_line = "";
+	
+	while (x < cont_array.length) {
+		serial_line = cont_array[x];
+		if (serial_line.startsWith("Serial")) {
+			return serial_line.split(":")[1].slice(1);
+		}
+		x++; 
+	}
 }
 
 
