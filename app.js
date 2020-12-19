@@ -15,7 +15,6 @@ const fetch = require('node-fetch');
 const { v4: uuidv4 } = require('uuid');
 const { exec } = require('child_process');
 const os = require('os');
-const clientId = require('node-machine-id');
 const fs = require('fs');
 
 const ShellyIot = require('shelly-iot');
