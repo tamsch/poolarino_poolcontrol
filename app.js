@@ -16,6 +16,7 @@ const { v4: uuidv4 } = require('uuid');
 const { exec } = require('child_process');
 const os = require('os');
 const clientId = require('node-machine-id');
+const fs = require('fs');
 
 const ShellyIot = require('shelly-iot');
 const Shelly = new ShellyIot({});
@@ -219,11 +220,25 @@ function saveVersion(res) {
     })
 }
 
+async function getMachineId() {
+    
+    var content = fs.readFileSync('/proc/cpuinfo', 'utf8');
+ 
+    var cont_array = content.split("\n");
+ 
+    var serial_line = cont_array[cont_array.length-2];
+ 
+    var serial = serial_line.split(":");
+ 
+    return serial[1].slice(1);
+}
+
+
 async function getOsInformation(){
 
     let system = os.type();
     let version = os.release();
-    let machineId = await clientId.machineIdSync();
+    let machineId = await getMachineId();
 
     let helper = [];
     helper.push(system, version, machineId);
