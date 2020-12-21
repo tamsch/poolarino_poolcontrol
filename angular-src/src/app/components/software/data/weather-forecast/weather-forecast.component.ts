@@ -93,7 +93,7 @@ export class WeatherForecastComponent implements OnInit, AfterViewInit {
                     this.completeTimes.push(completeTime);
                 }
             } else if(data.success && (data.data.cod == "400" || data.data.cod == "404")){
-                console.log(data.data.message);
+                //console.log(data.data.message);
             } else {
 
             }

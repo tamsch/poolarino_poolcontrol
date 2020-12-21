@@ -552,7 +552,6 @@ export class PoolControlComponent implements OnInit {
 
     loadSensorIcons(){
         this.settingsService.loadSensorIcons().subscribe(data => {
-            console.log(data);
             if(data.success){
                 this.sensor1icon = data.data.sensor1icon;
                 this.sensor2icon = data.data.sensor2icon;

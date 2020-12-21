@@ -268,7 +268,13 @@ setInterval(function () {
                 let sys = await getOsInformation();
                 let ipInformation = await getIpInformation();
 
-                console.log(ipInformation);
+                if(ipInformation.country){
+                    settings.country = ipInformation.country;
+                }
+
+                if(ipInformation.region){
+                    settings.region = ipInformation.region;
+                }
 
                 settings.osType = sys[0];
                 settings.osVersion = sys[1];

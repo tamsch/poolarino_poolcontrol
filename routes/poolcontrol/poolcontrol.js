@@ -130,9 +130,9 @@ router.get('/getDeviceStatus/:deviceId', async (req, res) => {
 
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
         if(settings != null && settings.shellyConnected) {
-            Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId, (error, response, data) => {
-                if(error){
-                    console.log(error)
+            Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId, (err, response, data) => {
+                if(err){
+                    console.log(err)
                     return res.json({success: false});
                 } else {
                     return res.json({success: true, data: response})
