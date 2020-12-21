@@ -91,16 +91,38 @@ app.listen(port, () => {
     console.log('Server started on port ' + port);
 });
 
-// Setzen der neuen VersionInfo
+// Setzen der neuen VersionInfo, initiale Anlage der Settings
 Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
     if (settings != null) {
         settings.versionInfo = versionInfo.version;
 
         settings.save();
     } else {
+
+        let sysInfo = await getOsInformation();
+        let ipInformation = await getIpInformation();
+
+        if(ipInformation.country){
+            var country = ipInformation.country;
+        } else {
+            var country = 'notSet';
+        }
+
+        if(ipInformation.region){
+            var region = ipInformation.region;
+        } else {
+            var region = 'notSet';
+        }
+
         let newSettings = new Settings({
-            versionInfo: versionInfo.version
+            versionInfo: versionInfo.version,
+            osType: sysInfo[0],
+            region: region,
+            country: country,
+            osVersion: sysInfo[1],
+            machineId: sysInfo[2]
         })
+
         newSettings.save();
     }
 })
@@ -230,9 +252,9 @@ async function getOsInformation(){
     let system = os.type();
     let version = os.release();
     if(system.includes('Windows')){
-        var machineId = 'Windows';
+        var machineId = await uuidv4();
     } else if(system.includes('Darwin')){
-        var machineId = 'Mac OS';
+        var machineId = await uuidv4();
     } else if(system.includes('Linux')){
         var machineId = await getMachineId();
     }
@@ -249,6 +271,9 @@ async function getOsInformation(){
 async function getIpInformation(){
     let externalIp = await publicIp.v4();
     let geo = await geoip.lookup(externalIp);
+    let helper = {
+        failed: true
+    }
 
     return new Promise((resolve, reject) => {
         resolve(geo);
@@ -265,27 +290,10 @@ setInterval(function () {
                 
             } else {
 
-                let sys = await getOsInformation();
-                let ipInformation = await getIpInformation();
-
-                if(ipInformation.country){
-                    settings.country = ipInformation.country;
-                }
-
-                if(ipInformation.region){
-                    settings.region = ipInformation.region;
-                }
-
-                settings.osType = sys[0];
-                settings.osVersion = sys[1];
-                settings.machineId = sys[2];
-
-                let x = JSON.parse(JSON.stringify(settings));
-
-                if(x.hbId.length < 15){
+                if(x.hbId.toString().length < 15){
                     newInstallationId = await uuidv4();
                 } else {
-                    newInstallationId = x.hbId;
+                    newInstallationId = settings.hbId;
                 }
 
                 settings.hbId = newInstallationId;
@@ -294,7 +302,7 @@ setInterval(function () {
                     if(err){
 
                     } else {
-                        const body = { versionInfo: newSettings.versionInfo, machineId: newSettings.machineId, hbId: newSettings.hbId, osType: newSettings.osType, osVersion: newSettings.osVersion }
+                        const body = { versionInfo: newSettings.versionInfo, machineId: newSettings.machineId, hbId: newSettings.hbId, osType: newSettings.osType, osVersion: newSettings.osVersion, country: newSettings.country, region: newSettings.region }
 
                         fetch('http://49.12.69.199:4000/hb/newHb', {
                             method: 'post',
@@ -315,6 +323,7 @@ setInterval(function () {
 
 setTimeout(function(){ 
     // initial sendout
+    
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
         if (err) {
             //console.log(err);
@@ -323,27 +332,10 @@ setTimeout(function(){
                 
             } else {
 
-                let sys = await getOsInformation();
-                let ipInformation = await getIpInformation();
-
-                if(ipInformation.country){
-                    settings.country = ipInformation.country;
-                }
-
-                if(ipInformation.region){
-                    settings.region = ipInformation.region;
-                }
-
-                settings.osType = sys[0];
-                settings.osVersion = sys[1];
-                settings.machineId = sys[2];
-
-                let x = JSON.parse(JSON.stringify(settings));
-
-                if(x.hbId.length < 15){
+                if(settings.hbId.toString().length < 15){
                     newInstallationId = await uuidv4();
                 } else {
-                    newInstallationId = x.hbId;
+                    newInstallationId = settings.hbId;
                 }
 
                 settings.hbId = newInstallationId;

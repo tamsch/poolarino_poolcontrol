@@ -14,6 +14,42 @@ const SettingsSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+    versionInfo:{
+        type: Number,
+        default: 0.1
+    },
+    actualVersion:{
+        type: Number,
+        default: 0.1
+    },
+    machineId:{
+        type: String,
+        default: '000000000'
+    },
+    hbId:{
+        type: String,
+        default: '1234567890'
+    },
+    hbDisabled:{
+        type: Boolean,
+        default: false
+    },
+    osType:{
+        type: String,
+        default: 'OSType'
+    },
+    osVersion:{
+        type: String,
+        default: 'OSVersion'
+    },
+    country:{
+        type: String,
+        default: 'notSet'
+    },
+    region:{
+        type: String,
+        default: 'notSet'
+    },
     sensor1name:{
         type: String,
         default: '1'
@@ -94,26 +130,6 @@ const SettingsSchema = mongoose.Schema({
         type: String,
         default: 'de'
     },
-    versionInfo:{
-        type: Number,
-        default: 0.1
-    },
-    actualVersion:{
-        type: Number,
-        default: 0.1
-    },
-    machineId:{
-        type: String,
-        default: '000000000'
-    },
-    hbId:{
-        type: String,
-        default: '1234567890'
-    },
-    hbDisabled:{
-        type: Boolean,
-        default: false
-    },
     sensor1icon:{
         type: String,
         default: 'fas fa fa-home'
@@ -145,22 +161,6 @@ const SettingsSchema = mongoose.Schema({
     sensor8icon:{
         type: String,
         default: 'fas fa fa-home'
-    },
-    osType:{
-        type: String,
-        default: 'OSType'
-    },
-    osVersion:{
-        type: String,
-        default: 'OSVersion'
-    },
-    country:{
-        type: String,
-        default: 'notSet'
-    },
-    region:{
-        type: String,
-        default: 'notSet'
     }
     
 })
