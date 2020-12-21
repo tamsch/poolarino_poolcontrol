@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const passport = require('passport');
 const mongoose = require('mongoose');
 const versionInfo = require('./config/versionInfo');
 const config = require('./config/database');
@@ -16,6 +15,8 @@ const { v4: uuidv4 } = require('uuid');
 const { exec } = require('child_process');
 const os = require('os');
 const fs = require('fs');
+const geoip = require('geoip-lite');
+const publicIp = require('public-ip');
 
 const ShellyIot = require('shelly-iot');
 const Shelly = new ShellyIot({});
@@ -49,8 +50,6 @@ const app = express();
 
 const poolControl = require('./routes/poolcontrol/poolcontrol');
 const weatherForecast = require('./routes/weatherforecast/weatherforecast');
-const users = require('./routes/user/users');
-const userRights = require('./routes/user/userRights');
 const settings = require('./routes/settings/settings');
 
 
@@ -67,19 +66,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 
-//Passport Middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(errorHandler({ dumpExceptions: true, showStack: true }));
 // then, set the listener and do your stuff...
 
-//Importing Authentication
-require('./config/passport')(passport);
-
 //Setting up Routes
-app.use('/users', users);
-app.use('/userRights', userRights);
 app.use('/poolcontrol', poolControl);
 app.use('/weatherforecast', weatherForecast);
 app.use('/settings', settings);
@@ -239,13 +229,29 @@ async function getOsInformation(){
 
     let system = os.type();
     let version = os.release();
-    let machineId = await getMachineId();
+    if(system.includes('Windows')){
+        var machineId = 'Windows';
+    } else if(system.includes('Darwin')){
+        var machineId = 'Mac OS';
+    } else if(system.includes('Linux')){
+        var machineId = await getMachineId();
+    }
+    
 
     let helper = [];
     helper.push(system, version, machineId);
     
     return new Promise((resolve, reject) => {
         resolve(helper);
+    })
+}
+
+async function getIpInformation(){
+    let externalIp = await publicIp.v4();
+    let geo = await geoip.lookup(externalIp);
+
+    return new Promise((resolve, reject) => {
+        resolve(geo);
     })
 }
 
@@ -260,6 +266,9 @@ setInterval(function () {
             } else {
 
                 let sys = await getOsInformation();
+                let ipInformation = await getIpInformation();
+
+                console.log(ipInformation);
 
                 settings.osType = sys[0];
                 settings.osVersion = sys[1];
@@ -309,6 +318,15 @@ setTimeout(function(){
             } else {
 
                 let sys = await getOsInformation();
+                let ipInformation = await getIpInformation();
+
+                if(ipInformation.country){
+                    settings.country = ipInformation.country;
+                }
+
+                if(ipInformation.region){
+                    settings.region = ipInformation.region;
+                }
 
                 settings.osType = sys[0];
                 settings.osVersion = sys[1];
@@ -328,7 +346,7 @@ setTimeout(function(){
                     if(err){
 
                     } else {
-                        const body = { versionInfo: newSettings.versionInfo, machineId: newSettings.machineId, hbId: newSettings.hbId, osType: newSettings.osType, osVersion: newSettings.osVersion }
+                        const body = { versionInfo: newSettings.versionInfo, machineId: newSettings.machineId, hbId: newSettings.hbId, osType: newSettings.osType, osVersion: newSettings.osVersion, country: newSettings.country, region: newSettings.region }
 
                         fetch('http://49.12.69.199:4000/hb/newHb', {
                             method: 'post',

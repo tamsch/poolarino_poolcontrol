@@ -5,8 +5,6 @@ import { SoftwareRoutingModule } from './software-routing.module';
 import { SoftwareComponent } from './software.component';
 import { MenuComponent } from './menu/menu.component';
 import { DataComponent } from './data/data.component';
-import { HeaderPoolcontrolComponent } from './header/header-poolcontrol/header-poolcontrol.component';
-
 
 
 
@@ -14,8 +12,7 @@ import { HeaderPoolcontrolComponent } from './header/header-poolcontrol/header-p
     declarations: [
         SoftwareComponent,
         MenuComponent,
-        DataComponent,
-        HeaderPoolcontrolComponent
+        DataComponent
     ],
     imports: [
         CommonModule,

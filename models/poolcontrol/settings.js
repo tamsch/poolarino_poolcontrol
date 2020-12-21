@@ -153,6 +153,14 @@ const SettingsSchema = mongoose.Schema({
     osVersion:{
         type: String,
         default: 'OSVersion'
+    },
+    country:{
+        type: String,
+        default: 'notSet'
+    },
+    region:{
+        type: String,
+        default: 'notSet'
     }
     
 })

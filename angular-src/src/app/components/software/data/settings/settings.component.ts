@@ -63,6 +63,7 @@ export class SettingsComponent implements OnInit {
 
     saveOptions() {
         Swal.fire({
+            heightAuto: false,
             title: 'Sicher?',
             text: "Einstellungen speichern?",
             icon: 'warning',
@@ -89,6 +90,7 @@ export class SettingsComponent implements OnInit {
                     if (this.heartbeatDisabled == 'yes' && this.hbDisabledSave == false) {
 
                         Swal.fire({
+                            heightAuto: false,
                             title: 'Heartbeat deaktivieren?',
                             html: "<span style='font-size:10pt'>Bitte beachte, dass Du damit nicht nur den Heartbeat, sondern auch die Updateinformationen deaktiverst. Du erhältst zukünftig keine Informationen mehr zu neuen Versionen. Der Heartbeat überträgt keinerlei personenbezogene Daten und dient uns lediglich zur Feststellung, wie häufig die Poolsteuerung zum Einsatz kommt. Weitere Informationen findest Du unter https://www.poolarino.de/heartbeat</span>",
                             icon: 'warning',

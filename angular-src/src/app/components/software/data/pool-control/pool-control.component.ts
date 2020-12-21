@@ -468,6 +468,7 @@ export class PoolControlComponent implements OnInit {
                     if (data.data[0].isOn) {
 
                         Swal.fire({
+                            heightAuto: false,
                             title: 'Sicher?',
                             text: "Solar wirklich abschalten?",
                             icon: 'warning',
@@ -494,6 +495,7 @@ export class PoolControlComponent implements OnInit {
                     } else {
 
                         Swal.fire({
+                            heightAuto: false,
                             title: 'Sicher?',
                             text: "Solar wirklich anschalten?",
                             icon: 'warning',

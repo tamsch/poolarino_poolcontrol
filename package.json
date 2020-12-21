@@ -8,7 +8,6 @@
     "start": "node app"
   },
   "dependencies": {
-    "bcryptjs": "*",
     "body-parser": "*",
     "cors": "^2.8.5",
     "ds18b20": "^0.1.0",
@@ -16,23 +15,21 @@
     "express": "*",
     "express-error-handler": "^1.1.0",
     "file-system": "^2.2.2",
-    "isomorphic-fetch": "^2.2.1",
+    "geoip-lite": "^1.4.2",
+    "isomorphic-fetch": "^3.0.0",
     "jquery": "^3.5.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.5",
+    "mongoose": "^5.11.8",
     "node-fetch": "^2.6.1",
     "node-geocoder": "^3.27.0",
-    "nodemailer": "^6.4.11",
-    "passport": "*",
-    "passport-jwt": "*",
+    "public-ip": "^4.0.3",
     "rpi-gpio": "^2.1.7",
     "shelljs": "^0.8.4",
-    "shelly-iot": "^1.1.0",
-    "uuid": "^8.3.0"
+    "shelly-iot": "^1.1.1",
+    "uuid": "^8.3.2"
   },
   "author": "Tammo Schimanski",
   "license": "GPL",
   "devDependencies": {
-    "@types/jquery": "^3.5.1"
+    "@types/jquery": "^3.5.5"
   }
 }
