@@ -100,16 +100,20 @@ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, set
     } else {
 
         let sysInfo = await getOsInformation();
-        let ipInformation = await getIpInformation();
+        //let ipInformation = await getIpInformation();
+        var country = 'notSet';
+        var region = 'notSet';
 
         if(ipInformation.country){
-            var country = ipInformation.country;
+            // var country = ipInformation.country;
+            var country = 'notSet';
         } else {
             var country = 'notSet';
         }
 
         if(ipInformation.region){
-            var region = ipInformation.region;
+            // var region = ipInformation.region;
+            var region = 'notSet';
         } else {
             var region = 'notSet';
         }
