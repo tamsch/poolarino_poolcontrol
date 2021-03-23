@@ -211,21 +211,17 @@ setInterval(function () {
 
 
             });
-        } else {
-
         }
     })
 
 }, 10000);
 
-Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+/* Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
     if (settings != null && settings.raspberryPiConnected) {
         gpiop.setup(16, gpio.DIR_IN);
         gpiop.setup(18, gpio.DIR_IN);
-    } else {
-
     }
-})
+}) */
 
 function saveVersion(res) {
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
@@ -249,7 +245,6 @@ async function getMachineId() {
 		x++; 
 	}
 }
-
 
 async function getOsInformation(){
 
@@ -323,7 +318,6 @@ setInterval(function () {
         }
     })
 }, 3600000);
-
 
 setTimeout(function(){ 
     // initial sendout

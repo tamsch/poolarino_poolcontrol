@@ -74,11 +74,14 @@ router.get('/getTemperaturesForGraphForSensor/:sensorId', async (req, res) => {
 router.get('/toggleDevice/:deviceId', async (req, res) => {
     console.log('REQ-GET | poolControl.js | /toggleDevice');
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
+        console.log(settings);
         if(settings != null && settings.shellyConnected) {
             Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId + '?turn=toggle', (error, response, data) => {
                 if(error){
+                    console.log(error);
                     return res.json({success: false});
                 } else {
+                    console.log(response);
                     if(req.params.deviceId === '3' || req.params.deviceId === '0'){
                         // Wenn das Gerät eingeschaltet wurde, wird ein neuer Eintrag in der RuntimeDB erzeugt.
                         // Diesem Eintrag wird ein Startdatum hinzugefügt.
@@ -176,7 +179,6 @@ router.get('/solar/:solarValue', async (req, res) => {
                 await asyncCallDevice(settings.shellyIp, '/relay/0?turn=off');
                 const status = await asyncCallDevice(settings.shellyIp, '/status');
         
-        
                 if(status.relays[0].ison || status.meters[0].power > 350 || status.meters[1].power > 350 || status.meters[2].power > 350 || status.meters[3].power > 350) {
         
                     return res.json({success: false, msg: 'Pumpe ließ sich nicht ausschalten!'});
@@ -189,10 +191,21 @@ router.get('/solar/:solarValue', async (req, res) => {
                                 } else if(solar.length = 0) {
                                     console.log('Kein Eintrag gefunden!');
                                 } else {
+
+                                    gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                        return gpiop.write(16, false)
+                                    }).catch((err) => {
+                                        console.log('Error: ', err.toString())
+                                    })
+
+                                    gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                        return gpiop.write(18, true)
+                                    }).catch((err) => {
+                                        console.log('Error: ', err.toString())
+                                    })
         
-        
-                                    shell.exec('gpio write 10 0');
-                                    shell.exec('gpio write 11 1');
+                                    //shell.exec('gpio write 10 0');
+                                    //shell.exec('gpio write 11 1');
 
                                     solar.set({
                                         isOn: false,
@@ -217,8 +230,19 @@ router.get('/solar/:solarValue', async (req, res) => {
                                 } else if(solar.length = 0) {
                                     console.log('Kein Eintrag gefunden.')
                                 } else {
-                                    shell.exec('gpio write 10 1');
-                                    shell.exec('gpio write 11 0');
+
+                                    gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                        return gpiop.write(16, true)
+                                    }).catch((err) => {
+                                        console.log('Error: ', err.toString())
+                                    })
+
+                                    gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                        return gpiop.write(18, false)
+                                    }).catch((err) => {
+                                        console.log('Error: ', err.toString())
+                                    })
+
                                     solar.set({
                                         isOn: true,
                                         justSwitched: true
@@ -238,8 +262,17 @@ router.get('/solar/:solarValue', async (req, res) => {
                     }, 10000)
             
                     setTimeout(() => {
-                        shell.exec('gpio write 10 1');
-                        shell.exec('gpio write 11 1');
+                        gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                            return gpiop.write(16, true)
+                        }).catch((err) => {
+                            console.log('Error: ', err.toString())
+                        })
+
+                        gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                            return gpiop.write(18, true)
+                        }).catch((err) => {
+                            console.log('Error: ', err.toString())
+                        })
                         asyncCallDevice(settings.shellyIp, '/relay/0?turn=on');
                     }, 30000)
             
@@ -337,8 +370,6 @@ router.get('/getSolarState', async (req, res) => {
         
             // const gpio23 = await shell.exec('cat /sys/class/gpio/gpio23/value');
             // const gpio24 = await shell.exec('cat /sys/class/gpio/gpio24/value');
-        
-            
         
             setTimeout(() => {
                 if(gpio24 && !gpio23){
