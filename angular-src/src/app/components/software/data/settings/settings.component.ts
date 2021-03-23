@@ -46,6 +46,8 @@ export class SettingsComponent implements OnInit {
     shellyRelay1Name: String;
     shellyRelay2Name: String;
 
+    temperatureSensorIdSkimmer: String;
+    temperatureSensorIdSolar: String;
 
     weatherCity: String;
     weatherCountryCode: String;
@@ -143,7 +145,9 @@ export class SettingsComponent implements OnInit {
                                     pumpConnectedShellyRelay: this.pumpConnectedShellyRelay,
                                     shellyRelay0Name: this.shellyRelay0Name,
                                     shellyRelay1Name: this.shellyRelay1Name,
-                                    shellyRelay2Name: this.shellyRelay2Name
+                                    shellyRelay2Name: this.shellyRelay2Name,
+                                    temperatureSensorIdSkimmer: this.temperatureSensorIdSkimmer,
+                                    temperatureSensorIdSolar: this.temperatureSensorIdSolar
                                 }
 
                                 this.settingsService.saveSettings(settings).subscribe(data => {
@@ -197,7 +201,9 @@ export class SettingsComponent implements OnInit {
                             pumpConnectedShellyRelay: this.pumpConnectedShellyRelay,
                             shellyRelay0Name: this.shellyRelay0Name,
                             shellyRelay1Name: this.shellyRelay1Name,
-                            shellyRelay2Name: this.shellyRelay2Name
+                            shellyRelay2Name: this.shellyRelay2Name,
+                            temperatureSensorIdSkimmer: this.temperatureSensorIdSkimmer,
+                            temperatureSensorIdSolar: this.temperatureSensorIdSolar
                         }
 
                         this.settingsService.saveSettings(settings).subscribe(data => {
@@ -248,7 +254,9 @@ export class SettingsComponent implements OnInit {
                         pumpConnectedShellyRelay: this.pumpConnectedShellyRelay,
                         shellyRelay0Name: this.shellyRelay0Name,
                         shellyRelay1Name: this.shellyRelay1Name,
-                        shellyRelay2Name: this.shellyRelay2Name
+                        shellyRelay2Name: this.shellyRelay2Name,
+                        temperatureSensorIdSkimmer: this.temperatureSensorIdSkimmer,
+                        temperatureSensorIdSolar: this.temperatureSensorIdSolar
                     }
 
                     this.settingsService.saveSettings(settings).subscribe(data => {
@@ -306,6 +314,10 @@ export class SettingsComponent implements OnInit {
                 this.shellyRelay2Name = data.data.shellyRelay2Name;
 
                 this.pumpConnectedShellyRelay = data.data.pumpConnectedShellyRelay;
+
+                
+                this.temperatureSensorIdSkimmer = data.data.temperatureSensorIdSkimmer;
+                this.temperatureSensorIdSolar = data.data.temperatureSensorIdSolar;
 
                 if (this.shellyConnectedBoolean) {
                     this.shellyConnected = 'yes';

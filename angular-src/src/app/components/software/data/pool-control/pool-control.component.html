@@ -238,13 +238,13 @@
 </div>
 <hr>
 <div class="bottomTemps">
-    <div class="bottomTempContainer" [hidden]="!solarIsOn">
-        <p class="bottomTemperatureIcon"> <i [class]="sensor8icon"></i></p>
-        <p class="bottomTemperature">{{ sensor8name }}: <b>{{ tempSensor8 ? tempSensor8 + '°C' : '' }}</b></p>
-    </div>
     <div class="bottomTempContainer">
         <p class="bottomTemperatureIcon"><i [class]="sensor7icon"></i></p>
         <p class="bottomTemperature">{{ sensor7name }}: <b>{{ tempSensor7 ? tempSensor7 + '°C' : '' }}</b></p>
+    </div>
+    <div class="bottomTempContainer" [hidden]="!solarIsOn">
+        <p class="bottomTemperatureIcon"> <i [class]="sensor8icon"></i></p>
+        <p class="bottomTemperature">{{ sensor8name }}: <b>{{ tempSensor8 ? tempSensor8 + '°C' : '' }}</b></p>
     </div>
     <div class="bottomTempContainer" [hidden]="!solarIsOn">
         <p class="bottomTemperatureIcon"><i class="fas fa-thermometer"></i></p>

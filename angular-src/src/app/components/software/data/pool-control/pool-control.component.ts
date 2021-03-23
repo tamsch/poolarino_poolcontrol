@@ -139,7 +139,6 @@ export class PoolControlComponent implements OnInit {
     }
 
     getTempsAndRuntime() {
-        console.log('und los')
         this.showLoaderTemps = true;
         this.noValues = false;
 
@@ -296,10 +295,8 @@ export class PoolControlComponent implements OnInit {
                 }
 
                 this.settingsService.getSolarAndSkimmerSensorIds().subscribe(data => {
-                    console.log(data);
                     if(data.success){
-                        console.log(data);
-                        this.tempDifferenz = this.tempSensor1 - this.tempSensor2;
+                        this.tempDifferenz = this[data.solarSensorId] - this[data.skimmerSensorId];
                         this.tempHelper = Math.round(this.tempDifferenz * 100) / 100;
                         if (this.tempHelper < 0) {
                             this.tempHelper = 0.0;
@@ -308,9 +305,6 @@ export class PoolControlComponent implements OnInit {
                         this.noValues = false;
                     }
                 })
-
-                
-
             } else {
                 this.showLoaderTemps = false;
                 this.noValues = true;

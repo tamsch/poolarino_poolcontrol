@@ -59,6 +59,8 @@ router.put('/saveSettings', async (req, res) => {
         settings.shellyRelay0Name = req.body.shellyRelay0Name;
         settings.shellyRelay1Name = req.body.shellyRelay1Name;
         settings.shellyRelay2Name = req.body.shellyRelay2Name;
+        settings.temperatureSensorIdSkimmer = req.body.temperatureSensorIdSkimmer;
+        settings.temperatureSensorIdSolar = req.body.temperatureSensorIdSolar;
 
         await settings.save((err, saved) => {
             if (err) {
@@ -112,7 +114,6 @@ router.get('/loadRelayTitles', async (req, res) => {
             }
             
             return res.json({success: true, data: helper});
-
         }
     })
 })
@@ -132,7 +133,6 @@ router.get('/loadSensorIcons', async (req, res) => {
 
 //IDs der Solar und Skimmer Temperatursensoren abfragen
 router.get('/getSolarAndSkimmerSensorIds', async (req, res) => {
-    console.log('erwer')
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
         if(settings != null) {
             return res.json({success: true, skimmerSensorId: settings.temperatureSensorIdSkimmer, solarSensorId: settings.temperatureSensorIdSolar})

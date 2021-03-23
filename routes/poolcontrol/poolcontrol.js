@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const ds18b20 = require('ds18b20');
-const Temperature = require('../../models/poolcontrol/temperature');
 const Runtime = require('../../models/poolcontrol/runtime');
 const Solar = require('../../models/poolcontrol/solar');
 
@@ -10,13 +9,11 @@ const Shelly = new ShellyIot({});
 
 const Settings = require('../../models/poolcontrol/settings');
 
-var shell = require('shelljs');
-
 var gpio = require('rpi-gpio')
 var gpiop = gpio.promise;
 
 function getTemp(id) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         ds18b20.temperature(id, (err, value) => {
             resolve({ id, t: value });
         });
@@ -37,7 +34,6 @@ function asyncCallDevice(device, command) {
 
 //Temperaturen aller Sensoren jetzt aktuell laden
 router.get('/getTemperatureFromAllSensors', (req, res) => {
-
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
         if(settings != null && settings.raspberryPiConnected) {
             ds18b20.sensors((err, ids) => {
@@ -54,7 +50,6 @@ router.get('/getTemperatureFromAllSensors', (req, res) => {
                         return res.status(200).json({success: true, data: values});
                     });
                 }
-                
             });
         } else {
             return res.json({success: false});
@@ -72,43 +67,37 @@ router.get('/toggleDevice/:deviceId', async (req, res) => {
                     console.log(error);
                     return res.json({success: false});
                 } else {
-                    if(req.params.deviceId === '3' || req.params.deviceId === '0'){
-                        // Wenn das Gerät eingeschaltet wurde, wird ein neuer Eintrag in der RuntimeDB erzeugt.
-                        // Diesem Eintrag wird ein Startdatum hinzugefügt.
-                        if(response.ison){
-                            let dateHelper = new Date();
-                            let dateHelperToday = dateHelper.toISOString().substr(0,10);
-                            let newRuntime = new Runtime({
-                                relay: req.params.deviceId,
-                                date: dateHelperToday,
-                                startTime: new Date()
-                            });
-            
-                            newRuntime.save();
-                            return res.json({success: true, data: response});
-                        } else {
-                        // Wenn das Gerät ausgeschaltet wurde, wird der letzte Eintrag herangezogen und das Enddatum gesetzt
-                            Runtime.findOne().where({'relay': req.params.deviceId}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
-                                runtime.set({
-                                    endTime: new Date()
-                                })
-            
-                                let calcHelper = runtime.endTime - runtime.startTime;
-            
-                                runtime.set({
-                                    calculatedTime: calcHelper
-                                })
-            
-                                runtime.save();
-            
-                                return res.json({success: true, data: response});
-            
-                            })
-                        }
-                        
-                    } else {
+                    // Wenn das Gerät eingeschaltet wurde, wird ein neuer Eintrag in der RuntimeDB erzeugt.
+                    // Diesem Eintrag wird ein Startdatum hinzugefügt.
+                    if(response.ison){
+                        let dateHelper = new Date();
+                        let dateHelperToday = dateHelper.toISOString().substr(0,10);
+                        let newRuntime = new Runtime({
+                            relay: req.params.deviceId,
+                            date: dateHelperToday,
+                            startTime: new Date()
+                        });
+        
+                        newRuntime.save();
                         return res.json({success: true, data: response});
-                    }     
+                    } else {
+                    // Wenn das Gerät ausgeschaltet wurde, wird der letzte Eintrag herangezogen und das Enddatum gesetzt
+                        Runtime.findOne().where({'relay': req.params.deviceId}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
+                            runtime.set({
+                                endTime: new Date()
+                            })
+        
+                            let calcHelper = runtime.endTime - runtime.startTime;
+        
+                            runtime.set({
+                                calculatedTime: calcHelper
+                            })
+        
+                            runtime.save();
+        
+                            return res.json({success: true, data: response});
+                        })
+                    }
                 }   
             });
         } else {
@@ -129,7 +118,6 @@ router.get('/getDeviceStatus/:deviceId', async (req, res) => {
                 } else {
                     return res.json({success: true, data: response, deviceId: req.params.deviceId})
                 }
-                
             }); 
         } else {
             return res.json({success: false});
@@ -147,7 +135,6 @@ router.get('/getRelayLoad', async (req, res) => {
                 } else {
                     return res.json({success: true, data: response.meters, relays: response.relays});
                 }
-                
             }); 
         } else {
             return res.json({success: false});
@@ -158,11 +145,9 @@ router.get('/getRelayLoad', async (req, res) => {
 
 //Solarumstellen mit Prüfung, ob Relay wirklich deaktiviert ist!
 router.get('/solar/:solarValue', async (req, res) => {
-
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
         if(settings != null && settings.shellyConnected){
             try {
-
                 await asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=off');
                 const status = await asyncCallDevice(settings.shellyIp, '/status');
 
@@ -345,6 +330,5 @@ router.get('/getSolar', async (req, res) => {
         }
     })  
 })
-
 
 module.exports = router; 

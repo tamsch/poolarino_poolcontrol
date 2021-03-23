@@ -42,6 +42,6 @@ interface data {
     msg: String,
     data: any,
     updateAvailable: Boolean,
-    solarSensorId: String,
-    skimmerSensorId: String
+    solarSensorId: string,
+    skimmerSensorId: string
 }
