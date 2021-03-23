@@ -20,14 +20,6 @@ export class SettingsService {
         return this.http.put<data>(environment.serverUrl + '/settings/saveSettings', settings);
     }
 
-    addTemperatureSensors(temperatureSensors) {
-        return this.http.post<data>(environment.serverUrl + '/settings/addTemperatureSensors', temperatureSensors)
-    }
-
-    loadTemperatureSensorData() {
-        return this.http.get<data>(environment.serverUrl + '/settings/loadTemperatureSensorData');
-    }
-
     checkVersion() {
         return this.http.get<data>(environment.serverUrl + '/settings/checkVersion');
     }
@@ -39,11 +31,17 @@ export class SettingsService {
     loadRelayTitles(){
         return this.http.get<data>(environment.serverUrl + '/settings/loadRelayTitles');
     }
+
+    getSolarAndSkimmerSensorIds(){
+        return this.http.get<data>(environment.serverUrl + '/settings/getSolarAndSkimmerSensorIds');
+    }
 }
 
 interface data {
     success: Boolean,
     msg: String,
     data: any,
-    updateAvailable: Boolean
+    updateAvailable: Boolean,
+    solarSensorId: String,
+    skimmerSensorId: String
 }

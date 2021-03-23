@@ -39,44 +39,28 @@ export class PoolControlComponent implements OnInit {
     sensor7icon: String = '';
     sensor8icon: String = '';
 
-    tempGartenhuette: number;
-    tempSkimmer: number;
-    tempSwitchgehaeuse: number;
-    tempRaspberryGehaeuse: number;
-    tempLufttemperatur: number;
-    tempSolaranlage: number;
-    tempWarmesWasser: number;
+    tempSensor1: number;
+    tempSensor2: number;
+    tempSensor3: number;
+    tempSensor4: number;
+    tempSensor5: number;
+    tempSensor6: number;
+    tempSensor7: number;
+    tempSensor8: number;
     tempDifferenz: number;
     tempHelper: number;
-    tempHifiGehaeuse: number;
 
     colorCodeProg: String = 'primary';
 
-    colorTempLufttemperatur: String = '#fff';
-    colorTempGartenhuette: String = '#fff';
-    colorTempRaspberryGehaeuse: String = '#fff';
-    colorTempSwitchGehaeuse: String = '#fff';
-    colorTempHifiGehaeuse: String = '#fff';
-    colorTempSkimmer: String = '#fff';
-    colorTempSolaranlage: String = '#fff';
-    colorTempWarmesWasser: String = '#fff';
+    colorSensor1: String = '#fff';
+    colorSensor2: String = '#fff';
+    colorSensor3: String = '#fff';
+    colorSensor4: String = '#fff';
+    colorSensor5: String = '#fff';
+    colorSensor6: String = '#fff';
+    colorSensor7: String = '#fff';
+    colorSensor8: String = '#fff';
     colorTempDifferenz: String = '#fff';
-
-    combHelperGartenhuette: any = [];
-    combHelperSkimmer: any = [];
-    combHelperLufttemperatur: any = [];
-    combHelperSwitchgehaeuse: any = [];
-    combHelperRaspberryGehaeuse: any = [];
-    combHelperSolaranlage: any = [];
-    combHelperWarmesWasser: any = [];
-
-    finiHelperGartenhuette: any = [];
-    finiHelperSkimmer: any = [];
-    finiHelperLufttemperatur: any = [];
-    finiHelperSwitchgehaeuse: any = [];
-    finiHelperRaspberryGehaeuse: any = [];
-    finiHelperSolaranlage: any = [];
-    finiHelperWarmesWasser: any = [];
 
     relayZeroIsOn: Boolean;
     relayOneIsOn: Boolean;
@@ -90,6 +74,7 @@ export class PoolControlComponent implements OnInit {
 
     relayOneRuntime: Number;
     relayZeroRuntime: Number;
+    relayTwoRuntime: Number;
     relayThreeRuntime: Number;
 
     solarJustChanged: Boolean = false;
@@ -154,167 +139,177 @@ export class PoolControlComponent implements OnInit {
     }
 
     getTempsAndRuntime() {
+        console.log('und los')
         this.showLoaderTemps = true;
         this.noValues = false;
 
-        this.colorTempLufttemperatur = '#d8d8d8';
-        this.colorTempGartenhuette = '#d8d8d8';
-        this.colorTempRaspberryGehaeuse = '#d8d8d8';
-        this.colorTempSwitchGehaeuse = '#d8d8d8';
-        this.colorTempHifiGehaeuse = '#d8d8d8';
-        this.colorTempSkimmer = '#d8d8d8';
-        this.colorTempSolaranlage = '#d8d8d8';
-        this.colorTempWarmesWasser = '#d8d8d8';
+        this.colorSensor1 = '#d8d8d8';
+        this.colorSensor2 = '#d8d8d8';
+        this.colorSensor3 = '#d8d8d8';
+        this.colorSensor4 = '#d8d8d8';
+        this.colorSensor5 = '#d8d8d8';
+        this.colorSensor6 = '#d8d8d8';
+        this.colorSensor7 = '#d8d8d8';
+        this.colorSensor8 = '#d8d8d8';
         this.colorTempDifferenz = '#d8d8d8';
+
         this.poolControlService.getTemperatureFromAllSensors().subscribe(data => {
             if (data.success) {
                 for (let num of data.data) {
-                    if (num.id === this.sensor7id) {
-                        this.tempLufttemperatur = num.t;
+                    if (num.id === this.sensor1id) {
+                        this.tempSensor1 = num.t;
                         if (num.t >= 0 && num.t <= 5) {
-                            this.colorTempLufttemperatur = '#0e58cf';
+                            this.colorSensor1 = '#0e58cf';
                         } else if (num.t >= 5.1 && num.t <= 10) {
-                            this.colorTempLufttemperatur = '#3366FF';
+                            this.colorSensor1 = '#3366FF';
                         } else if (num.t >= 10.1 && num.t <= 15) {
-                            this.colorTempLufttemperatur = '#7badf7';
+                            this.colorSensor1 = '#7badf7';
                         } else if (num.t >= 15.1 && num.t <= 20) {
-                            this.colorTempLufttemperatur = '#f9bd25';
+                            this.colorSensor1 = '#f9bd25';
                         } else if (num.t >= 20.1 && num.t <= 25) {
-                            this.colorTempLufttemperatur = '#fc6400';
+                            this.colorSensor1 = '#fc6400';
                         } else if (num.t >= 25.1 && num.t <= 30) {
-                            this.colorTempLufttemperatur = '#fc4700';
+                            this.colorSensor1 = '#fc4700';
                         } else if (num.t >= 30.1) {
-                            this.colorTempLufttemperatur = '#ff2b2b';
-                        }
-                    } else if (num.id === this.sensor6id) {
-                        this.tempSkimmer = num.t;
-                        if (num.t >= 0 && num.t <= 5) {
-                            this.colorTempSkimmer = '#0e58cf';
-                        } else if (num.t >= 5.1 && num.t <= 10) {
-                            this.colorTempSkimmer = '#3366FF';
-                        } else if (num.t >= 10.1 && num.t <= 15) {
-                            this.colorTempSkimmer = '#7badf7';
-                        } else if (num.t >= 15.1 && num.t <= 20) {
-                            this.colorTempSkimmer = '#f9bd25';
-                        } else if (num.t >= 20.1 && num.t <= 25) {
-                            this.colorTempSkimmer = '#fc6400';
-                        } else if (num.t >= 25.1 && num.t <= 30) {
-                            this.colorTempSkimmer = '#fc4700';
-                        } else if (num.t >= 30.1) {
-                            this.colorTempSkimmer = '#ff2b2b';
-                        }
-                    } else if (num.id === this.sensor4id) {
-                        this.tempSwitchgehaeuse = num.t;
-                        if (num.t >= 0 && num.t <= 5) {
-                            this.colorTempSwitchGehaeuse = '#0e58cf';
-                        } else if (num.t >= 5.1 && num.t <= 10) {
-                            this.colorTempSwitchGehaeuse = '#3366FF';
-                        } else if (num.t >= 10.1 && num.t <= 15) {
-                            this.colorTempSwitchGehaeuse = '#7badf7';
-                        } else if (num.t >= 15.1 && num.t <= 20) {
-                            this.colorTempSwitchGehaeuse = '#f9bd25';
-                        } else if (num.t >= 20.1 && num.t <= 25) {
-                            this.colorTempSwitchGehaeuse = '#fc6400';
-                        } else if (num.t >= 25.1 && num.t <= 30) {
-                            this.colorTempSwitchGehaeuse = '#fc4700';
-                        } else if (num.t >= 30.1) {
-                            this.colorTempSwitchGehaeuse = '#ff2b2b';
+                            this.colorSensor1 = '#ff2b2b';
                         }
                     } else if (num.id === this.sensor2id) {
-                        this.tempGartenhuette = num.t;
+                        this.tempSensor2 = num.t;
                         if (num.t >= 0 && num.t <= 5) {
-                            this.colorTempGartenhuette = '#0e58cf';
+                            this.colorSensor2 = '#0e58cf';
                         } else if (num.t >= 5.1 && num.t <= 10) {
-                            this.colorTempGartenhuette = '#3366FF';
+                            this.colorSensor2 = '#3366FF';
                         } else if (num.t >= 10.1 && num.t <= 15) {
-                            this.colorTempGartenhuette = '#7badf7';
+                            this.colorSensor2 = '#7badf7';
                         } else if (num.t >= 15.1 && num.t <= 20) {
-                            this.colorTempGartenhuette = '#f9bd25';
+                            this.colorSensor2 = '#f9bd25';
                         } else if (num.t >= 20.1 && num.t <= 25) {
-                            this.colorTempGartenhuette = '#fc6400';
+                            this.colorSensor2 = '#fc6400';
                         } else if (num.t >= 25.1 && num.t <= 30) {
-                            this.colorTempGartenhuette = '#fc4700';
+                            this.colorSensor2 = '#fc4700';
                         } else if (num.t >= 30.1) {
-                            this.colorTempGartenhuette = '#ff2b2b';
+                            this.colorSensor2 = '#ff2b2b';
                         }
                     } else if (num.id === this.sensor3id) {
-                        this.tempRaspberryGehaeuse = num.t;
+                        this.tempSensor3 = num.t;
                         if (num.t >= 0 && num.t <= 5) {
-                            this.colorTempRaspberryGehaeuse = '#0e58cf';
+                            this.colorSensor3 = '#0e58cf';
                         } else if (num.t >= 5.1 && num.t <= 10) {
-                            this.colorTempRaspberryGehaeuse = '#3366FF';
+                            this.colorSensor3 = '#3366FF';
                         } else if (num.t >= 10.1 && num.t <= 15) {
-                            this.colorTempRaspberryGehaeuse = '#7badf7';
+                            this.colorSensor3 = '#7badf7';
                         } else if (num.t >= 15.1 && num.t <= 20) {
-                            this.colorTempRaspberryGehaeuse = '#f9bd25';
+                            this.colorSensor3 = '#f9bd25';
                         } else if (num.t >= 20.1 && num.t <= 25) {
-                            this.colorTempRaspberryGehaeuse = '#fc6400';
+                            this.colorSensor3 = '#fc6400';
                         } else if (num.t >= 25.1 && num.t <= 30) {
-                            this.colorTempRaspberryGehaeuse = '#fc4700';
+                            this.colorSensor3 = '#fc4700';
                         } else if (num.t >= 30.1) {
-                            this.colorTempRaspberryGehaeuse = '#ff2b2b';
+                            this.colorSensor3 = '#ff2b2b';
                         }
-                    } else if (num.id === this.sensor1id) {
-                        this.tempSolaranlage = num.t;
+                    } else if (num.id === this.sensor4id) {
+                        this.tempSensor4 = num.t;
                         if (num.t >= 0 && num.t <= 5) {
-                            this.colorTempSolaranlage = '#0e58cf';
+                            this.colorSensor4 = '#0e58cf';
                         } else if (num.t >= 5.1 && num.t <= 10) {
-                            this.colorTempSolaranlage = '#3366FF';
+                            this.colorSensor4 = '#3366FF';
                         } else if (num.t >= 10.1 && num.t <= 15) {
-                            this.colorTempSolaranlage = '#7badf7';
+                            this.colorSensor4 = '#7badf7';
                         } else if (num.t >= 15.1 && num.t <= 20) {
-                            this.colorTempSolaranlage = '#f9bd25';
+                            this.colorSensor4 = '#f9bd25';
                         } else if (num.t >= 20.1 && num.t <= 25) {
-                            this.colorTempSolaranlage = '#fc6400';
+                            this.colorSensor4 = '#fc6400';
                         } else if (num.t >= 25.1 && num.t <= 30) {
-                            this.colorTempSolaranlage = '#fc4700';
+                            this.colorSensor4 = '#fc4700';
                         } else if (num.t >= 30.1) {
-                            this.colorTempSolaranlage = '#ff2b2b';
-                        }
-                    } else if (num.id === this.sensor8id) {
-                        this.tempWarmesWasser = num.t;
-                        if (num.t >= 0 && num.t <= 5) {
-                            this.colorTempWarmesWasser = '#0e58cf';
-                        } else if (num.t >= 5.1 && num.t <= 10) {
-                            this.colorTempWarmesWasser = '#3366FF';
-                        } else if (num.t >= 10.1 && num.t <= 15) {
-                            this.colorTempWarmesWasser = '#7badf7';
-                        } else if (num.t >= 15.1 && num.t <= 20) {
-                            this.colorTempWarmesWasser = '#f9bd25';
-                        } else if (num.t >= 20.1 && num.t <= 25) {
-                            this.colorTempWarmesWasser = '#fc6400';
-                        } else if (num.t >= 25.1 && num.t <= 30) {
-                            this.colorTempWarmesWasser = '#fc4700';
-                        } else if (num.t >= 30.1) {
-                            this.colorTempWarmesWasser = '#ff2b2b';
+                            this.colorSensor4 = '#ff2b2b';
                         }
                     } else if (num.id === this.sensor5id) {
-                        this.tempHifiGehaeuse = num.t
+                        this.tempSensor5 = num.t
                         if (num.t >= 0 && num.t < 5) {
-                            this.colorTempHifiGehaeuse = '#0e58cf';
+                            this.colorSensor5 = '#0e58cf';
                         } else if (num.t >= 5.1 && num.t <= 10) {
-                            this.colorTempHifiGehaeuse = '#3366FF';
+                            this.colorSensor5 = '#3366FF';
                         } else if (num.t >= 10.1 && num.t <= 15) {
-                            this.colorTempHifiGehaeuse = '#7badf7';
+                            this.colorSensor5 = '#7badf7';
                         } else if (num.t >= 15.1 && num.t <= 20) {
-                            this.colorTempHifiGehaeuse = '#f9bd25';
+                            this.colorSensor5 = '#f9bd25';
                         } else if (num.t >= 20.1 && num.t <= 25) {
-                            this.colorTempHifiGehaeuse = '#fc6400';
+                            this.colorSensor5 = '#fc6400';
                         } else if (num.t >= 25.1 && num.t <= 30) {
-                            this.colorTempHifiGehaeuse = '#fc4700';
+                            this.colorSensor5 = '#fc4700';
                         } else if (num.t >= 30.1) {
-                            this.colorTempHifiGehaeuse = '#ff2b2b';
+                            this.colorSensor5 = '#ff2b2b';
+                        }
+                    } else if (num.id === this.sensor6id) {
+                        this.tempSensor6 = num.t;
+                        if (num.t >= 0 && num.t <= 5) {
+                            this.colorSensor6 = '#0e58cf';
+                        } else if (num.t >= 5.1 && num.t <= 10) {
+                            this.colorSensor6 = '#3366FF';
+                        } else if (num.t >= 10.1 && num.t <= 15) {
+                            this.colorSensor6 = '#7badf7';
+                        } else if (num.t >= 15.1 && num.t <= 20) {
+                            this.colorSensor6 = '#f9bd25';
+                        } else if (num.t >= 20.1 && num.t <= 25) {
+                            this.colorSensor6 = '#fc6400';
+                        } else if (num.t >= 25.1 && num.t <= 30) {
+                            this.colorSensor6 = '#fc4700';
+                        } else if (num.t >= 30.1) {
+                            this.colorSensor6 = '#ff2b2b';
+                        }
+                    } else if (num.id === this.sensor7id) {
+                        this.tempSensor7 = num.t;
+                        if (num.t >= 0 && num.t <= 5) {
+                            this.colorSensor7 = '#0e58cf';
+                        } else if (num.t >= 5.1 && num.t <= 10) {
+                            this.colorSensor7 = '#3366FF';
+                        } else if (num.t >= 10.1 && num.t <= 15) {
+                            this.colorSensor7 = '#7badf7';
+                        } else if (num.t >= 15.1 && num.t <= 20) {
+                            this.colorSensor7 = '#f9bd25';
+                        } else if (num.t >= 20.1 && num.t <= 25) {
+                            this.colorSensor7 = '#fc6400';
+                        } else if (num.t >= 25.1 && num.t <= 30) {
+                            this.colorSensor7 = '#fc4700';
+                        } else if (num.t >= 30.1) {
+                            this.colorSensor7 = '#ff2b2b';
+                        }
+                    } else if (num.id === this.sensor8id) {
+                        this.tempSensor8 = num.t;
+                        if (num.t >= 0 && num.t <= 5) {
+                            this.colorSensor8 = '#0e58cf';
+                        } else if (num.t >= 5.1 && num.t <= 10) {
+                            this.colorSensor8 = '#3366FF';
+                        } else if (num.t >= 10.1 && num.t <= 15) {
+                            this.colorSensor8 = '#7badf7';
+                        } else if (num.t >= 15.1 && num.t <= 20) {
+                            this.colorSensor8 = '#f9bd25';
+                        } else if (num.t >= 20.1 && num.t <= 25) {
+                            this.colorSensor8 = '#fc6400';
+                        } else if (num.t >= 25.1 && num.t <= 30) {
+                            this.colorSensor8 = '#fc4700';
+                        } else if (num.t >= 30.1) {
+                            this.colorSensor8 = '#ff2b2b';
                         }
                     }
                 }
 
-                this.tempDifferenz = this.tempWarmesWasser - this.tempSkimmer;
-                this.tempHelper = Math.round(this.tempDifferenz * 100) / 100;
-                if (this.tempHelper < 0) {
-                    this.tempHelper = 0.0;
-                }
-                this.showLoaderTemps = false;
-                this.noValues = false;
+                this.settingsService.getSolarAndSkimmerSensorIds().subscribe(data => {
+                    console.log(data);
+                    if(data.success){
+                        console.log(data);
+                        this.tempDifferenz = this.tempSensor1 - this.tempSensor2;
+                        this.tempHelper = Math.round(this.tempDifferenz * 100) / 100;
+                        if (this.tempHelper < 0) {
+                            this.tempHelper = 0.0;
+                        }
+                        this.showLoaderTemps = false;
+                        this.noValues = false;
+                    }
+                })
+
+                
 
             } else {
                 this.showLoaderTemps = false;
@@ -322,12 +317,16 @@ export class PoolControlComponent implements OnInit {
             }
         })
 
-        let relays = ['0', '3'];
+        let relays = ['0', '1', '2', '3'];
         for (let num of relays) {
             this.poolControlService.relayRuntime(num).subscribe(data => {
                 if (data.success) {
                     if (data.data.relay === '0') {
                         this.relayZeroRuntime = data.data.runtime;
+                    } else if (data.data.relay === '1') {
+                        this.relayOneRuntime = data.data.runtime;
+                    } else if (data.data.relay === '2') {
+                        this.relayTwoRuntime = data.data.runtime;
                     } else if (data.data.relay === '3') {
                         this.relayThreeRuntime = data.data.runtime;
                     }
@@ -450,6 +449,11 @@ export class PoolControlComponent implements OnInit {
                 this.relayOneWatt = data.data[1].power;
                 this.relayTwoWatt = data.data[2].power;
                 this.relayThreeWatt = data.data[3].power;
+
+                this.relayZeroIsOn = data.relays[0].ison;
+                this.relayOneIsOn = data.relays[1].ison;
+                this.relayTwoIsOn = data.relays[2].ison;
+                this.relayThreeIsOn = data.relays[3].ison;
             }
         })
 

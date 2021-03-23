@@ -59,15 +59,7 @@ router.get('/getTemperatureFromAllSensors', (req, res) => {
         } else {
             return res.json({success: false});
         }
-    })
-
-    
-})
-
-//Laden der Temperaturen für Anzeige des Graphen
-router.get('/getTemperaturesForGraphForSensor/:sensorId', async (req, res) => {
-    const temps = await Temperature.find({'sensor': req.params.sensorId}).select('temperature time -_id');
-    return res.status(200).json({success: true, data: temps});
+    })   
 })
 
 //Relay am Shelly An- bzw. Ausschalten
@@ -128,7 +120,6 @@ router.get('/toggleDevice/:deviceId', async (req, res) => {
 
 //Status des Relays abfragen
 router.get('/getDeviceStatus/:deviceId', async (req, res) => {
-
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
         if(settings != null && settings.shellyConnected) {
             Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId, (err, response, data) => {
@@ -144,8 +135,6 @@ router.get('/getDeviceStatus/:deviceId', async (req, res) => {
             return res.json({success: false});
         }
     })
-
- 
 })
 
 //Verbrauch des Relays abfragen
@@ -182,7 +171,7 @@ router.get('/solar/:solarValue', async (req, res) => {
                 if(status.relays[pumpRelay].ison || status.meters[pumpRelay].power > 100) {
                     return res.json({success: false, msg: 'Pumpe ließ sich nicht ausschalten!'});
                 } else {
-                    setTimeout(() => {
+                    setTimeout(async () => {
                         if(req.params.solarValue === 'off') {
                             Solar.findOne({isOn: true}).exec(async (err, solar) => {
                                 if(err) {
@@ -192,19 +181,16 @@ router.get('/solar/:solarValue', async (req, res) => {
                                 } else {
 
                                     let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
-                                        return gpiop.write(16, true)
+                                        return gpiop.write(16, false)
                                     }).catch((err) => {
                                         console.log('Error: ', err.toString())
                                     })
 
                                     let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
-                                        return gpiop.write(18, false)
+                                        return gpiop.write(18, true)
                                     }).catch((err) => {
                                         console.log('Error: ', err.toString())
                                     })
-        
-                                    //shell.exec('gpio write 10 0');
-                                    //shell.exec('gpio write 11 1');
 
                                     solar.set({
                                         isOn: false,

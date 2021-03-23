@@ -15,10 +15,6 @@ export class PoolcontrolService {
         return this.http.get<data>( environment.serverUrl + '/poolControl/getTemperatureFromAllSensors/');
     }
 
-    getTemperaturesForGraphForSensor(sensorId){
-        return this.http.get<data>( environment.serverUrl + '/poolcontrol/getTemperaturesForGraphForSensor/' + sensorId)
-    }
-
     toggleDevice(deviceId){
         return this.http.get<data>( environment.serverUrl + '/poolcontrol/toggleDevice/' + deviceId);
     }

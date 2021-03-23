@@ -64,10 +64,10 @@
                 </div>
                 <div class="buttonRuntimeAndPowerConsumption">
                     <div class="buttonRuntimeRuntime">
-                        {{ relayThreeRuntime ? relayThreeRuntime + ' Minuten' : '0 Minuten' }}
+                        {{ relayTwoRuntime ? relayTwoRuntime + ' Minuten' : '0 Minuten' }}
                     </div>
                     <div class="buttonRuntimePower">
-                        {{ relayThreeWatt ? relayThreeWatt + ' Watt' : '0 Watt' }}
+                        {{ relayTwoWatt ? relayTwoWatt + ' Watt' : '0 Watt' }}
                     </div>
                 </div>
             </div>
@@ -103,9 +103,9 @@
     <div class="tempContainer">
         <div id="containerTempSolaranlage">
             <round-progress class="roundProgress"
-            [current]="tempSolaranlage"
+            [current]="tempSensor1"
             [max]="50"
-            [color]="colorTempSolaranlage"
+            [color]="colorSensor1"
             [background]="'#eaeaea'"
             [radius]="125"
             [stroke]="20"
@@ -120,14 +120,14 @@
         </div>
         <p class="tempIcon"><i [class]="sensor1icon"></i></p>
         <div class="upperAliner" style="text-align: center;">{{ sensor1name }}</div>
-        <p class="upperTemperature">{{ tempSolaranlage ? tempSolaranlage + '°C' : '' }}</p>
+        <p class="upperTemperature">{{ tempSensor1 ? tempSensor1 + '°C' : '' }}</p>
     </div>
     <div class="tempContainer">
         <div id="containerTempGartenhuette">
             <round-progress class="roundProgress"
-            [current]="tempGartenhuette"
+            [current]="tempSensor2"
             [max]="50"
-            [color]="colorTempGartenhuette"
+            [color]="colorSensor2"
             [background]="'#eaeaea'"
             [radius]="125"
             [stroke]="20"
@@ -142,14 +142,14 @@
         </div>
         <p class="tempIcon"><i [class]="sensor2icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor2name }}</div>
-        <p class="upperTemperature">{{ tempGartenhuette ? tempGartenhuette + '°C' : '' }}</p>
+        <p class="upperTemperature">{{ tempSensor2 ? tempSensor2 + '°C' : '' }}</p>
     </div>
     <div class="tempContainer">
         <div id="containerTempRaspiGehaeuse">
             <round-progress class="roundProgress"
-            [current]="tempRaspberryGehaeuse"
+            [current]="tempSensor3"
             [max]="50"
-            [color]="colorTempRaspberryGehaeuse"
+            [color]="colorSensor3"
             [background]="'#eaeaea'"
             [radius]="125"
             [stroke]="20"
@@ -164,7 +164,7 @@
         </div>
         <p class="tempIcon"><i [class]="sensor3icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor3name }}</div>
-        <p class="upperTemperature">{{ tempRaspberryGehaeuse ? tempRaspberryGehaeuse + '°C' : '' }}</p>
+        <p class="upperTemperature">{{ tempSensor3 ? tempSensor3 + '°C' : '' }}</p>
     </div>
 </div>
 <hr>
@@ -172,9 +172,9 @@
     <div class="tempContainer">
         <div id="containerTempSwitchGehaeuse">
             <round-progress class="roundProgressMiddle"
-            [current]="tempSwitchgehaeuse"
+            [current]="tempSensor4"
             [max]="50"
-            [color]="colorTempSwitchGehaeuse"
+            [color]="colorSensor4"
             [background]="'#eaeaea'"
             [radius]="125"
             [stroke]="20"
@@ -189,14 +189,14 @@
         </div>
         <p class="tempIcon"><i [class]="sensor4icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor4name }}</div>
-        <p class="upperTemperature">{{ tempSwitchgehaeuse ? tempSwitchgehaeuse + '°C' : '' }}</p>
+        <p class="upperTemperature">{{ tempSensor4 ? tempSensor4 + '°C' : '' }}</p>
     </div>
     <div class="tempContainer">
         <div id="containerTempHifiGehaeuse">
             <round-progress class="roundProgressMiddle"
-            [current]="tempHifiGehaeuse"
+            [current]="tempSensor5"
             [max]="50"
-            [color]="colorTempHifiGehaeuse"
+            [color]="colorSensor5"
             [background]="'#eaeaea'"
             [radius]="125"
             [stroke]="20"
@@ -211,14 +211,14 @@
         </div>
         <p class="tempIcon"><i [class]="sensor5icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor5name }}</div>
-        <p class="upperTemperature">{{ tempHifiGehaeuse ? tempHifiGehaeuse + '°C' : '' }}</p>
+        <p class="upperTemperature">{{ tempSensor5 ? tempSensor5 + '°C' : '' }}</p>
     </div>
     <div class="tempContainer">
         <div id="containerTempSkimmer">
             <round-progress class="roundProgressMiddle"
-            [current]="tempSkimmer"
+            [current]="tempSensor6"
             [max]="50"
-            [color]="colorTempSkimmer"
+            [color]="colorSensor6"
             [background]="'#eaeaea'"
             [radius]="125"
             [stroke]="20"
@@ -233,18 +233,18 @@
         </div>
         <p class="tempIcon"><i [class]="sensor6icon"></i></p>
         <div class="upperAliner" style="text-align: center">{{ sensor6name }}</div>
-        <p class="upperTemperature">{{ tempSkimmer ? tempSkimmer + '°C' : '' }}</p>
+        <p class="upperTemperature">{{ tempSensor6 ? tempSensor6 + '°C' : '' }}</p>
     </div>
 </div>
 <hr>
 <div class="bottomTemps">
     <div class="bottomTempContainer" [hidden]="!solarIsOn">
         <p class="bottomTemperatureIcon"> <i [class]="sensor8icon"></i></p>
-        <p class="bottomTemperature">{{ sensor8name }}: <b>{{ tempWarmesWasser ? tempWarmesWasser + '°C' : '' }}</b></p>
+        <p class="bottomTemperature">{{ sensor8name }}: <b>{{ tempSensor8 ? tempSensor8 + '°C' : '' }}</b></p>
     </div>
     <div class="bottomTempContainer">
         <p class="bottomTemperatureIcon"><i [class]="sensor7icon"></i></p>
-        <p class="bottomTemperature">{{ sensor7name }}: <b>{{ tempLufttemperatur ? tempLufttemperatur + '°C' : '' }}</b></p>
+        <p class="bottomTemperature">{{ sensor7name }}: <b>{{ tempSensor7 ? tempSensor7 + '°C' : '' }}</b></p>
     </div>
     <div class="bottomTempContainer" [hidden]="!solarIsOn">
         <p class="bottomTemperatureIcon"><i class="fas fa-thermometer"></i></p>

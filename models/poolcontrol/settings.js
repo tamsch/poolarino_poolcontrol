@@ -170,15 +170,23 @@ const SettingsSchema = mongoose.Schema({
     },
     shellyRelay0Name: {
         type: String,
-        default: 'Channel 1 Bezeichnung'
+        default: 'Channel 0 Bezeichnung'
     },
     shellyRelay1Name: {
         type: String,
-        default: 'Channel 2 Bezeichnung'
+        default: 'Channel 1 Bezeichnung'
     },
     shellyRelay2Name: {
         type: String,
-        default: 'Channel 3 Bezeichnung'
+        default: 'Channel 2 Bezeichnung'
+    },
+    temperatureSensorIdSkimmer: {
+        type: String,
+        default: ''
+    },
+    temperatureSensorIdSolar: {
+        type: String,
+        default: ''
     }
     
 })

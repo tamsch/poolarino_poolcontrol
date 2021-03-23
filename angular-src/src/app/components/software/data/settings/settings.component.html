@@ -164,20 +164,47 @@
                 <mat-option value="0">0</mat-option>
                 <mat-option value="1">1</mat-option>
                 <mat-option value="2">2</mat-option>
-                <mat-option value="3">3</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill" class="selectPumpRelay">
-            <mat-label>Bezeichnung Shelly Channel 1?</mat-label>
+            <mat-label>Bezeichnung Shelly Channel 0?</mat-label>
             <input matInput [(ngModel)]="shellyRelay0Name">
         </mat-form-field>
         <mat-form-field appearance="fill" class="selectPumpRelay">
-            <mat-label>Bezeichnung Shelly Channel 2?</mat-label>
+            <mat-label>Bezeichnung Shelly Channel 1?</mat-label>
             <input matInput [(ngModel)]="shellyRelay1Name">
         </mat-form-field>
         <mat-form-field appearance="fill" class="selectPumpRelay">
-            <mat-label>Bezeichnung Shelly Channel 3?</mat-label>
+            <mat-label>Bezeichnung Shelly Channel 2?</mat-label>
             <input matInput [(ngModel)]="shellyRelay2Name">
+        </mat-form-field>
+    </mat-tab>
+    <mat-tab label="Solar">
+        <mat-form-field appearance="fill" class="selectPumpRelay">
+            <mat-label>Temperatur Sensor-ID Skimmer?</mat-label>
+            <mat-select [(value)]="pumpConnectedShellyRelay">
+                <mat-option value="1">1</mat-option>
+                <mat-option value="2">2</mat-option>
+                <mat-option value="3">3</mat-option>
+                <mat-option value="4">4</mat-option>
+                <mat-option value="5">5</mat-option>
+                <mat-option value="6">6</mat-option>
+                <mat-option value="7">7</mat-option>
+                <mat-option value="8">8</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="selectPumpRelay">
+            <mat-label>Temperatursensor-ID Solar-Rücklauf?</mat-label>
+            <mat-select [(value)]="pumpConnectedShellyRelay">
+                <mat-option value="1">1</mat-option>
+                <mat-option value="2">2</mat-option>
+                <mat-option value="3">3</mat-option>
+                <mat-option value="4">4</mat-option>
+                <mat-option value="5">5</mat-option>
+                <mat-option value="6">6</mat-option>
+                <mat-option value="7">7</mat-option>
+                <mat-option value="8">8</mat-option>
+            </mat-select>
         </mat-form-field>
     </mat-tab>
 </mat-tab-group>

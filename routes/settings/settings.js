@@ -130,4 +130,15 @@ router.get('/loadSensorIcons', async (req, res) => {
     })
 })
 
+//IDs der Solar und Skimmer Temperatursensoren abfragen
+router.get('/getSolarAndSkimmerSensorIds', async (req, res) => {
+    console.log('erwer')
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
+        if(settings != null) {
+            return res.json({success: true, skimmerSensorId: settings.temperatureSensorIdSkimmer, solarSensorId: settings.temperatureSensorIdSolar})
+        } else {
+            return res.json({success: false});
+        }
+    })
+})
 module.exports = router; 
