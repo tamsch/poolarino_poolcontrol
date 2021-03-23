@@ -338,7 +338,6 @@ export class PoolControlComponent implements OnInit {
 
     toggleDevice(deviceId) {
         this.poolControlService.toggleDevice(deviceId).subscribe(data => {
-            console.log(data);
             if (data.success) {
                 if (deviceId === '0') {
                     if (data.data.ison) {
@@ -377,7 +376,6 @@ export class PoolControlComponent implements OnInit {
 
     refreshDevice(deviceId) {
         this.poolControlService.getDeviceStatus(deviceId).subscribe(data => {
-            console.log(data);
             if (data.success) {
                 if (deviceId === '0') {
                     if (data.data.ison) {
@@ -413,7 +411,6 @@ export class PoolControlComponent implements OnInit {
 
         for (let num of deviceIds) {
             this.poolControlService.getDeviceStatus(num).subscribe(data => {
-                console.log(data);
                 if (data.success) {
                     if (data.deviceId === '0') {
                         if (data.data.ison) {
@@ -456,7 +453,8 @@ export class PoolControlComponent implements OnInit {
             }
         })
 
-        this.poolControlService.getSolarState().subscribe(data => {
+        this.poolControlService.getSolar().subscribe(data => {
+            console.log(data);
             if (data.success) {
                 if (data.data.isOn) {
                     this.solarIsOn = true;

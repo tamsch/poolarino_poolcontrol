@@ -74,14 +74,12 @@ router.get('/getTemperaturesForGraphForSensor/:sensorId', async (req, res) => {
 router.get('/toggleDevice/:deviceId', async (req, res) => {
     console.log('REQ-GET | poolControl.js | /toggleDevice');
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
-        console.log(settings);
         if(settings != null && settings.shellyConnected) {
             Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId + '?turn=toggle', (error, response, data) => {
                 if(error){
                     console.log(error);
                     return res.json({success: false});
                 } else {
-                    console.log(response);
                     if(req.params.deviceId === '3' || req.params.deviceId === '0'){
                         // Wenn das Gerät eingeschaltet wurde, wird ein neuer Eintrag in der RuntimeDB erzeugt.
                         // Diesem Eintrag wird ein Startdatum hinzugefügt.
@@ -186,21 +184,21 @@ router.get('/solar/:solarValue', async (req, res) => {
                 } else {
                     setTimeout(() => {
                         if(req.params.solarValue === 'off') {
-                            Solar.findOne({isOn: true}).exec((err, solar) => {
+                            Solar.findOne({isOn: true}).exec(async (err, solar) => {
                                 if(err) {
                                     console.log(err);
                                 } else if(solar.length = 0) {
                                     console.log('Kein Eintrag gefunden!');
                                 } else {
 
-                                    gpiop.setup(16, gpiop.DIR_OUT).then(() => {
-                                        return gpiop.write(16, false)
+                                    let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                        return gpiop.write(16, true)
                                     }).catch((err) => {
                                         console.log('Error: ', err.toString())
                                     })
 
-                                    gpiop.setup(18, gpiop.DIR_OUT).then(() => {
-                                        return gpiop.write(18, true)
+                                    let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                        return gpiop.write(18, false)
                                     }).catch((err) => {
                                         console.log('Error: ', err.toString())
                                     })
@@ -224,7 +222,7 @@ router.get('/solar/:solarValue', async (req, res) => {
                             })
                             
                         } else if (req.params.solarValue === 'on') {
-                            Solar.findOne({isOn: false}).exec((err, solar) => {
+                            Solar.findOne({isOn: false}).exec(async (err, solar) => {
         
                                 if(err) {
                                     console.log(err)
@@ -233,13 +231,13 @@ router.get('/solar/:solarValue', async (req, res) => {
                                     return res.json({success: false})
                                 } else {
 
-                                    gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                    let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
                                         return gpiop.write(16, true)
                                     }).catch((err) => {
                                         console.log('Error: ', err.toString())
                                     })
 
-                                    gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                    let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
                                         return gpiop.write(18, false)
                                     }).catch((err) => {
                                         console.log('Error: ', err.toString())
@@ -263,14 +261,14 @@ router.get('/solar/:solarValue', async (req, res) => {
                         }
                     }, 10000)
             
-                    setTimeout(() => {
-                        gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                    setTimeout(async() => {
+                        let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
                             return gpiop.write(16, true)
                         }).catch((err) => {
                             console.log('Error: ', err.toString())
                         })
 
-                        gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                        let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
                             return gpiop.write(18, true)
                         }).catch((err) => {
                             console.log('Error: ', err.toString())
@@ -278,7 +276,7 @@ router.get('/solar/:solarValue', async (req, res) => {
                         asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=on');
                     }, 30000)
             
-                    return res.json({success: true, msg: ''});
+                    return res.json({success: true});
                 }
         
                 
@@ -344,7 +342,7 @@ router.get('/relayRuntime/:relayId', async (req, res) => {
 
 // Ermittlung des Solarwertes - Ist Solar aktuell an oder aus
 router.get('/getSolar', async (req, res) => {
-    Solar.find().exec((err, solar) => {
+    Solar.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, solar) => {
         if(err){
             console.log(err);
         }
@@ -362,54 +360,5 @@ router.get('/getSolar', async (req, res) => {
     })  
 })
 
-//Ermittlung der aktuellen Stellung des Kugelhahns
-router.get('/getSolarState', async (req, res) => {
-
-    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
-        if(settings != null && settings.raspberryPiConnected) {
-            gpiop.setup(16, gpiop.DIR_IN).then(() => {
-                return gpiop.read(16, true)
-            }).catch((err) => {
-                console.log('Error: ', err.toString())
-            })
-
-            gpiop.setup(18, gpiop.DIR_IN).then(() => {
-                return gpiop.read(18, false)
-            }).catch((err) => {
-                console.log('Error: ', err.toString())
-            })
-        
-            // const gpio23 = await shell.exec('cat /sys/class/gpio/gpio23/value');
-            // const gpio24 = await shell.exec('cat /sys/class/gpio/gpio24/value');
-        
-            setTimeout(() => {
-                if(gpio24 && !gpio23){
-                    let helper = {
-                        isOn: false
-                    }
-        
-                    return res.json({success: true, data: helper});
-                } else if(!gpio24 && gpio23){
-                    let helper = {
-                        isOn: true
-                    }
-        
-                    return res.json({success: true, data: helper});
-                } else {
-                    return res.json({success: false});
-                }
-        
-                
-            }, 500)
-        } else {
-            return res.json({success: false});
-        }
-    })
-    
-    
-    
-
-    
-})
 
 module.exports = router; 

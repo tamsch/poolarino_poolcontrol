@@ -35,10 +35,6 @@ export class PoolcontrolService {
         return this.http.get<data>( environment.serverUrl + '/poolcontrol/getSolar');
     }
 
-    getSolarState() {
-        return this.http.get<data>( environment.serverUrl + '/poolcontrol/getSolarState');
-    }
-
     setSolar(solarValue) {
         return this.http.get<data>( environment.serverUrl + '/poolcontrol/solar/' + solarValue);
     }

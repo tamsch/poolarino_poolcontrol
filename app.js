@@ -228,12 +228,21 @@ setInterval(function () {
 
 }, 10000);
 
-/* Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
     if (settings != null && settings.raspberryPiConnected) {
-        gpiop.setup(16, gpio.DIR_IN);
-        gpiop.setup(18, gpio.DIR_IN);
+        let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+            return gpiop.write(16, true)
+        }).catch((err) => {
+            console.log('Error: ', err.toString())
+        })
+
+        let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+            return gpiop.write(18, true)
+        }).catch((err) => {
+            console.log('Error: ', err.toString())
+        })
     }
-}) */
+})
 
 function saveVersion(res) {
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
@@ -244,7 +253,6 @@ function saveVersion(res) {
 }
 
 async function getMachineId() {
-    console.log('ERERRE')
     
     var content = fs.readFileSync('/proc/cpuinfo', 'utf8');
     var cont_array = content.split("\n");
@@ -261,11 +269,9 @@ async function getMachineId() {
 
 async function getOsInformation(){
 
-    console.log('angzelotti')
     let system = os.type();
     let version = os.release();
-    console.log('knurz')
-    console.log(system);
+
     if(system.includes('Windows')){
         var machineId = await uuidv4();
     } else if(system.includes('Darwin')){

@@ -19,9 +19,6 @@ router.get('/loadAllSettings', async (req, res) => {
 router.put('/saveSettings', async (req, res) => {
     const settings = await Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1);
 
-    console.log(settings);
-    console.log(req.body);
-
     if (settings) {
         settings.shellyConnected = req.body.shellyConnected;
         settings.raspberryPiConnected = req.body.raspberryPiConnected;
