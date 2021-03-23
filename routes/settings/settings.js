@@ -19,6 +19,9 @@ router.get('/loadAllSettings', async (req, res) => {
 router.put('/saveSettings', async (req, res) => {
     const settings = await Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1);
 
+    console.log(settings);
+    console.log(req.body);
+
     if (settings) {
         settings.shellyConnected = req.body.shellyConnected;
         settings.raspberryPiConnected = req.body.raspberryPiConnected;
@@ -55,7 +58,10 @@ router.put('/saveSettings', async (req, res) => {
         settings.weatherCountryCode = req.body.weatherCountryCode;
 
         settings.hbDisabled = req.body.hbDisabled;
-
+        settings.pumpConnectedShellyRelay = req.body.pumpConnectedShellyRelay;
+        settings.shellyRelay0Name = req.body.shellyRelay0Name;
+        settings.shellyRelay1Name = req.body.shellyRelay1Name;
+        settings.shellyRelay2Name = req.body.shellyRelay2Name;
 
         await settings.save((err, saved) => {
             if (err) {
@@ -94,6 +100,26 @@ router.get('/checkVersion', async (req, res) => {
         }
     })
 })
+
+//VersionInfo laden
+router.get('/loadRelayTitles', async (req, res) => {
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
+        if (err || settings == null) {
+            console.log(err);
+            return res.json({ success: false });
+        } else {
+            let helper = {
+                shellyRelay0Name: settings.shellyRelay0Name,
+                shellyRelay1Name: settings.shellyRelay1Name,
+                shellyRelay2Name: settings.shellyRelay2Name
+            }
+            
+            return res.json({success: true, data: helper});
+
+        }
+    })
+})
+
 
 //Alle Settings laden
 router.get('/loadSensorIcons', async (req, res) => {

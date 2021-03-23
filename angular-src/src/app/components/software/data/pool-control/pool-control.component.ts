@@ -117,6 +117,10 @@ export class PoolControlComponent implements OnInit {
 
     envBoolean: Boolean = false;
 
+    shellyRelay0Name: String;
+    shellyRelay1Name: String;
+    shellyRelay2Name: String;
+
 
     constructor(
         private poolControlService: PoolcontrolService,
@@ -139,6 +143,7 @@ export class PoolControlComponent implements OnInit {
 
             this.loadSensorIcons();
 
+            this.loadRelayTitles();
 
             this.sub = interval(10000).subscribe(x => this.getDeviceLoad());
             this.subTemps = interval(60000).subscribe(x => this.getTempsAndRuntime());
@@ -333,6 +338,7 @@ export class PoolControlComponent implements OnInit {
 
     toggleDevice(deviceId) {
         this.poolControlService.toggleDevice(deviceId).subscribe(data => {
+            console.log(data);
             if (data.success) {
                 if (deviceId === '0') {
                     if (data.data.ison) {
@@ -371,6 +377,7 @@ export class PoolControlComponent implements OnInit {
 
     refreshDevice(deviceId) {
         this.poolControlService.getDeviceStatus(deviceId).subscribe(data => {
+            console.log(data);
             if (data.success) {
                 if (deviceId === '0') {
                     if (data.data.ison) {
@@ -406,26 +413,27 @@ export class PoolControlComponent implements OnInit {
 
         for (let num of deviceIds) {
             this.poolControlService.getDeviceStatus(num).subscribe(data => {
+                console.log(data);
                 if (data.success) {
-                    if (num === '0') {
+                    if (data.deviceId === '0') {
                         if (data.data.ison) {
                             this.relayZeroIsOn = true;
                         } else {
                             this.relayZeroIsOn = false;
                         }
-                    } else if (num === '1') {
+                    } else if (data.deviceId === '1') {
                         if (data.data.ison) {
                             this.relayOneIsOn = true;
                         } else {
                             this.relayOneIsOn = false;
                         }
-                    } else if (num === '2') {
+                    } else if (data.deviceId === '2') {
                         if (data.data.ison) {
                             this.relayTwoIsOn = true;
                         } else {
                             this.relayTwoIsOn = false;
                         }
-                    } else if (num === '3') {
+                    } else if (data.deviceId === '3') {
                         if (data.data.ison) {
                             this.relayThreeIsOn = true;
                         } else {
@@ -561,6 +569,16 @@ export class PoolControlComponent implements OnInit {
                 this.sensor6icon = data.data.sensor6icon;
                 this.sensor7icon = data.data.sensor7icon;
                 this.sensor8icon = data.data.sensor8icon;
+            }
+        })
+    }
+    
+    loadRelayTitles(){
+        this.settingsService.loadRelayTitles().subscribe(data => {
+            if(data.success){
+                this.shellyRelay0Name = data.data.shellyRelay0Name;
+                this.shellyRelay1Name = data.data.shellyRelay1Name;
+                this.shellyRelay2Name = data.data.shellyRelay2Name;
             }
         })
     }

@@ -161,6 +161,24 @@ const SettingsSchema = mongoose.Schema({
     sensor8icon:{
         type: String,
         default: 'fas fa fa-home'
+    },
+    pumpConnectedShellyRelay:{
+        type: String
+    },
+    lastPowerConsumptionPump:{
+        type: Number
+    },
+    shellyRelay0Name: {
+        type: String,
+        default: 'Channel 1 Bezeichnung'
+    },
+    shellyRelay1Name: {
+        type: String,
+        default: 'Channel 2 Bezeichnung'
+    },
+    shellyRelay2Name: {
+        type: String,
+        default: 'Channel 3 Bezeichnung'
     }
     
 })

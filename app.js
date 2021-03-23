@@ -98,9 +98,8 @@ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, set
 
         settings.save();
     } else {
-
         let sysInfo = await getOsInformation();
-        //let ipInformation = await getIpInformation();
+        let ipInformation = await getIpInformation();
         var country = 'notSet';
         var region = 'notSet';
 
@@ -127,7 +126,17 @@ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, set
             machineId: sysInfo[2]
         })
 
-        newSettings.save();
+        let newSolar = new Solar({
+            isOn: false
+        })
+
+        newSolar.save();
+
+        newSettings.save((err, savedSettings) => {
+            if(err){
+                console.log(err);
+            }
+        });
     }
 })
 
@@ -191,18 +200,21 @@ setInterval(function () {
                         if (err) {
                             console.log(err);
                         } else {
-                            if ((response.meters[0].power < 400 || response.meters[0].power > 500) && response.relays[0].ison && !solar[0].justSwitched) {
-                                Shelly.callDevice(settings.shellyIp, '/relay/0?turn=off', (error, response, data) => {
+
+                            let pumpRelay = parseInt(settings.pumpConnectedShellyRelay);
+
+                            /* if ((response.meters[pumpRelay].power < 400 || response.meters[pumpRelay].power > 500) && response.relays[pumpRelay].ison && !solar[0].justSwitched) {
+                                Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=off', (error, response, data) => {
                                     console.log('Pumpe notabgeschaltet!');
                                     let newGeneral = new General({
                                         emergencyShutdown: true,
-                                        relay: 0,
+                                        relay: pumpRelay,
                                         resolved: false
                                     })
 
                                     newGeneral.save();
                                 });
-                            }
+                            } */
                         }
 
 
@@ -232,6 +244,7 @@ function saveVersion(res) {
 }
 
 async function getMachineId() {
+    console.log('ERERRE')
     
     var content = fs.readFileSync('/proc/cpuinfo', 'utf8');
     var cont_array = content.split("\n");
@@ -248,13 +261,16 @@ async function getMachineId() {
 
 async function getOsInformation(){
 
+    console.log('angzelotti')
     let system = os.type();
     let version = os.release();
+    console.log('knurz')
+    console.log(system);
     if(system.includes('Windows')){
         var machineId = await uuidv4();
     } else if(system.includes('Darwin')){
         var machineId = await uuidv4();
-    } else if(system.includes('Linux')){
+    } else if(system.includes('Linux') && !system.includes('Warning')){
         var machineId = await getMachineId();
     }
     
@@ -289,7 +305,7 @@ setInterval(function () {
                 
             } else {
 
-                if(x.hbId.toString().length < 15){
+                if(settings.hbId.toString().length < 15){
                     newInstallationId = await uuidv4();
                 } else {
                     newInstallationId = settings.hbId;

@@ -35,6 +35,10 @@ export class SettingsService {
     loadSensorIcons(){
         return this.http.get<data>(environment.serverUrl + '/settings/loadSensorIcons');
     }
+
+    loadRelayTitles(){
+        return this.http.get<data>(environment.serverUrl + '/settings/loadRelayTitles');
+    }
 }
 
 interface data {

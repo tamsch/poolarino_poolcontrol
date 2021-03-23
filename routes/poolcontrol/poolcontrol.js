@@ -138,7 +138,7 @@ router.get('/getDeviceStatus/:deviceId', async (req, res) => {
                     console.log(err)
                     return res.json({success: false});
                 } else {
-                    return res.json({success: true, data: response})
+                    return res.json({success: true, data: response, deviceId: req.params.deviceId})
                 }
                 
             }); 
@@ -176,11 +176,12 @@ router.get('/solar/:solarValue', async (req, res) => {
         if(settings != null && settings.shellyConnected){
             try {
 
-                await asyncCallDevice(settings.shellyIp, '/relay/0?turn=off');
+                await asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=off');
                 const status = await asyncCallDevice(settings.shellyIp, '/status');
+
+                let pumpRelay = parseInt(settings.pumpConnectedShellyRelay);
         
-                if(status.relays[0].ison || status.meters[0].power > 350 || status.meters[1].power > 350 || status.meters[2].power > 350 || status.meters[3].power > 350) {
-        
+                if(status.relays[pumpRelay].ison || status.meters[pumpRelay].power > 100) {
                     return res.json({success: false, msg: 'Pumpe ließ sich nicht ausschalten!'});
                 } else {
                     setTimeout(() => {
@@ -227,8 +228,9 @@ router.get('/solar/:solarValue', async (req, res) => {
         
                                 if(err) {
                                     console.log(err)
-                                } else if(solar.length = 0) {
-                                    console.log('Kein Eintrag gefunden.')
+                                } else if(solar === null) {
+                                    console.log('Kein Eintrag gefunden.');
+                                    return res.json({success: false})
                                 } else {
 
                                     gpiop.setup(16, gpiop.DIR_OUT).then(() => {
@@ -273,7 +275,7 @@ router.get('/solar/:solarValue', async (req, res) => {
                         }).catch((err) => {
                             console.log('Error: ', err.toString())
                         })
-                        asyncCallDevice(settings.shellyIp, '/relay/0?turn=on');
+                        asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=on');
                     }, 30000)
             
                     return res.json({success: true, msg: ''});
@@ -365,8 +367,17 @@ router.get('/getSolarState', async (req, res) => {
 
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
         if(settings != null && settings.raspberryPiConnected) {
-            const gpio23 = await gpiop.read(16);
-            const gpio24 = await gpiop.read(18);
+            gpiop.setup(16, gpiop.DIR_IN).then(() => {
+                return gpiop.read(16, true)
+            }).catch((err) => {
+                console.log('Error: ', err.toString())
+            })
+
+            gpiop.setup(18, gpiop.DIR_IN).then(() => {
+                return gpiop.read(18, false)
+            }).catch((err) => {
+                console.log('Error: ', err.toString())
+            })
         
             // const gpio23 = await shell.exec('cat /sys/class/gpio/gpio23/value');
             // const gpio24 = await shell.exec('cat /sys/class/gpio/gpio24/value');

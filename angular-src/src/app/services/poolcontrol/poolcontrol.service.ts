@@ -53,5 +53,6 @@ interface data {
     ison: Boolean;
     success: Boolean,
     msg: String,
-    data: any
+    data: any,
+    deviceId: String
 }

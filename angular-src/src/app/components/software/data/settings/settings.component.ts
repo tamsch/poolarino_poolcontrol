@@ -41,6 +41,10 @@ export class SettingsComponent implements OnInit {
     sensor8name: String;
     sensor8id: String;
     sensor8icon: String;
+    pumpConnectedShellyRelay: String;
+    shellyRelay0Name: String;
+    shellyRelay1Name: String;
+    shellyRelay2Name: String;
 
 
     weatherCity: String;
@@ -135,7 +139,11 @@ export class SettingsComponent implements OnInit {
                                     weatherName: this.weatherName,
                                     weatherAppId: this.weatherAppId,
                                     weatherCountryCode: this.weatherCountryCode,
-                                    hbDisabled: this.hbDisabled
+                                    hbDisabled: this.hbDisabled,
+                                    pumpConnectedShellyRelay: this.pumpConnectedShellyRelay,
+                                    shellyRelay0Name: this.shellyRelay0Name,
+                                    shellyRelay1Name: this.shellyRelay1Name,
+                                    shellyRelay2Name: this.shellyRelay2Name
                                 }
 
                                 this.settingsService.saveSettings(settings).subscribe(data => {
@@ -185,7 +193,11 @@ export class SettingsComponent implements OnInit {
                             weatherName: this.weatherName,
                             weatherAppId: this.weatherAppId,
                             weatherCountryCode: this.weatherCountryCode,
-                            hbDisabled: this.hbDisabled
+                            hbDisabled: this.hbDisabled,
+                            pumpConnectedShellyRelay: this.pumpConnectedShellyRelay,
+                            shellyRelay0Name: this.shellyRelay0Name,
+                            shellyRelay1Name: this.shellyRelay1Name,
+                            shellyRelay2Name: this.shellyRelay2Name
                         }
 
                         this.settingsService.saveSettings(settings).subscribe(data => {
@@ -232,7 +244,11 @@ export class SettingsComponent implements OnInit {
                         weatherName: this.weatherName,
                         weatherAppId: this.weatherAppId,
                         weatherCountryCode: this.weatherCountryCode,
-                        hbDisabled: this.hbDisabled
+                        hbDisabled: this.hbDisabled,
+                        pumpConnectedShellyRelay: this.pumpConnectedShellyRelay,
+                        shellyRelay0Name: this.shellyRelay0Name,
+                        shellyRelay1Name: this.shellyRelay1Name,
+                        shellyRelay2Name: this.shellyRelay2Name
                     }
 
                     this.settingsService.saveSettings(settings).subscribe(data => {
@@ -285,7 +301,11 @@ export class SettingsComponent implements OnInit {
                 this.hbDisabled = data.data.hbDisabled;
                 this.hbDisabledSave = data.data.hbDisabled;
 
+                this.shellyRelay0Name = data.data.shellyRelay0Name;
+                this.shellyRelay1Name = data.data.shellyRelay1Name;
+                this.shellyRelay2Name = data.data.shellyRelay2Name;
 
+                this.pumpConnectedShellyRelay = data.data.pumpConnectedShellyRelay;
 
                 if (this.shellyConnectedBoolean) {
                     this.shellyConnected = 'yes';

@@ -157,7 +157,29 @@
             <input matInput [(ngModel)]="sensor8icon">
         </mat-form-field>
     </mat-tab>
-    <mat-tab label="Pumpe" disabled></mat-tab>
+    <mat-tab label="Pumpe">
+        <mat-form-field appearance="fill" class="selectPumpRelay">
+            <mat-label>Relay der Pumpe am Shelly?</mat-label>
+            <mat-select [(value)]="pumpConnectedShellyRelay">
+                <mat-option value="0">0</mat-option>
+                <mat-option value="1">1</mat-option>
+                <mat-option value="2">2</mat-option>
+                <mat-option value="3">3</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="selectPumpRelay">
+            <mat-label>Bezeichnung Shelly Channel 1?</mat-label>
+            <input matInput [(ngModel)]="shellyRelay0Name">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="selectPumpRelay">
+            <mat-label>Bezeichnung Shelly Channel 2?</mat-label>
+            <input matInput [(ngModel)]="shellyRelay1Name">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="selectPumpRelay">
+            <mat-label>Bezeichnung Shelly Channel 3?</mat-label>
+            <input matInput [(ngModel)]="shellyRelay2Name">
+        </mat-form-field>
+    </mat-tab>
 </mat-tab-group>
 
 <button mat-flat-button color="primary" class="saveButton" (click)="saveOptions()">Speichern</button>

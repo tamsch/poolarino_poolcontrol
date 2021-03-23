@@ -18,7 +18,7 @@
     "geoip-lite": "^1.4.2",
     "isomorphic-fetch": "^3.0.0",
     "jquery": "^3.6.0",
-    "mongoose": "^5.11.19",
+    "mongoose": "^5.12.2",
     "node-fetch": "^2.6.1",
     "node-geocoder": "^3.27.0",
     "public-ip": "^4.0.3",

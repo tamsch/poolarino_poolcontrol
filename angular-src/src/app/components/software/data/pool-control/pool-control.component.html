@@ -10,7 +10,7 @@
                     <i class="fas sizeCorrection fa-power-off"></i>
                 </div>
                 <div class="buttonDescription">
-                    <span class="buttonDescriptionText">Poolpumpe</span>
+                    <span class="buttonDescriptionText">{{ shellyRelay0Name }}</span>
                 </div>
                 <div class="buttonRuntimeAndPowerConsumption">
                     <div class="buttonRuntimeRuntime">
@@ -34,7 +34,7 @@
                     <i class="fas sizeCorrection fa-power-off"></i>
                 </div>
                 <div class="buttonDescription">
-                    <span class="buttonDescriptionText">Musik</span>
+                    <span class="buttonDescriptionText">{{ shellyRelay1Name }}</span>
                 </div>
                 <div class="buttonRuntimeAndPowerConsumption">
                     <div class="buttonRuntimeRuntime">
@@ -51,7 +51,7 @@
         </div>
     </div>
     <div class="rightSwitches">
-        <div class="rightSwitch" (click)="toggleDevice('3')">
+        <div class="rightSwitch" (click)="toggleDevice('2')">
             <div class="topStatusBar">
 
             </div>
@@ -60,7 +60,7 @@
                     <i class="fas sizeCorrection fa-power-off"></i>
                 </div>
                 <div class="buttonDescription">
-                    <span class="buttonDescriptionText">Beleuchtung</span>
+                    <span class="buttonDescriptionText">{{ shellyRelay2Name }}</span>
                 </div>
                 <div class="buttonRuntimeAndPowerConsumption">
                     <div class="buttonRuntimeRuntime">
@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bottomStatusBar" [ngClass]="{'greenBackground' : relayThreeIsOn,'redBackground' : !relayThreeIsOn }">
+            <div class="bottomStatusBar" [ngClass]="{'greenBackground' : relayTwoIsOn,'redBackground' : !relayTwoIsOn }">
 
             </div>
         </div>
