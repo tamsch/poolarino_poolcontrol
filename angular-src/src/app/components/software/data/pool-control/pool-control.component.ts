@@ -454,7 +454,6 @@ export class PoolControlComponent implements OnInit {
         })
 
         this.poolControlService.getSolar().subscribe(data => {
-            console.log(data);
             if (data.success) {
                 if (data.data.isOn) {
                     this.solarIsOn = true;
@@ -471,7 +470,7 @@ export class PoolControlComponent implements OnInit {
         } else {
             this.poolControlService.getSolar().subscribe(data => {
                 if (data.success) {
-                    if (data.data[0].isOn) {
+                    if (data.data.isOn) {
 
                         Swal.fire({
                             heightAuto: false,
