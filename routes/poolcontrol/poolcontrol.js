@@ -62,6 +62,9 @@ router.get('/toggleDevice/:deviceId', async (req, res) => {
     console.log('REQ-GET | poolControl.js | /toggleDevice');
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
         if(settings != null && settings.shellyConnected) {
+            if(settings.pumpConnectedShellyRelay === req.params.deviceId){
+                return res.json({success: false, msg: 'Bitte deaktivieren Sie die automatische Pumpensteuerung um wieder manuell steuern zu können.'});
+            }
             Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId + '?turn=toggle', (error, response, data) => {
                 if(error){
                     console.log(error);
@@ -147,6 +150,9 @@ router.get('/getRelayLoad', async (req, res) => {
 router.get('/solar/:solarValue', async (req, res) => {
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
         if(settings != null && settings.shellyConnected){
+            if(settings.automatedSolarActivation || settings.automatedWatertemperatureDeactivation){
+                return res.json({success: false, msg: 'Bitte deaktivieren Sie für eine manuelle Steuerung der Solaranlage zunächst die aktivierten Automatismen.'});
+            }
             try {
                 await asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=off');
                 const status = await asyncCallDevice(settings.shellyIp, '/status');

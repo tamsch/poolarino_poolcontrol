@@ -44,7 +44,7 @@ interface data {
     relays: any;
     ison: Boolean;
     success: Boolean,
-    msg: String,
+    msg: string,
     data: any,
     deviceId: String
 }

@@ -180,14 +180,17 @@ const SettingsSchema = mongoose.Schema({
         type: String,
         default: 'Channel 2 Bezeichnung'
     },
+    //Temperatursensor-ID Skimmer
     temperatureSensorIdSkimmer: {
         type: String,
         default: ''
     },
+    //Temperatursensor-ID Solar-Rücklauf
     temperatureSensorIdSolar: {
         type: String,
         default: ''
     },
+    //Temperatursensor Solar Aktivierung?
     temperatureSensorSolarActivation: {
         type: String,
         default: ''
@@ -212,7 +215,7 @@ const SettingsSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
-    automatedSolarDeactivation: {
+    automatedSolarActivation: {
         type: Boolean,
         default: false
     },

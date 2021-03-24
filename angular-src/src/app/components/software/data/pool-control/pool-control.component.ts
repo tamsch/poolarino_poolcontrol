@@ -357,6 +357,13 @@ export class PoolControlComponent implements OnInit {
                         this.relayThreeIsOn = false;
                     }
                 }
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    heightAuto: false,
+                    title: 'Umschaltung fehlgeschlagen',
+                    text: data.msg,
+                })
             }
         })
 
@@ -487,7 +494,17 @@ export class PoolControlComponent implements OnInit {
                                     if (data.success) {
                                         this.solarIsOn = false;
                                         this.getDeviceLoad();
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            heightAuto: false,
+                                            title: 'Umschaltung fehlgeschlagen',
+                                            text: data.msg,
+                                        })
+
+                                        this.solarJustChanged = false;
                                     }
+                                    
                                 })
                                 setTimeout(() => {
                                     this.solarJustChanged = false;
@@ -513,6 +530,15 @@ export class PoolControlComponent implements OnInit {
                                 this.poolControlService.setSolar('on').subscribe(data => {
                                     if (data.success) {
                                         this.getDeviceLoad();
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            heightAuto: false,
+                                            title: 'Umschaltung fehlgeschlagen',
+                                            text: data.msg,
+                                        })
+
+                                        this.solarJustChanged = false;
                                     }
                                 })
                                 setTimeout(() => {

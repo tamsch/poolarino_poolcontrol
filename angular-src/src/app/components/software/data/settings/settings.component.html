@@ -37,6 +37,9 @@
                 <mat-option value="no">Nein</mat-option>
             </mat-select>
         </mat-form-field>
+        <div class="spacer" style="width: 50%">
+
+        </div>
         <mat-form-field appearance="fill" class="selectPumpRelay">
             <mat-label>Bezeichnung Shelly Channel 0?</mat-label>
             <input matInput [(ngModel)]="shellyRelay0Name">
@@ -388,11 +391,11 @@
                 <mat-option value="33">33</mat-option>
             </mat-select>
         </mat-form-field>
-        <div class="automatedSolarDeactivation">
-            <div class="automatedSolarDeactivationText">Automatische Solarsteuerung aktivieren?</div>
+        <div class="automatedSolarActivation">
+            <div class="automatedSolarActivationText">Automatische Solarsteuerung aktivieren?</div>
         </div>
-        <div class="automatedSolarDeactivationCheckbox">
-            <input type="checkbox" name="solarActivation" [(ngModel)]="automatedSolarDeactivation" id="solarActivation" class="form-control checkboxAutomatedSolar">
+        <div class="automatedSolarActivationCheckbox">
+            <input type="checkbox" name="solarActivation" [(ngModel)]="automatedSolarActivation" id="solarActivation" class="form-control checkboxAutomatedSolar">
         </div>
         
         <div class="automatedWaterTemperatureDeactivation">

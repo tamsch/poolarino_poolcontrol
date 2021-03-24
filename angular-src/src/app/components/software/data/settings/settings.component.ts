@@ -64,7 +64,7 @@ export class SettingsComponent implements OnInit {
     temperatureSolarActivation: Number;
     temperatureSolarDeactivation: Number;
     temperatureWaterDeactivation: Number;
-    automatedSolarDeactivation: Boolean;
+    automatedSolarActivation: Boolean;
     automatedWatertemperatureDeactivation: Boolean;
 
     pumpActivationTime1: String;
@@ -174,7 +174,7 @@ export class SettingsComponent implements OnInit {
                                     temperatureSolarActivation: this.temperatureSolarActivation,
                                     temperatureSolarDeactivation: this.temperatureSolarDeactivation,
                                     temperatureWaterDeactivation: this.temperatureWaterDeactivation,
-                                    automatedSolarDeactivation: this.automatedSolarDeactivation,
+                                    automatedSolarActivation: this.automatedSolarActivation,
                                     automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation,
                                     pumpActivationTime1: this.pumpActivationTime1,
                                     pumpDeactivationTime1: this.pumpDeactivationTime1,
@@ -247,7 +247,7 @@ export class SettingsComponent implements OnInit {
                             temperatureSolarActivation: this.temperatureSolarActivation,
                             temperatureSolarDeactivation: this.temperatureSolarDeactivation,
                             temperatureWaterDeactivation: this.temperatureWaterDeactivation,
-                            automatedSolarDeactivation: this.automatedSolarDeactivation,
+                            automatedSolarActivation: this.automatedSolarActivation,
                             automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation,
                             pumpActivationTime1: this.pumpActivationTime1,
                             pumpDeactivationTime1: this.pumpDeactivationTime1,
@@ -317,7 +317,7 @@ export class SettingsComponent implements OnInit {
                         temperatureSolarActivation: this.temperatureSolarActivation,
                         temperatureSolarDeactivation: this.temperatureSolarDeactivation,
                         temperatureWaterDeactivation: this.temperatureWaterDeactivation,
-                        automatedSolarDeactivation: this.automatedSolarDeactivation,
+                        automatedSolarActivation: this.automatedSolarActivation,
                         automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation,
                         pumpActivationTime1: this.pumpActivationTime1,
                         pumpDeactivationTime1: this.pumpDeactivationTime1,
@@ -329,8 +329,6 @@ export class SettingsComponent implements OnInit {
                         pumpDeactivationTime3: this.pumpDeactivationTime3,
                         activateFilterInterval3: this.activateFilterInterval3
                     }
-
-                    console.log(settings);
 
                     this.settingsService.saveSettings(settings).subscribe(data => {
                         if (data.success) {
@@ -397,7 +395,7 @@ export class SettingsComponent implements OnInit {
                 this.temperatureSolarActivation = data.data.temperatureSolarActivation.toString();
                 this.temperatureSolarDeactivation = data.data.temperatureSolarDeactivation.toString();
                 this.temperatureWaterDeactivation = data.data.temperatureWaterDeactivation.toString();
-                this.automatedSolarDeactivation = data.data.automatedSolarDeactivation;
+                this.automatedSolarActivation = data.data.automatedSolarActivation;
                 this.automatedWatertemperatureDeactivation = data.data.automatedWatertemperatureDeactivation;
 
                 this.pumpActivationTime1 =  data.data.pumpActivationTime1;

@@ -8,8 +8,8 @@ const config = require('./config/database');
 const ds18b20 = require('ds18b20');
 const Temperature = require('./models/poolcontrol/temperature');
 const errorHandler = require('express-error-handler');
-const General = require('./models/poolcontrol/general');
 const Solar = require('./models/poolcontrol/solar');
+const Runtime = require('./models/poolcontrol/runtime');
 const fetch = require('node-fetch');
 const { v4: uuidv4 } = require('uuid');
 const { exec } = require('child_process');
@@ -74,9 +74,6 @@ app.use('/poolcontrol', poolControl);
 app.use('/weatherforecast', weatherForecast);
 app.use('/settings', settings);
 
-
-
-
 //Calling Index-Route
 app.get('/', (req, res) => {
     res.send('Ungültige Route!');
@@ -90,6 +87,18 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log('Server started on port ' + port);
 });
+
+// Async Call des Shellys
+function asyncCallDevice(device, command) {
+    return new Promise((resolve, reject) => {
+        Shelly.callDevice(device, command, (error, response) => {
+            if (error) {
+                return reject(error);
+            }
+            return resolve(response);
+        })
+    });
+}
 
 // Setzen der neuen VersionInfo, initiale Anlage der Settings
 Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
@@ -140,53 +149,15 @@ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, set
     }
 })
 
-function getTemp(id, time) {
-    return new Promise((resolve, reject) => {
+function getTemp(id) {
+    return new Promise((resolve) => {
         ds18b20.temperature(id, (err, value) => {
-            resolve({ id, t: value, d: time });
+            resolve({ id, t: value });
         });
     });
 }
 
-// 5 Minuten interval zur Ermittlung der Temperaturen.
-// Temperaturen werden nach der Ermittlung in die DB geschrieben.
-setInterval(function () {
-    let date = + new Date();
-    ds18b20.sensors((err, ids) => {
-        if (err) {
-            console.log(err);
-        } else {
-            const temps = [];
-            for (i = 0; i < ids.length; i += 1) {
-                temps.push(getTemp(ids[i], date));
-            }
 
-            Promise.all(temps).then(values => {
-
-                for (i = 0; i < temps.length; i++) {
-
-                    let dateHelper = values[i].d;
-                    dateHelper = dateHelper.toString();
-                    dateHelper = dateHelper.slice(0, -3);
-                    dateHelper = parseInt(dateHelper);
-                    dateHelper = dateHelper + 7200;
-                    dateHelper = dateHelper.toString();
-                    dateHelper = dateHelper + '000';
-                    dateHelper = parseInt(dateHelper);
-
-                    newTemperature = new Temperature({
-                        sensor: values[i].id,
-                        temperature: values[i].t,
-                        time: dateHelper
-                    })
-
-                    newTemperature.save();
-                }
-            });
-        }
-
-    });
-}, 300000);
 
 // Trockenlauf- und Überdruckschutz der Pumpe - Prüft alle 10 Sekunden den Verbrauch
 setInterval(function () {
@@ -235,14 +206,16 @@ setInterval(function () {
             Solar.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, solar) => {
                 if(solar != null && solar.justSwitched === false){
                     // Prüfe Aktivierung der Pumpe
+                    let h = new Date().getHours();
+                    let m = new Date();
+                    let f = h + ':' + (m.getMinutes()<10?'0':'') + m.getMinutes();
+
                     if(settings.activateFilterInterval1){
                         if(settings.pumpActivationTime1 != '' && settings.pumpDeactivationTime1 != '' && !settings.justChangedInterval1){
-                            let h = new Date().getHours();
-                            let m = new Date();
-                            let f = h + ':' + (m.getMinutes()<10?'0':'') + m.getMinutes();
 
                             if(f === settings.pumpActivationTime1){
                                 Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=on', (error, response, data) => {
+                                    console.log('activated interval 1');
                                     if(response.ison){
                                         let dateHelper = new Date();
                                         let dateHelperToday = dateHelper.toISOString().substr(0,10);
@@ -253,12 +226,27 @@ setInterval(function () {
                                         });
                         
                                         newRuntime.save();
+
+                                        settings.justChangedInterval1 = true;
+                                        settings.save();
+
+                                        setTimeout(async () => {
+                                            settings.set({
+                                                justChangedInterval1: false
+                                            });
+                                            settings.save();
+                                        }, 90000)
+                                    }
+
+                                    if(error){
+                                        console.log(error)
                                     }
                                 });
                             }
 
                             if(f === settings.pumpDeactivationTime1){
                                 Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=off', (error, response, data) => {
+                                    console.log('deactivated interval 1');
                                     Runtime.findOne().where({'relay': settings.pumpConnectedShellyRelay}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
                                         runtime.set({
                                             endTime: new Date()
@@ -271,25 +259,157 @@ setInterval(function () {
                                         })
                     
                                         runtime.save();
-                    
-                                        return res.json({success: true, data: response});
+
+                                        settings.justChangedInterval1 = true;
+                                        settings.save();
+
+                                        setTimeout(async () => {
+                                            settings.set({
+                                                justChangedInterval1: false
+                                            });
+                                            settings.save();
+                                        }, 90000)
                                     })
                                 });
                             }
+                        } else {
+                            console.log('1 - Aktivierungs- oder Deaktivierungsinterval nicht gesetzt, oder die Channel-Stellung wurde gerade geändert!')
                         }
                     }
 
                     if(settings.activateFilterInterval2){
-                        if(settings.pumpActivationTime2 != '' && settings.pumpDeactivationTime2 != ''){
+                        if(settings.pumpActivationTime2 != '' && settings.pumpDeactivationTime2 != '' && !settings.justChangedInterval2){
+                            if(f === settings.pumpActivationTime2){
+                                Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=on', (error, response, data) => {
+                                    console.log('activated interval 2');
+                                    if(response.ison){
+                                        let dateHelper = new Date();
+                                        let dateHelperToday = dateHelper.toISOString().substr(0,10);
+                                        let newRuntime = new Runtime({
+                                            relay: settings.pumpConnectedShellyRelay,
+                                            date: dateHelperToday,
+                                            startTime: new Date()
+                                        });
+                        
+                                        newRuntime.save();
 
+                                        settings.justChangedInterval2 = true;
+                                        settings.save();
+
+                                        setTimeout(async () => {
+                                            settings.set({
+                                                justChangedInterval2: false
+                                            });
+                                            settings.save();
+                                        }, 90000)
+                                    }
+
+                                    if(error){
+                                        console.log(error)
+                                    }
+                                });
+                            }
+
+                            if(f === settings.pumpDeactivationTime2){
+                                Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=off', (error, response, data) => {
+                                    console.log('activated interval 2');
+                                    Runtime.findOne().where({'relay': settings.pumpConnectedShellyRelay}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
+                                        runtime.set({
+                                            endTime: new Date()
+                                        })
+                    
+                                        let calcHelper = runtime.endTime - runtime.startTime;
+                    
+                                        runtime.set({
+                                            calculatedTime: calcHelper
+                                        })
+                    
+                                        runtime.save();
+
+                                        settings.justChangedInterval2 = true;
+                                        settings.save();
+
+                                        setTimeout(async () => {
+                                            settings.set({
+                                                justChangedInterval2: false
+                                            });
+                                            settings.save();
+                                        }, 90000)
+                                    })
+                                });
+                            }
+                        } else {
+                            console.log('2 - Aktivierungs- oder Deaktivierungsinterval nicht gesetzt, oder die Channel-Stellung wurde gerade geändert!')
                         }
                     }
 
                     if(settings.activateFilterInterval3){
-                        if(settings.pumpActivationTime3 != '' && settings.pumpDeactivationTime3 != ''){
+                        if(settings.pumpActivationTime3 != '' && settings.pumpDeactivationTime3 != '' && !settings.justChangedInterval3){
+                            if(f === settings.pumpActivationTime3){
+                                Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=on', (error, response, data) => {
+                                    console.log('activated interval 3');
+                                    if(response.ison){
+                                        let dateHelper = new Date();
+                                        let dateHelperToday = dateHelper.toISOString().substr(0,10);
+                                        let newRuntime = new Runtime({
+                                            relay: settings.pumpConnectedShellyRelay,
+                                            date: dateHelperToday,
+                                            startTime: new Date()
+                                        });
+                        
+                                        newRuntime.save();
 
+                                        settings.justChangedInterval3 = true;
+                                        settings.save();
+
+                                        setTimeout(async () => {
+                                            settings.set({
+                                                justChangedInterval3: false
+                                            });
+                                            settings.save();
+                                        }, 90000)
+                                    }
+
+                                    if(error){
+                                        console.log(error)
+                                    }
+                                });
+                            }
+
+                            if(f === settings.pumpDeactivationTime3){
+                                Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=off', (error, response, data) => {
+                                    console.log('activated interval 3');
+                                    Runtime.findOne().where({'relay': settings.pumpConnectedShellyRelay}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
+                                        runtime.set({
+                                            endTime: new Date()
+                                        })
+                    
+                                        let calcHelper = runtime.endTime - runtime.startTime;
+                    
+                                        runtime.set({
+                                            calculatedTime: calcHelper
+                                        })
+                    
+                                        runtime.save();
+
+                                        settings.justChangedInterval3 = true;
+                                        settings.save();
+
+                                        setTimeout(async () => {
+                                            settings.set({
+                                                justChangedInterval3: false
+                                            });
+                                            settings.save();
+                                        }, 90000)
+                                    })
+                                });
+                            }
+                        } else {
+                            console.log('3 - Aktivierungs- oder Deaktivierungsinterval nicht gesetzt, oder die Channel-Stellung wurde gerade geändert!')
                         }
                     }
+                } else {
+                    console.log('Keine Solareinstellungen gefunden oder Solar wurde oder wird gerade umgestellt - Automatische Pumpensteuerung nicht möglich!');
                 }
             })
         } else {
@@ -299,6 +419,232 @@ setInterval(function () {
 
 }, 10000);
 
+
+// Automatische Solarsteuerung
+setInterval(function () {
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
+        let solar = await Solar.findOne().sort({ field: 'asc', _id: -1 }).limit(1);
+
+        if(solar === null){
+
+        } else {
+            if(solar.justSwitched){
+                console.log('Solar wurde oder wird gerade umgestellt - Automatische Steuerung derzeit nicht möglich!');
+            } else {
+                if(solar.isOn){
+                    if(settings.automatedSolarActivation){
+                        if(settings.temperatureSensorIdSkimmer != '' && settings.temperatureSensorIdSolar != '' && settings.temperatureSensorSolarActivation != '' && settings.temperatureSolarActivation != 0 && settings.temperatureSolarDeactivation != 0){
+                            let temperatureHelper = settings.temperatureSensorSolarDeactivation.split('tempSensor');
+                            let dbSensor = 'sensor' + temperatureHelper[1] + 'id';
+        
+                            let solarDeactivationTemperature = await getTemp(settings[dbSensor]);
+        
+                            console.log('Prüfe Solar Deaktivierung');
+                            console.log('Ist-Temperatur: ' + solarDeactivationTemperature.t + 'C°');
+                            console.log('Umstell-Schwellwert: ' + settings.temperatureSolarDeactivation + 'C°');
+        
+                            if(solarDeactivationTemperature.t <= settings.temperatureSolarDeactivation){
+                                console.log('Starte Solar Deaktivierung');
+                                let relayShutdown = await asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=off');
+                                if(!relayShutdown.ison){
+                                    Runtime.findOne().where({'relay': settings.pumpConnectedShellyRelay}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
+                                        runtime.set({
+                                            endTime: new Date()
+                                        })
+                    
+                                        let calcHelper = runtime.endTime - runtime.startTime;
+                    
+                                        runtime.set({
+                                            calculatedTime: calcHelper
+                                        })
+                    
+                                        runtime.save();
+                                    })
+                                    console.log('Pumpe abgeschaltet - warte auf Beruhigung des Wasserkreislaufes.');
+                                    setTimeout(async () => {
+                                        console.log('Wasserkreislauf beruhigt, beginne Solarabschaltung!');
+                                        Solar.findOne({isOn: true}).exec(async (err, solar) => {
+                                            if(err) {
+                                                console.log(err);
+                                            } else if(solar.length = 0) {
+                                                console.log('Kein Eintrag gefunden!');
+                                            } else {
+                                                console.log('Beginne Umstellung des 3 Wege Ventils...');
+                                                let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                                    return gpiop.write(16, false)
+                                                }).catch((err) => {
+                                                    console.log('Error: ', err.toString())
+                                                })
+                
+                                                let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                                    return gpiop.write(18, true)
+                                                }).catch((err) => {
+                                                    console.log('Error: ', err.toString())
+                                                })
+                
+                                                solar.set({
+                                                    isOn: false,
+                                                    justSwitched: true
+                                                })
+                    
+                                                solar.save();
+                                                setTimeout(() => {
+                                                    solar.set({
+                                                        justSwitched: false
+                                                    });
+                                                    solar.save();
+                                                }, 90000)
+                                            }
+                                        })
+                                    }, 4000)                                    
+            
+                                    setTimeout(async() => {
+                                        let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                            return gpiop.write(16, true)
+                                        }).catch((err) => {
+                                            console.log('Error: ', err.toString())
+                                        })
+                
+                                        let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                            return gpiop.write(18, true)
+                                        }).catch((err) => {
+                                            console.log('Error: ', err.toString())
+                                        })
+                                        console.log('3 Wege Ventil erfolgreich umgestellt - Solar deaktiviert!');
+                                        asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=on');
+
+                                        let dateHelper = new Date();
+                                        let dateHelperToday = dateHelper.toISOString().substr(0,10);
+                                        let newRuntime = new Runtime({
+                                            relay: settings.pumpConnectedShellyRelay,
+                                            date: dateHelperToday,
+                                            startTime: new Date()
+                                        });
+                        
+                                        newRuntime.save();
+
+                                        console.log('Pumpe wieder angeschaltet');
+                                    }, 30000)
+                                }
+        
+                            }
+                        }
+                    }
+                } else {
+                    if (settings != null && settings.shellyConnected) {
+                        if(settings.automatedSolarActivation){
+                            if(settings.temperatureSensorIdSkimmer != '' && settings.temperatureSensorIdSolar != '' && settings.temperatureSensorSolarActivation != '' && settings.temperatureSolarActivation != 0 && settings.temperatureSolarDeactivation != 0){
+                                
+                                let temperatureHelper = settings.temperatureSensorSolarActivation.split('tempSensor');
+                                let dbSensor = 'sensor' + temperatureHelper[1] + 'id';
+        
+                                let solarActivationTemperature = await getTemp(settings[dbSensor]);
+        
+                                console.log('Prüfe Solar Aktivierung');
+                                console.log('Ist-Temperatur: ' + solarActivationTemperature.t + 'C°');
+                                console.log('Umstell-Schwellwert: ' + settings.temperatureSolarActivation + 'C°');
+        
+                                if(solarActivationTemperature.t >= settings.temperatureSolarActivation){
+                                    console.log('Starte Solar Aktivierung');
+                                    let relayShutdown = await asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=off');
+                                    if(!relayShutdown.ison){
+                                        console.log('Pumpe abgeschaltet - warte auf Beruhigung des Wasserkreislaufes.');
+                                        Runtime.findOne().where({'relay': settings.pumpConnectedShellyRelay}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
+                                            runtime.set({
+                                                endTime: new Date()
+                                            })
+                        
+                                            let calcHelper = runtime.endTime - runtime.startTime;
+                        
+                                            runtime.set({
+                                                calculatedTime: calcHelper
+                                            })
+                        
+                                            runtime.save();
+                                        })
+                                        setTimeout(async () => {
+                                            console.log('Wasserkreislauf beruhigt, beginne Solar Aktivierung!');
+                                            Solar.findOne({isOn: false}).exec(async (err, solar) => {
+                                                if(err) {
+                                                    console.log(err)
+                                                } else if(solar === null) {
+                                                    console.log('Kein Eintrag gefunden.');
+                                                } else {
+                                                    console.log('Beginne Umstellung des 3 Wege Ventils...');
+                                                    let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                                        return gpiop.write(16, true)
+                                                    }).catch((err) => {
+                                                        console.log('Error: ', err.toString())
+                                                    })
+                
+                                                    let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                                        return gpiop.write(18, false)
+                                                    }).catch((err) => {
+                                                        console.log('Error: ', err.toString())
+                                                    })
+                
+                                                    solar.set({
+                                                        isOn: true,
+                                                        justSwitched: true
+                                                    });
+                                                    solar.save();
+                                                    setTimeout(() => {
+                                                        solar.set({
+                                                            justSwitched: false
+                                                        });
+                
+                                                        solar.save();
+                                                    }, 90000)
+                                                }
+                                            })
+                                        }, 4000)
+        
+                                        setTimeout(async() => {
+                                            let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                                return gpiop.write(16, true)
+                                            }).catch((err) => {
+                                                console.log('Error: ', err.toString())
+                                            })
+                    
+                                            let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                                return gpiop.write(18, true)
+                                            }).catch((err) => {
+                                                console.log('Error: ', err.toString())
+                                            })
+                                            console.log('3 Wege Ventil erfolgreich umstellt - Solar aktiviert!')
+                                            asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=on');
+
+                                            let dateHelper = new Date();
+                                            let dateHelperToday = dateHelper.toISOString().substr(0,10);
+                                            let newRuntime = new Runtime({
+                                                relay: settings.pumpConnectedShellyRelay,
+                                                date: dateHelperToday,
+                                                startTime: new Date()
+                                            });
+                            
+                                            newRuntime.save();
+
+                                            console.log('Pumpe wieder angeschaltet!');
+                                        }, 30000)
+                                    } else {
+                                        console.log('Relay konnte nicht ausgeschaltet werden, Umstellung abgebrochen!');
+                                    }
+                                }    
+                            } else {
+                                console.log('Einer der Sensoren ist nicht korrekt ausgewählt oder die Temperaturen nicht eingestellt');
+                            }
+                        } else {
+                            console.log('Automatische Solarsteuerung ist deaktiviert!');
+                        }
+                    } else {
+                        console.log('Keine Settings gefunden oder kein Shelly angeschlossen!');
+                    }
+                }
+            }
+
+        }        
+    })
+}, 10000);
 
  Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
     if (settings != null && settings.raspberryPiConnected) {

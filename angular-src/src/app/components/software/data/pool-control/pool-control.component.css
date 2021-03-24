@@ -1,5 +1,8 @@
 @media screen and (max-width: 800px) {
 
+    .displayNone{
+        display: none;
+    }
 
     .switches{
         width: 88%;
@@ -254,138 +257,6 @@
     }
 }
 
-@media screen and (min-width: 801px) {
-
-    .displayNone{
-        display: none;
-    }
-
-    .chartContainer, .chartControlDescription {
-        display: block;
-    }
-
-    .controlCenter, .shellyRelais{
-        width: 100%;
-        height: 8%;
-        background-color: rgb(233, 233, 233)
-    }
-    
-    .shellyRelais{
-        margin-top: 2%;
-    }
-    
-    .controlOption{
-        cursor: pointer;
-        width: 25%;
-        height: 100%; 
-        float: left;
-        box-sizing: border-box;
-        border-right: 1px solid gray;
-    }
-    
-    .controlOption:hover{
-        background-color:rgb(196, 196, 196);
-    }
-    
-    .controlIcon{
-        width: 20%;
-        box-sizing: border-box;
-        margin-top: 3%;
-        padding-left: 6%;
-        float: left;
-    }
-    
-    .controlDescription{
-        width: 80%;
-        box-sizing: border-box;
-        float: right;
-        padding-top: 5%;
-    }
-    
-    .temperatures{
-        margin-top: 2%;
-        width: 100%;
-        height: 16%;
-        background-color: rgb(233, 233, 233);
-    }
-    
-    .temperature{
-        display: inline-block;
-        font-size: 16pt;
-    }
-    
-    .topTemps{
-        width: 100%;
-        height: 50%;
-    }
-    
-    .bottomTemps{
-        width: 100%;
-        height: 50%;
-    }
-    
-    .topTempContainer, .relay{
-        box-sizing: border-box;
-        width: 25%;
-        height: 100%;
-        float: left;
-        border-right: 1px solid gray;
-    }
-    
-    .bottomTempContainer{
-        box-sizing: border-box;
-        width: 25%;
-        height: 100%;
-        float: left;
-        border-top: 1px solid gray;
-        border-right: 1px solid gray;
-    }
-    
-    .tempIcon, .relayIcon{
-        width: 20%;
-        box-sizing: border-box;
-        margin-top: 4%;
-        padding-left: 5%;
-        float: left;
-    }
-    
-    .relayIcon{
-        cursor: pointer;
-        width: 20%;
-        box-sizing: border-box;
-        margin-top: 4%;
-        padding-left: 5%;
-        float: left;
-    }
-    
-    .tempDescription, .relayDescription{
-        width: 80%;
-        box-sizing: border-box;
-        float: right;
-        padding-top: 5%;
-    }
-    
-    .relayDescription{
-        padding-top: 6%;
-    }
-    
-    .powerState{
-        width: 50px;
-        height: 50px;
-    }
-    
-    .positive{
-        color: green;
-    }
-    
-    .negative{
-        color: red;
-    }
-
-    .disabled{
-        color: lightgray;
-    }
-}
 
 
 

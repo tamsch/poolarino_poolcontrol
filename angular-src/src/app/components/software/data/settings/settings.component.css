@@ -97,23 +97,23 @@ h3{
 .selectPumpRelay{
     width: 36%;
     font-size: 10pt;
-    margin-left: 1%;
+    margin-left: 4%;
     margin-top: 2%;
 }
 
 .selectSolarSkimmerSensors{
-    width: 44%;
+    width: 46%;
     font-size: 10pt;
     margin-left: 2%;
 }
 
-.automatedSolarDeactivation{
+.automatedSolarActivation{
     width: 30%;
     margin-left: 2%;
     font-size: 10pt;
 }
 
-.automatedSolarDeactivationCheckbox{
+.automatedSolarActivationCheckbox{
     width: 10%;
     margin-left: 28%;
     margin-top: -5%;
