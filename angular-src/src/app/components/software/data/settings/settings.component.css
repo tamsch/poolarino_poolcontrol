@@ -101,5 +101,52 @@ h3{
     margin-top: 2%;
 }
 
+.selectSolarSkimmerSensors{
+    width: 44%;
+    font-size: 10pt;
+    margin-left: 2%;
+}
+
+.automatedSolarDeactivation{
+    width: 30%;
+    margin-left: 2%;
+    font-size: 10pt;
+}
+
+.automatedSolarDeactivationText{
+    
+}
+
+.automatedSolarDeactivationCheckbox{
+    width: 10%;
+    margin-left: 28%;
+    margin-top: -5%;
+}
+
+.automatedWaterTemperatureDeactivation{
+    width: 32%;
+    margin-left: 40%;
+    margin-top: -5%;
+    font-size: 10pt;
+}
+
+.automatedWaterTemperatureDeactivationText{
+
+}
+
+.automatedWaterTemperatureDeactivationCheckbox{
+    width: 10%;
+    margin-left: 59%;
+    position: fixed;
+    margin-top: -6%;
+}
+
+.checkboxAutomatedSolar{
+
+}
+
+.checkboxTemperatureDeactivation{
+
+}
 
 

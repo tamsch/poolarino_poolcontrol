@@ -57,8 +57,16 @@ export class SettingsComponent implements OnInit {
     hbDisabled: Boolean = false;
 
     hbDisabledSave: Boolean;
-
-
+    
+    temperatureSensorSolarActivation: String;
+    temperatureSensorSolarDeactivation: String;
+    temperatureSensorSolarWatertemperature: String;
+    temperatureSolarActivation: Number;
+    temperatureSolarDeactivation: Number;
+    temperatureWaterDeactivation: Number;
+    automatedSolarDeactivation: Boolean;
+    automatedWatertemperatureDeactivation: Boolean;
+    
     constructor(
         private settingsService: SettingsService
     ) { }
@@ -147,7 +155,15 @@ export class SettingsComponent implements OnInit {
                                     shellyRelay1Name: this.shellyRelay1Name,
                                     shellyRelay2Name: this.shellyRelay2Name,
                                     temperatureSensorIdSkimmer: this.temperatureSensorIdSkimmer,
-                                    temperatureSensorIdSolar: this.temperatureSensorIdSolar
+                                    temperatureSensorIdSolar: this.temperatureSensorIdSolar,
+                                    temperatureSensorSolarActivation: this.temperatureSensorSolarActivation,
+                                    temperatureSensorSolarDeactivation: this.temperatureSensorSolarDeactivation,
+                                    temperatureSensorSolarWatertemperature: this.temperatureSensorSolarWatertemperature,
+                                    temperatureSolarActivation: this.temperatureSolarActivation,
+                                    temperatureSolarDeactivation: this.temperatureSolarDeactivation,
+                                    temperatureWaterDeactivation: this.temperatureWaterDeactivation,
+                                    automatedSolarDeactivation: this.automatedSolarDeactivation,
+                                    automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation
                                 }
 
                                 this.settingsService.saveSettings(settings).subscribe(data => {
@@ -203,7 +219,15 @@ export class SettingsComponent implements OnInit {
                             shellyRelay1Name: this.shellyRelay1Name,
                             shellyRelay2Name: this.shellyRelay2Name,
                             temperatureSensorIdSkimmer: this.temperatureSensorIdSkimmer,
-                            temperatureSensorIdSolar: this.temperatureSensorIdSolar
+                            temperatureSensorIdSolar: this.temperatureSensorIdSolar,
+                            temperatureSensorSolarActivation: this.temperatureSensorSolarActivation,
+                            temperatureSensorSolarDeactivation: this.temperatureSensorSolarDeactivation,
+                            temperatureSensorSolarWatertemperature: this.temperatureSensorSolarWatertemperature,
+                            temperatureSolarActivation: this.temperatureSolarActivation,
+                            temperatureSolarDeactivation: this.temperatureSolarDeactivation,
+                            temperatureWaterDeactivation: this.temperatureWaterDeactivation,
+                            automatedSolarDeactivation: this.automatedSolarDeactivation,
+                            automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation
                         }
 
                         this.settingsService.saveSettings(settings).subscribe(data => {
@@ -256,7 +280,15 @@ export class SettingsComponent implements OnInit {
                         shellyRelay1Name: this.shellyRelay1Name,
                         shellyRelay2Name: this.shellyRelay2Name,
                         temperatureSensorIdSkimmer: this.temperatureSensorIdSkimmer,
-                        temperatureSensorIdSolar: this.temperatureSensorIdSolar
+                        temperatureSensorIdSolar: this.temperatureSensorIdSolar,
+                        temperatureSensorSolarActivation: this.temperatureSensorSolarActivation,
+                        temperatureSensorSolarDeactivation: this.temperatureSensorSolarDeactivation,
+                        temperatureSensorSolarWatertemperature: this.temperatureSensorSolarWatertemperature,
+                        temperatureSolarActivation: this.temperatureSolarActivation,
+                        temperatureSolarDeactivation: this.temperatureSolarDeactivation,
+                        temperatureWaterDeactivation: this.temperatureWaterDeactivation,
+                        automatedSolarDeactivation: this.automatedSolarDeactivation,
+                        automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation
                     }
 
                     this.settingsService.saveSettings(settings).subscribe(data => {
@@ -318,6 +350,15 @@ export class SettingsComponent implements OnInit {
                 
                 this.temperatureSensorIdSkimmer = data.data.temperatureSensorIdSkimmer;
                 this.temperatureSensorIdSolar = data.data.temperatureSensorIdSolar;
+
+                this.temperatureSensorSolarActivation = data.data.temperatureSensorSolarActivation;
+                this.temperatureSensorSolarDeactivation = data.data.temperatureSensorSolarDeactivation;
+                this.temperatureSensorSolarWatertemperature = data.data.temperatureSensorSolarWatertemperature;
+                this.temperatureSolarActivation = data.data.temperatureSolarActivation;
+                this.temperatureSolarDeactivation = data.data.temperatureSolarDeactivation;
+                this.temperatureWaterDeactivation = data.data.temperatureWaterDeactivation;
+                this.automatedSolarDeactivation = data.data.automatedSolarDeactivation;
+                this.automatedWatertemperatureDeactivation = data.data.automatedWatertemperatureDeactivation;
 
                 if (this.shellyConnectedBoolean) {
                     this.shellyConnected = 'yes';

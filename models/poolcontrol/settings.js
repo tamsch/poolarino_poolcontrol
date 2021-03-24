@@ -187,6 +187,35 @@ const SettingsSchema = mongoose.Schema({
     temperatureSensorIdSolar: {
         type: String,
         default: ''
+    },
+    temperatureSensorSolarActivation: {
+        type: String,
+        default: ''
+    },
+    temperatureSensorSolarDeactivation: {
+        type: String,
+        default: ''
+    },
+    temperatureSensorSolarWatertemperature: {
+        type: String,
+        default: ''
+    },
+    temperatureSolarActivation: {
+        type: Number
+    },
+    temperatureSolarDeactivation: {
+        type: Number
+    },
+    temperatureWaterDeactivation: {
+        type: Number
+    },
+    automatedSolarDeactivation: {
+        type: Boolean,
+        default: false
+    },
+    automatedWatertemperatureDeactivation: {
+        type: Boolean,
+        default: false
     }
     
 })

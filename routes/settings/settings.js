@@ -62,6 +62,15 @@ router.put('/saveSettings', async (req, res) => {
         settings.temperatureSensorIdSkimmer = req.body.temperatureSensorIdSkimmer;
         settings.temperatureSensorIdSolar = req.body.temperatureSensorIdSolar;
 
+        settings.temperatureSensorSolarActivation = req.body.temperatureSensorSolarActivation;
+        settings.temperatureSensorSolarDeactivation = req.body.temperatureSensorSolarDeactivation;
+        settings.temperatureSensorSolarWatertemperature = req.body.temperatureSensorSolarWatertemperature;
+        settings.temperatureSolarActivation = req.body.temperatureSolarActivation;
+        settings.temperatureSolarDeactivation = req.body.temperatureSolarDeactivation;
+        settings.temperatureWaterDeactivation = req.body.temperatureWaterDeactivation;
+        settings.automatedSolarDeactivation = req.body.automatedSolarDeactivation;
+        settings.automatedWatertemperatureDeactivation = req.body.automatedWatertemperatureDeactivation;
+
         await settings.save((err, saved) => {
             if (err) {
                 console.log(err);
