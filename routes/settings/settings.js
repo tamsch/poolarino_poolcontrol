@@ -20,6 +20,7 @@ router.put('/saveSettings', async (req, res) => {
     const settings = await Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1);
 
     if (settings) {
+        console.log(req.body);
         settings.shellyConnected = req.body.shellyConnected;
         settings.raspberryPiConnected = req.body.raspberryPiConnected;
         settings.shellyIp = req.body.shellyIp;
@@ -70,6 +71,16 @@ router.put('/saveSettings', async (req, res) => {
         settings.temperatureWaterDeactivation = parseInt(req.body.temperatureWaterDeactivation);
         settings.automatedSolarDeactivation = req.body.automatedSolarDeactivation;
         settings.automatedWatertemperatureDeactivation = req.body.automatedWatertemperatureDeactivation;
+
+        settings.pumpActivationTime1 = req.body.pumpActivationTime1;
+        settings.pumpDeactivationTime1 = req.body.pumpDeactivationTime1;
+        settings.activateFilterInterval1 = req.body.activateFilterInterval1;
+        settings.pumpActivationTime2 = req.body.pumpActivationTime2;
+        settings.pumpDeactivationTime2 = req.body.pumpDeactivationTime2;
+        settings.activateFilterInterval2 = req.body.activateFilterInterval2;
+        settings.pumpActivationTime3 = req.body.pumpActivationTime3;
+        settings.pumpDeactivationTime3 = req.body.pumpDeactivationTime3;
+        settings.activateFilterInterval3 = req.body.activateFilterInterval3;
 
         await settings.save((err, saved) => {
             if (err) {

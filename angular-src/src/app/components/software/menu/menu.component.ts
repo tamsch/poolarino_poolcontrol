@@ -28,7 +28,9 @@ export class MenuComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this._clockSubscription = this.clockService.getClock().subscribe(time => this.time = time);
 
-        this.checkVersion();
+        setTimeout(() => {
+            this.checkVersion();
+        }, 10000);
 
         this.subVersion = interval(3600000).subscribe(x => this.checkVersion());
     }

@@ -29,6 +29,7 @@
     "core-js": "^3.9.1",
     "highcharts": "^9.0.1",
     "jquery": "^3.6.0",
+    "ngx-material-timepicker": "^5.5.3",
     "progressbar.js": "^1.1.0",
     "rxjs": "^6.6.6",
     "rxjs-compat": "^6.6.6",

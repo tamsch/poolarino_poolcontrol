@@ -66,6 +66,16 @@ export class SettingsComponent implements OnInit {
     temperatureWaterDeactivation: Number;
     automatedSolarDeactivation: Boolean;
     automatedWatertemperatureDeactivation: Boolean;
+
+    pumpActivationTime1: String;
+    pumpDeactivationTime1: String;
+    activateFilterInterval1: Boolean;
+    pumpActivationTime2: String;
+    pumpDeactivationTime2: String;
+    activateFilterInterval2: Boolean;
+    pumpActivationTime3: String;
+    pumpDeactivationTime3: String;
+    activateFilterInterval3: Boolean;
     
     constructor(
         private settingsService: SettingsService
@@ -73,6 +83,8 @@ export class SettingsComponent implements OnInit {
 
     ngOnInit() {
         this.loadSettings();
+
+        //this.timePicker1 = '17:00';
     }
 
     saveOptions() {
@@ -163,7 +175,16 @@ export class SettingsComponent implements OnInit {
                                     temperatureSolarDeactivation: this.temperatureSolarDeactivation,
                                     temperatureWaterDeactivation: this.temperatureWaterDeactivation,
                                     automatedSolarDeactivation: this.automatedSolarDeactivation,
-                                    automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation
+                                    automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation,
+                                    pumpActivationTime1: this.pumpActivationTime1,
+                                    pumpDeactivationTime1: this.pumpDeactivationTime1,
+                                    activateFilterInterval1: this.activateFilterInterval1,
+                                    pumpActivationTime2: this.pumpActivationTime2,
+                                    pumpDeactivationTime2: this.pumpDeactivationTime2,
+                                    activateFilterInterval2: this.activateFilterInterval2,
+                                    pumpActivationTime3: this.pumpActivationTime3,
+                                    pumpDeactivationTime3: this.pumpDeactivationTime3,
+                                    activateFilterInterval3: this.activateFilterInterval3
                                 }
 
                                 this.settingsService.saveSettings(settings).subscribe(data => {
@@ -227,7 +248,16 @@ export class SettingsComponent implements OnInit {
                             temperatureSolarDeactivation: this.temperatureSolarDeactivation,
                             temperatureWaterDeactivation: this.temperatureWaterDeactivation,
                             automatedSolarDeactivation: this.automatedSolarDeactivation,
-                            automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation
+                            automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation,
+                            pumpActivationTime1: this.pumpActivationTime1,
+                            pumpDeactivationTime1: this.pumpDeactivationTime1,
+                            activateFilterInterval1: this.activateFilterInterval1,
+                            pumpActivationTime2: this.pumpActivationTime2,
+                            pumpDeactivationTime2: this.pumpDeactivationTime2,
+                            activateFilterInterval2: this.activateFilterInterval2,
+                            pumpActivationTime3: this.pumpActivationTime3,
+                            pumpDeactivationTime3: this.pumpDeactivationTime3,
+                            activateFilterInterval3: this.activateFilterInterval3
                         }
 
                         this.settingsService.saveSettings(settings).subscribe(data => {
@@ -288,8 +318,19 @@ export class SettingsComponent implements OnInit {
                         temperatureSolarDeactivation: this.temperatureSolarDeactivation,
                         temperatureWaterDeactivation: this.temperatureWaterDeactivation,
                         automatedSolarDeactivation: this.automatedSolarDeactivation,
-                        automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation
+                        automatedWatertemperatureDeactivation: this.automatedWatertemperatureDeactivation,
+                        pumpActivationTime1: this.pumpActivationTime1,
+                        pumpDeactivationTime1: this.pumpDeactivationTime1,
+                        activateFilterInterval1: this.activateFilterInterval1,
+                        pumpActivationTime2: this.pumpActivationTime2,
+                        pumpDeactivationTime2: this.pumpDeactivationTime2,
+                        activateFilterInterval2: this.activateFilterInterval2,
+                        pumpActivationTime3: this.pumpActivationTime3,
+                        pumpDeactivationTime3: this.pumpDeactivationTime3,
+                        activateFilterInterval3: this.activateFilterInterval3
                     }
+
+                    console.log(settings);
 
                     this.settingsService.saveSettings(settings).subscribe(data => {
                         if (data.success) {
@@ -346,7 +387,6 @@ export class SettingsComponent implements OnInit {
                 this.shellyRelay2Name = data.data.shellyRelay2Name;
 
                 this.pumpConnectedShellyRelay = data.data.pumpConnectedShellyRelay;
-
                 
                 this.temperatureSensorIdSkimmer = data.data.temperatureSensorIdSkimmer;
                 this.temperatureSensorIdSolar = data.data.temperatureSensorIdSolar;
@@ -359,6 +399,16 @@ export class SettingsComponent implements OnInit {
                 this.temperatureWaterDeactivation = data.data.temperatureWaterDeactivation.toString();
                 this.automatedSolarDeactivation = data.data.automatedSolarDeactivation;
                 this.automatedWatertemperatureDeactivation = data.data.automatedWatertemperatureDeactivation;
+
+                this.pumpActivationTime1 =  data.data.pumpActivationTime1;
+                this.pumpDeactivationTime1 =  data.data.pumpDeactivationTime1;
+                this.activateFilterInterval1 =  data.data.activateFilterInterval1;
+                this.pumpActivationTime2 =  data.data.pumpActivationTime2;
+                this.pumpDeactivationTime2 =  data.data.pumpDeactivationTime2;
+                this.activateFilterInterval2 =  data.data.activateFilterInterval2;
+                this.pumpActivationTime3 =  data.data.pumpActivationTime3;
+                this.pumpDeactivationTime3 =  data.data.pumpDeactivationTime3;
+                this.activateFilterInterval3 =  data.data.activateFilterInterval3;
 
                 if (this.shellyConnectedBoolean) {
                     this.shellyConnected = 'yes';

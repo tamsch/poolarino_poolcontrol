@@ -5,6 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 import { SettingsRoutingModule } from './settings-routing.module';
@@ -23,7 +24,8 @@ import { FormsModule } from '@angular/forms';
         MatInputModule,
         MatTabsModule,
         FormsModule,
-        SettingsRoutingModule
+        SettingsRoutingModule,
+        NgxMaterialTimepickerModule.setLocale('de-DE')
     ]
 })
 export class SettingsModule { }

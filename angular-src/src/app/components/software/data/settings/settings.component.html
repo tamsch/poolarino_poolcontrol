@@ -1,3 +1,10 @@
+<ng-template #cancelBtn>
+    <button style="margin-right: 10px;" class="btn-primary">Abbrechen</button>
+</ng-template>
+<ng-template #confirmBtn>
+    <button class="btn-primary">Ok</button>
+</ng-template>
+
 <h3>Einstellungen</h3>
 <hr>
 <mat-tab-group animationDuration="0ms">
@@ -29,6 +36,18 @@
                 <mat-option value="yes">Ja</mat-option>
                 <mat-option value="no">Nein</mat-option>
             </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="selectPumpRelay">
+            <mat-label>Bezeichnung Shelly Channel 0?</mat-label>
+            <input matInput [(ngModel)]="shellyRelay0Name">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="selectPumpRelay">
+            <mat-label>Bezeichnung Shelly Channel 1?</mat-label>
+            <input matInput [(ngModel)]="shellyRelay1Name">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="selectPumpRelay" style="margin-top: -1%">
+            <mat-label>Bezeichnung Shelly Channel 2?</mat-label>
+            <input matInput [(ngModel)]="shellyRelay2Name">
         </mat-form-field>
     </mat-tab>
     <mat-tab label="Wetter">
@@ -159,25 +178,108 @@
     </mat-tab>
     <mat-tab label="Pumpe">
         <mat-form-field appearance="fill" class="selectPumpRelay">
-            <mat-label>Relay der Pumpe am Shelly?</mat-label>
+            <mat-label>Channel der Pumpe am Shelly?</mat-label>
             <mat-select [(value)]="pumpConnectedShellyRelay">
                 <mat-option value="0">0</mat-option>
                 <mat-option value="1">1</mat-option>
                 <mat-option value="2">2</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="fill" class="selectPumpRelay">
-            <mat-label>Bezeichnung Shelly Channel 0?</mat-label>
-            <input matInput [(ngModel)]="shellyRelay0Name">
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="selectPumpRelay">
-            <mat-label>Bezeichnung Shelly Channel 1?</mat-label>
-            <input matInput [(ngModel)]="shellyRelay1Name">
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="selectPumpRelay">
-            <mat-label>Bezeichnung Shelly Channel 2?</mat-label>
-            <input matInput [(ngModel)]="shellyRelay2Name">
-        </mat-form-field>
+        <div class="filterIntervalGrid">
+            <div class="filterTable">
+                <div class="tableHead">
+                    Filter-Interval 1
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Startzeit
+                    </div>
+                    <div class="rowContent">
+                        <input [ngxTimepicker]="startTimeInterval1" [(ngModel)]="pumpActivationTime1" [format]="24" readonly class="form-control">
+                        <ngx-material-timepicker #startTimeInterval1 [minutesGap]="5" [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"></ngx-material-timepicker>
+                    </div>
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Endzeit
+                    </div>
+                    <div class="rowContent">
+                        <input [ngxTimepicker]="stopTimeInterval1" [(ngModel)]="pumpDeactivationTime1" [format]="24" readonly class="form-control">
+                        <ngx-material-timepicker #stopTimeInterval1 [minutesGap]="5" [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"></ngx-material-timepicker>
+                    </div>
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Aktivieren
+                    </div>
+                    <div class="rowContent">
+                        <input type="checkbox" name="intervalActivation1" [(ngModel)]="activateFilterInterval1" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="filterTable">
+                <div class="tableHead">
+                    Filter-Interval 2
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Startzeit
+                    </div>
+                    <div class="rowContent">
+                        <input [ngxTimepicker]="startTimeInterval2" [(ngModel)]="pumpActivationTime2" [format]="24" readonly class="form-control">
+                        <ngx-material-timepicker #startTimeInterval2 [minutesGap]="5" [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"></ngx-material-timepicker>
+                    </div>
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Endzeit
+                    </div>
+                    <div class="rowContent">
+                        <input [ngxTimepicker]="stopTimeInterval2" [(ngModel)]="pumpDeactivationTime2" [format]="24" readonly class="form-control">
+                        <ngx-material-timepicker #stopTimeInterval2 [minutesGap]="5" [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"></ngx-material-timepicker>
+                    </div>
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Aktivieren
+                    </div>
+                    <div class="rowContent">
+                        <input type="checkbox" name="intervalActivation2" [(ngModel)]="activateFilterInterval2" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="filterTable">
+                <div class="tableHead">
+                    Filter-Interval 3
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Startzeit
+                    </div>
+                    <div class="rowContent">
+                        <input [ngxTimepicker]="startTimeInterval3" [(ngModel)]="pumpActivationTime3" [format]="24" readonly class="form-control">
+                        <ngx-material-timepicker #startTimeInterval3 [minutesGap]="5" [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"></ngx-material-timepicker>
+                    </div>
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Endzeit
+                    </div>
+                    <div class="rowContent">
+                        <input [ngxTimepicker]="stopTimeInterval3" [(ngModel)]="pumpDeactivationTime3" [format]="24" readonly class="form-control">
+                        <ngx-material-timepicker #stopTimeInterval3 [minutesGap]="5" [cancelBtnTmpl]="cancelBtn" [confirmBtnTmpl]="confirmBtn"></ngx-material-timepicker>
+                    </div>
+                </div>
+                <div class="tableRow">
+                    <div class="rowDesc">
+                        Aktivieren
+                    </div>
+                    <div class="rowContent">
+                        <input type="checkbox" name="intervalActivation3" [(ngModel)]="activateFilterInterval3" class="form-control ">
+                    </div>
+                </div>
+            </div>
+        </div>
     </mat-tab>
     <mat-tab label="Solar">
         <mat-form-field appearance="fill" class="selectSolarSkimmerSensors">

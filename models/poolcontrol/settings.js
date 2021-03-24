@@ -201,13 +201,16 @@ const SettingsSchema = mongoose.Schema({
         default: ''
     },
     temperatureSolarActivation: {
-        type: Number
+        type: Number,
+        default: 0
     },
     temperatureSolarDeactivation: {
-        type: Number
+        type: Number,
+        default: 0
     },
     temperatureWaterDeactivation: {
-        type: Number
+        type: Number,
+        default: 0
     },
     automatedSolarDeactivation: {
         type: Boolean,
@@ -216,7 +219,34 @@ const SettingsSchema = mongoose.Schema({
     automatedWatertemperatureDeactivation: {
         type: Boolean,
         default: false
-    }
+    },
+    pumpActivationTime1: {
+        type: String
+    },
+    pumpDeactivationTime1: {
+        type: String
+    },
+    activateFilterInterval1:{
+        type: Boolean
+    },
+    pumpActivationTime2: {
+        type: String
+    },
+    pumpDeactivationTime2: {
+        type: String
+    },
+    activateFilterInterval2:{
+        type: Boolean
+    },
+    pumpActivationTime3: {
+        type: String
+    },
+    pumpDeactivationTime3: {
+        type: String
+    },
+    activateFilterInterval3:{
+        type: Boolean
+    },
     
 })
 
