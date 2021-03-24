@@ -221,31 +221,49 @@ const SettingsSchema = mongoose.Schema({
         default: false
     },
     pumpActivationTime1: {
-        type: String
+        type: String,
+        default: ''
     },
     pumpDeactivationTime1: {
-        type: String
+        type: String,
+        default: ''
     },
     activateFilterInterval1:{
         type: Boolean
     },
+    justChangedInterval1: {
+        type: Boolean,
+        default: false
+    },
     pumpActivationTime2: {
-        type: String
+        type: String,
+        default: ''
     },
     pumpDeactivationTime2: {
-        type: String
+        type: String,
+        default: ''
     },
     activateFilterInterval2:{
         type: Boolean
     },
+    justChangedInterval2: {
+        type: Boolean,
+        default: false
+    },
     pumpActivationTime3: {
-        type: String
+        type: String,
+        default: ''
     },
     pumpDeactivationTime3: {
-        type: String
+        type: String,
+        default: ''
     },
     activateFilterInterval3:{
         type: Boolean
+    },
+    justChangedInterval3: {
+        type: Boolean,
+        default: false
     },
     
 })

@@ -228,6 +228,78 @@ setInterval(function () {
 
 }, 10000);
 
+// Prüft die automatische An- und Abschaltung der Pumpe
+setInterval(function () {
+    Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
+        if (settings != null && settings.shellyConnected && settings.pumpConnectedShellyRelay != '') {
+            Solar.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, solar) => {
+                if(solar != null && solar.justSwitched === false){
+                    // Prüfe Aktivierung der Pumpe
+                    if(settings.activateFilterInterval1){
+                        if(settings.pumpActivationTime1 != '' && settings.pumpDeactivationTime1 != '' && !settings.justChangedInterval1){
+                            let h = new Date().getHours();
+                            let m = new Date();
+                            let f = h + ':' + (m.getMinutes()<10?'0':'') + m.getMinutes();
+
+                            if(f === settings.pumpActivationTime1){
+                                Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=on', (error, response, data) => {
+                                    if(response.ison){
+                                        let dateHelper = new Date();
+                                        let dateHelperToday = dateHelper.toISOString().substr(0,10);
+                                        let newRuntime = new Runtime({
+                                            relay: settings.pumpConnectedShellyRelay,
+                                            date: dateHelperToday,
+                                            startTime: new Date()
+                                        });
+                        
+                                        newRuntime.save();
+                                    }
+                                });
+                            }
+
+                            if(f === settings.pumpDeactivationTime1){
+                                Shelly.callDevice(settings.shellyIp, '/relay/'  + settings.pumpConnectedShellyRelay +  '?turn=off', (error, response, data) => {
+                                    Runtime.findOne().where({'relay': settings.pumpConnectedShellyRelay}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
+                                        runtime.set({
+                                            endTime: new Date()
+                                        })
+                    
+                                        let calcHelper = runtime.endTime - runtime.startTime;
+                    
+                                        runtime.set({
+                                            calculatedTime: calcHelper
+                                        })
+                    
+                                        runtime.save();
+                    
+                                        return res.json({success: true, data: response});
+                                    })
+                                });
+                            }
+                        }
+                    }
+
+                    if(settings.activateFilterInterval2){
+                        if(settings.pumpActivationTime2 != '' && settings.pumpDeactivationTime2 != ''){
+
+                        }
+                    }
+
+                    if(settings.activateFilterInterval3){
+                        if(settings.pumpActivationTime3 != '' && settings.pumpDeactivationTime3 != ''){
+
+                        }
+                    }
+                }
+            })
+        } else {
+            console.log('Automatische Aktivierung der Pumpe nicht möglich. Settings nicht gesetzt, Shelly nicht angeschlossen oder kein Channel für die Pumpe gewählt!');
+        }
+    })
+
+}, 10000);
+
+
  Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, settings) => {
     if (settings != null && settings.raspberryPiConnected) {
         let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
