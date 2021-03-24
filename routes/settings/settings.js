@@ -65,9 +65,9 @@ router.put('/saveSettings', async (req, res) => {
         settings.temperatureSensorSolarActivation = req.body.temperatureSensorSolarActivation;
         settings.temperatureSensorSolarDeactivation = req.body.temperatureSensorSolarDeactivation;
         settings.temperatureSensorSolarWatertemperature = req.body.temperatureSensorSolarWatertemperature;
-        settings.temperatureSolarActivation = req.body.temperatureSolarActivation;
-        settings.temperatureSolarDeactivation = req.body.temperatureSolarDeactivation;
-        settings.temperatureWaterDeactivation = req.body.temperatureWaterDeactivation;
+        settings.temperatureSolarActivation = parseInt(req.body.temperatureSolarActivation);
+        settings.temperatureSolarDeactivation = parseInt(req.body.temperatureSolarDeactivation);
+        settings.temperatureWaterDeactivation = parseInt(req.body.temperatureWaterDeactivation);
         settings.automatedSolarDeactivation = req.body.automatedSolarDeactivation;
         settings.automatedWatertemperatureDeactivation = req.body.automatedWatertemperatureDeactivation;
 

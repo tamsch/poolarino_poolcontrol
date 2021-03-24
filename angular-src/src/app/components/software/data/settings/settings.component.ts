@@ -354,9 +354,9 @@ export class SettingsComponent implements OnInit {
                 this.temperatureSensorSolarActivation = data.data.temperatureSensorSolarActivation;
                 this.temperatureSensorSolarDeactivation = data.data.temperatureSensorSolarDeactivation;
                 this.temperatureSensorSolarWatertemperature = data.data.temperatureSensorSolarWatertemperature;
-                this.temperatureSolarActivation = data.data.temperatureSolarActivation;
-                this.temperatureSolarDeactivation = data.data.temperatureSolarDeactivation;
-                this.temperatureWaterDeactivation = data.data.temperatureWaterDeactivation;
+                this.temperatureSolarActivation = data.data.temperatureSolarActivation.toString();
+                this.temperatureSolarDeactivation = data.data.temperatureSolarDeactivation.toString();
+                this.temperatureWaterDeactivation = data.data.temperatureWaterDeactivation.toString();
                 this.automatedSolarDeactivation = data.data.automatedSolarDeactivation;
                 this.automatedWatertemperatureDeactivation = data.data.automatedWatertemperatureDeactivation;
 
