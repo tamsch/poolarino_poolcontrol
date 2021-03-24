@@ -121,14 +121,14 @@ h3{
 
 .automatedWaterTemperatureDeactivation{
     width: 32%;
-    margin-left: 40%;
+    margin-left: 50%;
     margin-top: -5%;
     font-size: 10pt;
 }
 
 .automatedWaterTemperatureDeactivationCheckbox{
     width: 10%;
-    margin-left: 59%;
+    margin-left: 69%;
     position: fixed;
     margin-top: -6%;
 }

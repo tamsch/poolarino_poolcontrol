@@ -105,6 +105,14 @@ Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, set
     if (settings != null) {
         settings.versionInfo = versionInfo.version;
 
+        Solar.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec(async (err, solar) => {
+            if(solar != null){
+                solar.justSwitched = false;
+
+                solar.save();
+            }
+        })
+
         settings.save();
     } else {
         let sysInfo = await getOsInformation();
@@ -197,7 +205,7 @@ setInterval(function () {
         }
     })
 
-}, 10000);
+}, 5000);
 
 // Prüft die automatische An- und Abschaltung der Pumpe
 setInterval(function () {
@@ -435,14 +443,24 @@ setInterval(function () {
                     if(settings.automatedSolarActivation){
                         if(settings.temperatureSensorIdSkimmer != '' && settings.temperatureSensorIdSolar != '' && settings.temperatureSensorSolarActivation != '' && settings.temperatureSolarActivation != 0 && settings.temperatureSolarDeactivation != 0){
                             let temperatureHelper = settings.temperatureSensorSolarDeactivation.split('tempSensor');
+                            let tempSkimmerHelper = settings.temperatureSensorIdSkimmer.split('tempSensor');
+
                             let dbSensor = 'sensor' + temperatureHelper[1] + 'id';
+                            let dbSensorSkimmer = 'sensor' + tempSkimmerHelper[1] + 'id';
         
                             let solarDeactivationTemperature = await getTemp(settings[dbSensor]);
+                            let skimmerDeactivationTemperature = await getTemp(settings[dbSensorSkimmer]);
         
                             console.log('Prüfe Solar Deaktivierung');
                             console.log('Ist-Temperatur: ' + solarDeactivationTemperature.t + 'C°');
                             console.log('Umstell-Schwellwert: ' + settings.temperatureSolarDeactivation + 'C°');
-        
+
+                            if(settings.automatedWatertemperatureDeactivation){
+                                console.log('Prüfe Wassertemperatur-Deaktivierung');
+                                console.log('Ist-Temperatur: ' + skimmerDeactivationTemperature.t + 'C°');
+                                console.log('Umstell-Schwellwert: ' + settings.temperatureWaterDeactivation + 'C°');
+                            }
+                            
                             if(solarDeactivationTemperature.t <= settings.temperatureSolarDeactivation){
                                 console.log('Starte Solar Deaktivierung');
                                 let relayShutdown = await asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=off');
@@ -527,6 +545,89 @@ setInterval(function () {
                                     }, 30000)
                                 }
         
+                            } else if(settings.automatedWatertemperatureDeactivation && (skimmerDeactivationTemperature.t >= settings.temperatureWaterDeactivation)) {
+                                console.log('Wunschtemperatur erreicht, beginne mit Solar Abschaltung...');
+                                let relayShutdown = await asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=off');
+                                if(!relayShutdown.ison){
+                                    Runtime.findOne().where({'relay': settings.pumpConnectedShellyRelay}).sort({ field: 'asc', _id: -1}).exec((err, runtime) => {
+                                        runtime.set({
+                                            endTime: new Date()
+                                        })
+                    
+                                        let calcHelper = runtime.endTime - runtime.startTime;
+                    
+                                        runtime.set({
+                                            calculatedTime: calcHelper
+                                        })
+                    
+                                        runtime.save();
+                                    })
+                                    console.log('Pumpe abgeschaltet - warte auf Beruhigung des Wasserkreislaufes.');
+                                    setTimeout(async () => {
+                                        console.log('Wasserkreislauf beruhigt, beginne Solarabschaltung!');
+                                        Solar.findOne({isOn: true}).exec(async (err, solar) => {
+                                            if(err) {
+                                                console.log(err);
+                                            } else if(solar.length = 0) {
+                                                console.log('Kein Eintrag gefunden!');
+                                            } else {
+                                                console.log('Beginne Umstellung des 3 Wege Ventils...');
+                                                let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                                    return gpiop.write(16, false)
+                                                }).catch((err) => {
+                                                    console.log('Error: ', err.toString())
+                                                })
+                
+                                                let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                                    return gpiop.write(18, true)
+                                                }).catch((err) => {
+                                                    console.log('Error: ', err.toString())
+                                                })
+                
+                                                solar.set({
+                                                    isOn: false,
+                                                    justSwitched: true
+                                                })
+                    
+                                                solar.save();
+                                                setTimeout(() => {
+                                                    solar.set({
+                                                        justSwitched: false
+                                                    });
+                                                    solar.save();
+                                                }, 90000)
+                                            }
+                                        })
+                                    }, 4000)                                    
+            
+                                    setTimeout(async() => {
+                                        let gpiop16 = await gpiop.setup(16, gpiop.DIR_OUT).then(() => {
+                                            return gpiop.write(16, true)
+                                        }).catch((err) => {
+                                            console.log('Error: ', err.toString())
+                                        })
+                
+                                        let gpiop18 = await gpiop.setup(18, gpiop.DIR_OUT).then(() => {
+                                            return gpiop.write(18, true)
+                                        }).catch((err) => {
+                                            console.log('Error: ', err.toString())
+                                        })
+                                        console.log('3 Wege Ventil erfolgreich umgestellt - Solar deaktiviert!');
+                                        asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=on');
+
+                                        let dateHelper = new Date();
+                                        let dateHelperToday = dateHelper.toISOString().substr(0,10);
+                                        let newRuntime = new Runtime({
+                                            relay: settings.pumpConnectedShellyRelay,
+                                            date: dateHelperToday,
+                                            startTime: new Date()
+                                        });
+                        
+                                        newRuntime.save();
+
+                                        console.log('Pumpe wieder angeschaltet');
+                                    }, 30000)
+                                }
                             }
                         }
                     }
@@ -543,6 +644,23 @@ setInterval(function () {
                                 console.log('Prüfe Solar Aktivierung');
                                 console.log('Ist-Temperatur: ' + solarActivationTemperature.t + 'C°');
                                 console.log('Umstell-Schwellwert: ' + settings.temperatureSolarActivation + 'C°');
+
+                                if(settings.automatedWatertemperatureDeactivation){
+
+                                    let tempSkimmerHelper = settings.temperatureSensorIdSkimmer.split('tempSensor');
+                                    let dbSensorSkimmer = 'sensor' + tempSkimmerHelper[1] + 'id';
+                                    let skimmerDeactivationTemperature = await getTemp(settings[dbSensorSkimmer]);
+
+                                    console.log('Prüfe Solar Aktivierung bezüglich der Wunschtemperatur');
+                                    console.log('Ist-Temperatur: ' + skimmerDeactivationTemperature.t + 'C°');
+                                    console.log('Wunschtemperatur: ' + settings.temperatureWaterDeactivation + 'C°');
+                                    console.log('Ergebnis (Differenz): ' + (settings.temperatureWaterDeactivation - skimmerDeactivationTemperature.t));
+
+                                    if((settings.temperatureWaterDeactivation - skimmerDeactivationTemperature.t) <= 2){
+                                        console.log('Solar nicht aktiviert, Wasser ist angenehm warm!');
+                                        return;
+                                    }
+                                }
         
                                 if(solarActivationTemperature.t >= settings.temperatureSolarActivation){
                                     console.log('Starte Solar Aktivierung');
@@ -714,7 +832,7 @@ async function getIpInformation(){
         failed: true
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         resolve(geo);
     })
 }

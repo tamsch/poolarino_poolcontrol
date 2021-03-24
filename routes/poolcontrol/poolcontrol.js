@@ -62,7 +62,7 @@ router.get('/toggleDevice/:deviceId', async (req, res) => {
     console.log('REQ-GET | poolControl.js | /toggleDevice');
     Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1).exec((err, settings) => {
         if(settings != null && settings.shellyConnected) {
-            if(settings.pumpConnectedShellyRelay === req.params.deviceId){
+            if((settings.pumpConnectedShellyRelay === req.params.deviceId) && (settings.activateFilterInterval1 || settings.activateFilterInterval2 || settings.activateFilterInterval3)){
                 return res.json({success: false, msg: 'Bitte deaktivieren Sie die automatische Pumpensteuerung um wieder manuell steuern zu können.'});
             }
             Shelly.callDevice(settings.shellyIp, '/relay/' + req.params.deviceId + '?turn=toggle', (error, response, data) => {

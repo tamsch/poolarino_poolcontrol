@@ -191,7 +191,14 @@ export class SettingsComponent implements OnInit {
                                     if (data.success) {
                                         this.loadSettings();
                                     } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            heightAuto: false,
+                                            title: 'Speichern fehlgeschlagen',
+                                            text: data.msg,
+                                        })
 
+                                        this.loadSettings();
                                     }
                                 })
                             } else {
@@ -264,7 +271,14 @@ export class SettingsComponent implements OnInit {
                             if (data.success) {
                                 this.loadSettings();
                             } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    heightAuto: false,
+                                    title: 'Speichern fehlgeschlagen',
+                                    text: data.msg,
+                                })
 
+                                this.loadSettings();
                             }
                         })
                     }
@@ -334,7 +348,14 @@ export class SettingsComponent implements OnInit {
                         if (data.success) {
                             this.loadSettings();
                         } else {
+                            Swal.fire({
+                                icon: 'error',
+                                heightAuto: false,
+                                title: 'Speichern fehlgeschlagen',
+                                text: data.msg,
+                            })
 
+                            this.loadSettings();
                         }
                     })
                 }

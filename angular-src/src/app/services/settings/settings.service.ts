@@ -39,7 +39,7 @@ export class SettingsService {
 
 interface data {
     success: Boolean,
-    msg: String,
+    msg: string,
     data: any,
     updateAvailable: Boolean,
     solarSensorId: string,

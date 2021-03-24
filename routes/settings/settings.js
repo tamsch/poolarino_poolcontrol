@@ -18,6 +18,7 @@ router.get('/loadAllSettings', async (req, res) => {
 //Settings speichern
 router.put('/saveSettings', async (req, res) => {
     const settings = await Settings.findOne().sort({ field: 'asc', _id: -1 }).limit(1);
+    console.log(req.body);
 
     if (settings) {
         settings.shellyConnected = req.body.shellyConnected;
@@ -80,6 +81,22 @@ router.put('/saveSettings', async (req, res) => {
         settings.pumpActivationTime3 = req.body.pumpActivationTime3;
         settings.pumpDeactivationTime3 = req.body.pumpDeactivationTime3;
         settings.activateFilterInterval3 = req.body.activateFilterInterval3;
+
+        if(!settings.automatedSolarActivation && settings.automatedWatertemperatureDeactivation){
+            return res.json({success: false, msg: 'Sie können das automatische Abschalten bei einer gewünschten Wassertemperatur nur nutzen, wenn Sie gleichzeit den Automatismus für die Solarsteuerung aktivieren.'})
+        }
+
+        if(settings.automatedSolarActivation && (settings.temperatureSensorIdSolar === '' || settings.temperatureSensorIdSkimmer === '' || settings.temperatureSensorSolarActivation === '' || settings.temperatureSolarDeactivation <= 19 || settings.temperatureSolarActivation <= 24)){
+            return res.json({success: false, msg: 'Um die automatische Solarsteuerung zu nutzen, legen Sie bitte alle 3 Sensoren und die zwei Temperaturwerte fest!'});
+        }
+
+        if((settings.temperatureSolarActivation - settings.temperatureSolarDeactivation) < 5){
+            return res.json({success: false, msg: 'Die Temperatur zur Solar-Deaktivierung muss mindestens 5C° unter dem Wert zur Solar-Aktivierung liegen!'});
+        }
+
+        if(settings.automatedWatertemperatureDeactivation && settings.temperatureWaterDeactivation <= 22){
+            return res.json({success: false, msg: 'Bitte wählen Sie eine Temperatur aus, wenn Sie die automatische Abschaltung bei Wunschtemperatur nutzen möchten.'}); 
+        }
 
         await settings.save((err, saved) => {
             if (err) {
