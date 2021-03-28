@@ -17,7 +17,7 @@ _start=1
 
 _end=100
 
-for number in $(seq ${_start} ${_end})
+while true
 do
 	
 	curl -sL https://deb.nodesource.com/setup_12.x &> /dev/null | sudo -E bash - &> /dev/null
@@ -50,7 +50,7 @@ do
 	ProgressBar 45 ${_end}
 	sudo mongo pool /home/mongodb.js &> /dev/null
 	ProgressBar 47 ${_end}
-	echo "module.exports = {database: 'mongodb://pool:pool@127.0.0.1:27017/pool' , secret:'deinscret'}" > ~/../poolarino_poolcontrol/config/database.js
+	echo "module.exports = {database: 'mongodb://pool:pool@127.0.0.1:27017/pool' , secret:'deinscret'}" > /home/poolarino_poolcontrol/config/database.js &> /dev/null
 	ProgressBar 51 ${_end}
 	sudo npm install -g pm2 &> /dev/null
 	ProgressBar 54 ${_end}
@@ -75,7 +75,7 @@ do
 	sudo ln -s /etc/pure-ftpd/conf/PureDB /etc/pure-ftpd/auth/60puredb &> /dev/null
 	ProgressBar 95 ${_end}
 	sudo service pure-ftpd restart &> /dev/null
-	ProgressBar 100 ${_end} 
+	ProgressBar 100 100 
 done
 
 printf '\nDie Poolarino-Poolsteuerung wurde erfolgreich installiert!\n'
