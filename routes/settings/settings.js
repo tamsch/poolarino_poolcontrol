@@ -90,7 +90,7 @@ router.put('/saveSettings', async (req, res) => {
             return res.json({success: false, msg: 'Um die automatische Solarsteuerung zu nutzen, legen Sie bitte alle 3 Sensoren und die zwei Temperaturwerte fest!'});
         }
 
-        if((settings.temperatureSolarActivation - settings.temperatureSolarDeactivation) < 5){
+        if(((settings.temperatureSolarActivation - settings.temperatureSolarDeactivation) < 5) && settings.automatedSolarActivation){
             return res.json({success: false, msg: 'Die Temperatur zur Solar-Deaktivierung muss mindestens 5C° unter dem Wert zur Solar-Aktivierung liegen!'});
         }
 
