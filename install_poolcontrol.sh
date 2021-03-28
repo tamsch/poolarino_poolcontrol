@@ -4,8 +4,11 @@ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 echo "installing nodejs..."
 sudo apt install nodejs -y
 echo "finished nodejs installation..."
+sudo -i
 echo "installing build tools..."
 sudo apt-get install gcc g++ make -y
+echo "leaving root..."
+exit
 echo "setting timezone..."
 sudo timedatectl set-timezone Europe/Berlin
 echo "ttimezone set"
@@ -26,10 +29,13 @@ sudo git clone https://github.com/tamsch/poolarino_poolcontrol.git
 echo "werwerwer"
 cd poolarino_poolcontrol
 echo "eiieie"
+sudo -i
 echo "urueueue"
 cd ../home/poolarino_poolcontrol/
 echo "installing packages..."
 sudo npm i
+echo "werwerewrwrwer"
+exit
 echo "ghgfhfghfh"
 sudo rm -r angular-src/
 echo "creating mongodb database..."
@@ -38,6 +44,7 @@ use pool
 db.createUser({user: "pool", pwd: "pool", roles: ["readWrite"]})
 exit
 echo "creating database file..."
+sudo -i
 echo "module.exports = {database: 'mongodb://pool:pool@127.0.0.1:27017/pool' , secret:'deinscret'}" > ~/../poolarino_poolcontrol/config/database.js
 echo "adding processmanager..."
 sudo npm install -g pm2
