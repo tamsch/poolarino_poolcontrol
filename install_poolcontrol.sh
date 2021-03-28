@@ -72,6 +72,12 @@ ProgressBar 91 ${_end}
 sudo ln -s /etc/pure-ftpd/conf/PureDB /etc/pure-ftpd/auth/60puredb &> /dev/null
 ProgressBar 95 ${_end}
 sudo service pure-ftpd restart &> /dev/null
+ProgressBar 96 ${_end}
+sudo rm -r /var/www/html/* &> /dev/null
+ProgressBar 97 ${_end}
+sudo mv /home/poolarino_poolcontrol/compiled/* /var/www/html/ &> /dev/null
+ProgressBar 97 ${_end}
+sudo service lighttpd restart &> /dev/null
 ProgressBar 100 ${_end}
 
 printf '\nDie Poolarino-Poolsteuerung wurde erfolgreich installiert!\n'
