@@ -47,7 +47,7 @@ sudo echo "db.createUser({user: 'pool', pwd: 'pool', roles: ['readWrite']})" > /
 ProgressBar 45 ${_end}
 sudo mongo pool /home/mongodb.js &> /dev/null
 ProgressBar 47 ${_end}
-echo "module.exports = {database: 'mongodb://pool:pool@127.0.0.1:27017/pool' , secret:'deinscret'}" > /home/poolarino_poolcontrol/config/database.js &> /dev/null
+echo "module.exports = {database: 'mongodb://pool:pool@127.0.0.1:27017/pool' , secret:'deinscret'}" > /home/poolarino_poolcontrol/config/database.js
 ProgressBar 51 ${_end}
 sudo npm install -g pm2 &> /dev/null
 ProgressBar 54 ${_end}
