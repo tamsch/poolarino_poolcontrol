@@ -20,7 +20,7 @@ _end=100
 ProgressBar 1 ${_end}
 sudo apt-get update 1> /dev/null
 ProgressBar 2 ${_end}
-sudo apt-get upgrade 1> /dev/null
+sudo apt-get upgrade 1> /dev/null || { echo 'Bitte warten Sie auf den Abschluss der Systemupdates und versuchen es dann erneut!' ; exit 1; }
 ProgressBar 3 ${_end}
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - &> /dev/null
 ProgressBar 4 ${_end}
