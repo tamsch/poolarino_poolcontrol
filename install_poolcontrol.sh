@@ -77,8 +77,11 @@ ProgressBar 96 ${_end}
 sudo rm -r /var/www/html/* &> /dev/null
 ProgressBar 97 ${_end}
 sudo mv /home/poolarino_poolcontrol/compiled/* /var/www/html/ &> /dev/null
-ProgressBar 97 ${_end}
+ProgressBar 98 ${_end}
 sudo service lighttpd restart &> /dev/null
+ProgressBar 99 ${_end}
+ip4=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+sudo sed -i -e "s/http:\\/\\/.*:3000/http:\\/\\/$ip4:3000/g" /var/www/html/main.80b45faf48cbb7d90940.js
 ProgressBar 100 ${_end}
 
 printf '\nDie Poolarino-Poolsteuerung wurde erfolgreich installiert!\n'
