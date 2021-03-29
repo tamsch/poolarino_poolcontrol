@@ -17,7 +17,7 @@ _start=1
 
 _end=100
 
-curl -sL https://deb.nodesource.com/setup_12.x &> /dev/null | sudo -E bash - &> /dev/null
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - &> /dev/null
 ProgressBar 3 ${_end}
 sudo apt install nodejs -y &> /dev/null
 ProgressBar 6 ${_end}
@@ -27,7 +27,7 @@ sudo timedatectl set-timezone Europe/Berlin &> /dev/null
 ProgressBar 14 ${_end}
 wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add - &> /dev/null
 ProgressBar 17 ${_end}
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" &> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list &> /dev/null
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list &> /dev/null
 ProgressBar 21 ${_end}
 sudo apt-get update &> /dev/null
 ProgressBar 25 ${_end}
