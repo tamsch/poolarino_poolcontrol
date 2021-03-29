@@ -66,7 +66,7 @@ sudo useradd ftpuser -g ftpgroup -s /sbin/nologin -d /dev/null &> /dev/null
 ProgressBar 78 ${_end}
 sudo chown -R ftpuser:ftpgroup /var/www/html &> /dev/null
 ProgressBar 84 ${_end}
-(echo poolarino; echo poolarino) | sudo pure-pw useradd uploadeng -u ftpuser -g ftpgroup -d /var/www/html -m &> /dev/null
+(echo poolarino; echo poolarino) | sudo pure-pw useradd upload -u ftpuser -g ftpgroup -d /var/www/html -m &> /dev/null
 ProgressBar 87 ${_end}
 sudo pure-pw mkdb &> /dev/null
 ProgressBar 91 ${_end}
