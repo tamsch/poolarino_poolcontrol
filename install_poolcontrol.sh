@@ -18,6 +18,10 @@ _start=1
 _end=100
 
 ProgressBar 1 ${_end}
+sudo apt-get update 1> /dev/null
+ProgressBar 2 ${_end}
+sudo apt-get upgrade 1> /dev/null
+ProgressBar 3 ${_end}
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - &> /dev/null
 ProgressBar 4 ${_end}
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list &> /dev/null
