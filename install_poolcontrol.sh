@@ -19,47 +19,39 @@ _end=100
 
 ProgressBar 1 ${_end}
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - &> /dev/null
-ProgressBar 3 ${_end}
-sudo apt install nodejs -y &> /dev/null
-ProgressBar 6 ${_end}
-sudo apt-get install gcc g++ make -y &> /dev/null
-ProgressBar 10 ${_end}
-sudo timedatectl set-timezone Europe/Berlin &> /dev/null
-ProgressBar 14 ${_end}
-wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add - &> /dev/null
-ProgressBar 17 ${_end}
+ProgressBar 4 ${_end}
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list &> /dev/null
-ProgressBar 21 ${_end}
+ProgressBar 7 ${_end}
+wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add - &> /dev/null
+ProgressBar 10 ${_end}
 sudo apt-get update &> /dev/null
-ProgressBar 25 ${_end}
-sudo apt-get install -y mongodb-org &> /dev/null
-ProgressBar 27 ${_end}
+ProgressBar 13 ${_end}
+sudo apt-get install gcc g++ make mongodb-org lighttpd pure-ftpd nodejs -y &> /dev/null
+ProgressBar 15 ${_end}
+sudo timedatectl set-timezone Europe/Berlin &> /dev/null
+ProgressBar 18 ${_end}
 sudo systemctl start mongod.service &> /dev/null
-ProgressBar 30 ${_end}
+ProgressBar 22 ${_end}
 sudo systemctl enable mongod.service &> /dev/null
-ProgressBar 33 ${_end}
+ProgressBar 24 ${_end}
 sudo git clone https://github.com/tamsch/poolarino_poolcontrol.git /home/poolarino_poolcontrol &> /dev/null
-ProgressBar 36 ${_end}
+ProgressBar 28 ${_end}
 sudo rm -r /home/poolarino_poolcontrol/angular-src/ &> /dev/null
-ProgressBar 39 ${_end}
+ProgressBar 32 ${_end}
 sudo npm --prefix /home/poolarino_poolcontrol/ install &> /dev/null
-ProgressBar 44 ${_end}
+ProgressBar 36 ${_end}
 sudo echo "db.createUser({user: 'pool', pwd: 'pool', roles: ['readWrite']})" > /home/mongodb.js
-ProgressBar 45 ${_end}
+ProgressBar 40 ${_end}
 sudo mongo pool /home/mongodb.js &> /dev/null
-ProgressBar 47 ${_end}
+ProgressBar 44 ${_end}
 echo "module.exports = {database: 'mongodb://pool:pool@127.0.0.1:27017/pool' , secret:'deinscret'}" > /home/poolarino_poolcontrol/config/database.js
-ProgressBar 51 ${_end}
+ProgressBar 49 ${_end}
 sudo npm install -g pm2 &> /dev/null
-ProgressBar 54 ${_end}
+ProgressBar 55 ${_end}
 sudo pm2 startup &> /dev/null
-ProgressBar 57 ${_end}
+ProgressBar 62 ${_end}
 sudo pm2 start /home/poolarino_poolcontrol/app.js &> /dev/null
-ProgressBar 61 ${_end}
-sudo apt-get install -y lighttpd &> /dev/null
-ProgressBar 66 ${_end}
-sudo apt-get install pure-ftpd -y &> /dev/null
-ProgressBar 70 ${_end}
+ProgressBar 68 ${_end}
 sudo groupadd ftpgroup &> /dev/null
 ProgressBar 73 ${_end}
 sudo useradd ftpuser -g ftpgroup -s /sbin/nologin -d /dev/null &> /dev/null
