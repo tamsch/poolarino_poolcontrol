@@ -84,4 +84,4 @@ ip4=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
 sudo sed -i -e "s/http:\\/\\/.*:3000/http:\\/\\/$ip4:3000/g" /var/www/html/main.80b45faf48cbb7d90940.js
 ProgressBar 100 ${_end}
 
-printf '\nDie Poolarino-Poolsteuerung wurde erfolgreich installiert!\n'
+printf "\nDie Poolarino-Poolsteuerung wurde erfolgreich installiert! Sie können diese nun unter http://$ip4 in Ihrem Browser aufrufen - viel Spaß und gutes Wetter! www.poolarino.de \n"
