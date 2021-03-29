@@ -17,6 +17,7 @@ _start=1
 
 _end=100
 
+ProgressBar 1 ${_end}
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - &> /dev/null
 ProgressBar 3 ${_end}
 sudo apt install nodejs -y &> /dev/null
