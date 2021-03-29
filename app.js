@@ -417,7 +417,7 @@ setInterval(function () {
                         }
                     }
                 } else {
-                    console.log('Keine Solareinstellungen gefunden oder Solar wurde oder wird gerade umgestellt - Automatische Pumpensteuerung nicht möglich!');
+                    //console.log('Keine Solareinstellungen gefunden oder Solar wurde oder wird gerade umgestellt - Automatische Pumpensteuerung nicht möglich!');
                 }
             })
         } else {
@@ -752,7 +752,7 @@ setInterval(function () {
                                 console.log('Einer der Sensoren ist nicht korrekt ausgewählt oder die Temperaturen nicht eingestellt');
                             }
                         } else {
-                            console.log('Automatische Solarsteuerung ist deaktiviert!');
+                            // console.log('Automatische Solarsteuerung ist deaktiviert!');
                         }
                     } else {
                         console.log('Keine Settings gefunden oder kein Shelly angeschlossen!');
