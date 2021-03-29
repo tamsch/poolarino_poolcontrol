@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 echo "Starting Poolarino-Poolcontrol installation"
 
 function ProgressBar {
