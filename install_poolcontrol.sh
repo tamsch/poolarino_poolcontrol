@@ -52,9 +52,9 @@ echo "module.exports = {database: 'mongodb://pool:pool@127.0.0.1:27017/pool' , s
 ProgressBar 49 ${_end}
 sudo npm install -g pm2 &> /dev/null
 ProgressBar 55 ${_end}
-sudo pm2 startup &> /dev/null
-ProgressBar 62 ${_end}
 sudo pm2 start /home/poolarino_poolcontrol/app.js &> /dev/null
+ProgressBar 62 ${_end}
+sudo pm2 startup &> /dev/null
 ProgressBar 68 ${_end}
 sudo groupadd ftpgroup &> /dev/null
 ProgressBar 73 ${_end}
