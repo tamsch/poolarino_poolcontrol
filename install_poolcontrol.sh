@@ -55,6 +55,8 @@ ProgressBar 55 ${_end}
 sudo pm2 start /home/poolarino_poolcontrol/app.js &> /dev/null
 ProgressBar 62 ${_end}
 sudo pm2 startup &> /dev/null
+ProgressBar 65 ${_end}
+sudo pm2 save &> /dev/null
 ProgressBar 68 ${_end}
 sudo groupadd ftpgroup &> /dev/null
 ProgressBar 73 ${_end}
