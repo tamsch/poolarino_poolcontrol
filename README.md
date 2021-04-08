@@ -1,8 +1,8 @@
-# Poolarino Poolcontrol by www.poolarino.de
+# Poolarino® Poolcontrol by www.poolarino.de
 
-Poolarino Poolcontrol is a free software to control your technic around your swimming pool. It's optimized for usage on a raspberry with a raspberry pi official touch screen (800x480px). If you have any questions feel free to join us under www.poolarino.de
+Poolarino® Poolcontrol is a free software to control your technic around your swimming pool. It's optimized for usage on a raspberry with a raspberry pi official touch screen (800x480px). If you have any questions feel free to join us under www.poolarino.de
 
-![Poolarino Poolcontrol](https://www.poolarino.de/media/23-poolarino-poolcontrol-v-1-0-0-dashboard-png/)
+![Poolarino® Poolcontrol](https://www.poolarino.de/media/23-poolarino-poolcontrol-v-1-0-0-dashboard-png/)
 
 ## Information
 
@@ -41,7 +41,7 @@ If you have any errors feel free to join and contact us via Issues here on Githu
 Contributing is extremly welcome. Feel free to improve and update the code via Pull Requests!
 
 ## License
-Poolarino Poolcontrol - software to control anything around your swimming pool
+Poolarino® Poolcontrol - software to control anything around your swimming pool
 Copyright (C) 2020 Tammo Schimanski
 
 This program is free software: you can redistribute it and/or modify
