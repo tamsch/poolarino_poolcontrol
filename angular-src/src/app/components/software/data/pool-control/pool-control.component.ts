@@ -67,15 +67,15 @@ export class PoolControlComponent implements OnInit {
     relayTwoIsOn: Boolean;
     relayThreeIsOn: Boolean;
 
-    relayZeroWatt: String;
-    relayOneWatt: String;
-    relayTwoWatt: String;
-    relayThreeWatt: String;
+    relayZeroWatt: string;
+    relayOneWatt: string;
+    relayTwoWatt: string;
+    relayThreeWatt: string;
 
-    relayOneRuntime: Number;
-    relayZeroRuntime: Number;
-    relayTwoRuntime: Number;
-    relayThreeRuntime: Number;
+    relayOneRuntime: number;
+    relayZeroRuntime: number;
+    relayTwoRuntime: number;
+    relayThreeRuntime: number;
 
     solarJustChanged: Boolean = false;
 
