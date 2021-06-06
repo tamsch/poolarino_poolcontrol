@@ -613,8 +613,7 @@ setInterval(function () {
                                             console.log('Error: ', err.toString())
                                         })
                                         console.log('3 Wege Ventil erfolgreich umgestellt - Solar deaktiviert!');
-                                        asyncCallDevice(settings.shellyIp, '/relay/' + settings.pumpConnectedShellyRelay + '?turn=on');
-
+                                        
                                         let dateHelper = new Date();
                                         let dateHelperToday = dateHelper.toISOString().substr(0,10);
                                         let newRuntime = new Runtime({
