@@ -442,7 +442,7 @@ setInterval(function () {
                 if(solar.isOn){
                     if(settings.automatedSolarActivation){
                         if(settings.temperatureSensorIdSkimmer != '' && settings.temperatureSensorIdSolar != '' && settings.temperatureSensorSolarActivation != '' && settings.temperatureSolarActivation != 0 && settings.temperatureSolarDeactivation != 0){
-                            let temperatureHelper = settings.temperatureSensorSolarDeactivation.split('tempSensor');
+                            let temperatureHelper = settings.temperatureSensorSolarActivation.split('tempSensor');
                             let tempSkimmerHelper = settings.temperatureSensorIdSkimmer.split('tempSensor');
 
                             let dbSensor = 'sensor' + temperatureHelper[1] + 'id';
