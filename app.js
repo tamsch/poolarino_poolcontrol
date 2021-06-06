@@ -624,7 +624,7 @@ setInterval(function () {
                         
                                         newRuntime.save();
 
-                                        console.log('Pumpe wieder angeschaltet');
+                                        //console.log('Pumpe wieder angeschaltet');
                                     }, 30000)
                                 }
                             }
