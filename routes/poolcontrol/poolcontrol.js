@@ -258,8 +258,13 @@ router.get('/solar/:solarValue', async (req, res) => {
         
                 
         
-            } catch {
-                return res.json({success: false, msg: 'Pumpe ließ sich nicht ausschalten!'});
+            } catch (e) {
+                if(e.message.includes('EHOSTUNREACH')){
+                    console.log('Kann Shelly nicht erreichen - IP korrekt?');
+                    return res.json({success: false, msg: 'Kann Shelly nicht erreichen - IP korrekt?'});
+                } else {
+                    return res.json({success: false, msg: 'Fehler beim Umstellen der Solarsteuerung!'});
+                }
             }
         } else {
             return res.json({success: false});
